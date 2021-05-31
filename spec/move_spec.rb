@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative '../lib/move.rb'
+
 describe Move do
   let(:position) { [1, 9] }
   let(:destination) { [3, 7] }
