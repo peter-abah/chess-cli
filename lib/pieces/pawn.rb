@@ -48,14 +48,6 @@ class Pawn
     result
   end
 
-  # def normal_move(board_array, pos, new_pos)
-  #   y, x = new_pos
-
-  #   return unless board_array[y][x].nil?
-
-  #   Move.new(pos, new_pos)
-  # end
-
   def capture_moves(board_array, pos)
     y, x = pos
     yn = y + direction
@@ -75,6 +67,6 @@ class Pawn
   def capture_move(piece, pos, new_pos)
     return if piece.color == color
 
-    Move.new(pos, new_pos)
+    Move.new(pos, new_pos, new_pos)
   end
 end
