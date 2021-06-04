@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative '../lib/move.rb'
+require_relative '../lib/move'
 
 describe Move do
   let(:position) { [1, 9] }
@@ -10,9 +10,9 @@ describe Move do
 
   describe '#initialize' do
     context 'when called with two arguments' do
-      it 'creates an object with @removed which is an empty array' do
+      it 'creates an object with @removed which is nil' do
         result = move.instance_variable_get(:@removed)
-        expect(result).to eq([])
+        expect(result).to be_nil
       end
 
       it 'creates an object with @moved which is a hash' do

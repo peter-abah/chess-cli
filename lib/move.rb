@@ -2,11 +2,10 @@
 
 # A class to represent a chess move
 class Move
-  attr_reader :removed
-  attr_accessor :moved
+  attr_accessor :moved, :removed
 
   def initialize(position, destination)
-    @removed = []
+    @removed = nil
     @moved = {}
     @moved[position] = destination
   end
