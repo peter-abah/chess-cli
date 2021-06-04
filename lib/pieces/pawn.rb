@@ -54,7 +54,7 @@ class Pawn
     result = []
 
     xn = x - 1
-    piece = xn >= 0 ? nil : board_array[yn][xn]
+    piece = xn >= 0 ? board_array[yn][xn] : nil
     result.push(capture_move(piece, pos, [yn, xn])) unless piece.nil?
 
     xn = x + 1

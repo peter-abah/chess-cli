@@ -93,7 +93,6 @@ describe Pawn do
         board = double('Board', :board_array => board_array, :prev_board_array => nil)
 
         array = pawn.possible_moves(board, [6, 3])
-        p array
         result = array.any? { |e| e.removed == [5, 4] }
         expect(result).to be true
       end
@@ -102,30 +101,30 @@ describe Pawn do
     context 'when there is a piece blocking it but there are two empty pieces in its front diagonal' do
       let(:pawn) { described_class.new('white') }
 
-      xit 'returns the correct move' do
+      it 'returns the correct move' do
         board_array = Array.new(8) { Array.new(8) }
         board_array[6][3] = pawn
         board_array[5][4] = described_class.new('black')
         board_array[5][3] = described_class.new('black')
         board_array[5][2] = described_class.new('black')
 
-        let(:board) { double('Board', :board_array => board_array, :prev_board_array => nil) }
+        board = double('Board', :board_array => board_array, :prev_board_array => nil)
 
-        expected = [[[6, 3], [5, 2]], [[6, 3], [5, 4]]]
+        expected = [{ [6, 3] => [5, 2] }, { [6, 3] => [5, 4] }]
 
         array = pawn.possible_moves(board, [6, 3])
         result = array.map(&:moved)
         expect(result).to eq(expected)
       end
 
-      xit 'returns moves that leads to capture of the enemy pieces' do
+      it 'returns moves that leads to capture of the enemy pieces' do
         board_array = Array.new(8) { Array.new(8) }
         board_array[6][3] = pawn
         board_array[5][4] = described_class.new('black')
         board_array[5][3] = described_class.new('black')
         board_array[5][2] = described_class.new('black')
 
-        let(:board) { double('Board', :board_array => board_array, :prev_board_array => nil) }
+        board = double('Board', :board_array => board_array, :prev_board_array => nil)
 
         array = pawn.possible_moves(board, [6, 3])
         array = array.map(&:removed).reject(&:empty?)
