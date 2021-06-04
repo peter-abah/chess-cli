@@ -4,7 +4,7 @@ require_relative '../move'
 
 # A class to reperesnt a chess pawn
 class Pawn
-  atrr_reader :color, :direction
+  attr_reader :color, :direction
 
   def initialize(color)
     @color = color
@@ -34,23 +34,27 @@ class Pawn
     result = []
 
     yn = y + direction
-    move = normal_move(board_array, pos, [yn, x])
-    result.push(move) unless move.nil?
+    return result unless board_array[yn][x].nil?
+
+    move = Move.new(pos, [yn, x])
+    result.push(move)
+
+    return result unless y == @start_pos
 
     yn = y + (direction * 2)
-    move = normal_move(board_array, pos, [yn, x])
-    result.push(move) unless move.nil?
+    move = Move.new(pos, [yn, x])
+    result.push(move)
 
     result
   end
 
-  def normal_move(board_array, pos, new_pos)
-    y, x = new_pos
+  # def normal_move(board_array, pos, new_pos)
+  #   y, x = new_pos
 
-    return unless board_array[y][x].nil?
+  #   return unless board_array[y][x].nil?
 
-    Move.new(pos, new_pos)
-  end
+  #   Move.new(pos, new_pos)
+  # end
 
   def capture_moves(board_array, pos)
     y, x = pos
@@ -64,6 +68,8 @@ class Pawn
     xn = x + 1
     piece = xn < 8 ? board_array[yn][xn] : nil
     result.push(capture_move(piece, pos, [yn, xn])) unless piece.nil?
+
+    result
   end
 
   def capture_move(piece, pos, new_pos)

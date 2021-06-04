@@ -11,8 +11,6 @@ describe Move do
 
   describe '#initialize' do
     context 'when called with two arguments' do
-
-
       it 'creates an object with @removed which is nil' do
         result = move.instance_variable_get(:@removed)
         expect(result).to be_nil
