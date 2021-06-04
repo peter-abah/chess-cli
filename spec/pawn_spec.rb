@@ -132,5 +132,40 @@ describe Pawn do
         expect(array).to eq([[5, 2], [5, 4]])
       end
     end
+
+    context 'when an en passant move is available' do
+      let(:pawn) { described_class.new('white') }
+
+      it 'returns moves containing the en passant' do
+        board_array = Array.new(8) { Array.new(8) }
+        board_array[3][3] = pawn
+        board_array[3][4] = described_class.new('black')
+
+        prev_board_array = Array.new(8) { Array.new(8) }
+        prev_board_array[3][3] = pawn
+        prev_board_array[1][4] = described_class.new('black')
+
+        board = double('Board', :board_array => board_array, :prev_board_array => prev_board_array)
+
+        array = pawn.possible_moves(board, [3, 3])
+        result = array.any?(&:en_passant)
+        expect(result).to be true
+      end
+    end
+
+    context 'when the pawn is at the 7th rank' do
+      let(:pawn) { described_class.new('white') }
+
+      it 'returns a promotion move' do
+        board_array = Array.new(8) { Array.new(8) }
+        board_array[1][3] = pawn
+
+        board = double('Board', :board_array => board_array, :prev_board_array => nil)
+
+        array = pawn.possible_moves(board, [1, 3])
+        result = array.any?(&:promotion)
+        expect(result).to be true
+      end
+    end
   end
 end
