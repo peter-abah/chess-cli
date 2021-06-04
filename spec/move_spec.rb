@@ -36,6 +36,11 @@ describe Move do
         result = move.instance_variable_get(:@en_passant)
         expect(result).to be false
       end
+
+      it 'creates an object with @castle attribute as false' do
+        result = move.instance_variable_get(:@castle)
+        expect(result).to be false
+      end
     end
 
     context 'when called with three arguments' do
