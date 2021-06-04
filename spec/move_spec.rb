@@ -26,6 +26,16 @@ describe Move do
         result = moved[position]
         expect(result).to eq(destination)
       end
+
+      it 'creates an object with @promotion as false' do
+        result = move.instance_variable_get(:@promotion)
+        expect(result).to be false
+      end
+
+      it 'creates an object with @en_passant attribute as false' do
+        result = move.instance_variable_get(:@en_passant)
+        expect(result).to be false
+      end
     end
 
     context 'when called with three arguments' do
