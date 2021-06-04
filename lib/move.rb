@@ -4,8 +4,8 @@
 class Move
   attr_accessor :moved, :removed
 
-  def initialize(position, destination)
-    @removed = nil
+  def initialize(position, destination, removed = nil)
+    @removed = removed
     @moved = {}
     @moved[position] = destination
   end

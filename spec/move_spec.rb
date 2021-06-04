@@ -5,11 +5,14 @@ require_relative '../lib/move'
 describe Move do
   let(:position) { [1, 9] }
   let(:destination) { [3, 7] }
+  let(:removed) { [2, 4] }
 
   subject(:move) { described_class.new(position, destination) }
 
   describe '#initialize' do
     context 'when called with two arguments' do
+
+
       it 'creates an object with @removed which is nil' do
         result = move.instance_variable_get(:@removed)
         expect(result).to be_nil
@@ -24,6 +27,15 @@ describe Move do
         moved = move.instance_variable_get(:@moved)
         result = moved[position]
         expect(result).to eq(destination)
+      end
+    end
+
+    context 'when called with three arguments' do
+      subject(:move) { described_class.new(position, destination, removed) }
+
+      it 'creates an object with @removed which is the third argument' do
+        result = move.instance_variable_get(:@removed)
+        expect(result).to eq(removed)
       end
     end
   end
