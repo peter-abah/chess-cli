@@ -4,23 +4,16 @@ describe Pawn do
   describe '#initialize' do
     context 'when called with one argument' do
       let(:color) { 'white' }
-      # let(:pos) { [6, 3] }
       subject(:pawn) { described_class.new(color) }
 
       it 'has an attribute @color' do
         result = pawn.instance_variable_get(:@color)
         expect(result).to eq(color)
       end
-
-      # it 'has an attribute @pos' do
-      #   result = pawn.instance_variable_get(:@pos)
-      #   expect(result).to eq(pos)
-      # end
     end
   end
 
   describe '#possible_moves' do
-
     context 'when called with a board at default position' do
       board_array = Array.new(8) { Array.new(8) }
       board_array[6] = Array.new(8) { |i| Pawn.new('white') }
@@ -109,7 +102,7 @@ describe Pawn do
       board_array[5, 2] = described_class.new('black')
 
       let(:board) { double('Board', :board_array => board, prev_board_array => nil) }
-      
+
       xit 'returns the correct move' do
         expected = [[[6, 3], [5, 2]], [[6, 3], [5, 4]]]
 
@@ -120,7 +113,7 @@ describe Pawn do
 
       xit 'returns moves that leads to capture of the enemy pieces' do
         array = pawn.possible_moves(board, [6, 3])
-        array = array.map(&:removed).select { |e| !e.empty? }
+        array = array.map(&:removed).reject(&:empty?)
 
         expect(array).to eq([[5, 2], [5, 4]])
       end
