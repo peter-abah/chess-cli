@@ -85,14 +85,15 @@ describe Pawn do
         expect(result).to eq(expected)
       end
 
-      xit 'returns a move that leads to capture of piece' do
+      it 'returns a move that leads to capture of piece' do
         board_array = Array.new(8) { Array.new(8) }
         board_array[6][3] = pawn
         board_array[5][4] = described_class.new('black')
 
         board = double('Board', :board_array => board_array, :prev_board_array => nil)
 
-        array = pawn.possibles_moves(board, [6, 3])
+        array = pawn.possible_moves(board, [6, 3])
+        p array
         result = array.any? { |e| e.removed == [5, 4] }
         expect(result).to be true
       end
