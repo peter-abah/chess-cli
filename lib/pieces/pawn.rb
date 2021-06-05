@@ -57,18 +57,21 @@ class Pawn
     result = []
 
     xn = x - 1
-    piece = xn >= 0 ? board_array[yn][xn] : nil
-    result.push(capture_move(piece, pos, [yn, xn])) unless piece.nil?
+    move = capture_move(board_array, pos, [yn, xn])
+    result.push(move) unless move.nil?
 
     xn = x + 1
-    piece = xn < 8 ? board_array[yn][xn] : nil
-    result.push(capture_move(piece, pos, [yn, xn])) unless piece.nil?
+    move = capture_move(board_array, pos, [yn, xn])
+    result.push(move) unless move.nil?
 
     result
   end
 
-  def capture_move(piece, pos, new_pos)
-    return if piece.color == color
+  def capture_move(board_array, pos, new_pos)
+    yn, xn = new_pos
+    _y, x = pos
+    piece = xn >= 0 || x < 8 ? board_array[yn][xn] : nil
+    return if piece.nil? || piece.color == color
 
     Move.new(pos, new_pos, new_pos)
   end
