@@ -25,6 +25,9 @@ class Pawn
 
     moves = capture_moves(board_array, pos)
     result.concat(moves)
+
+    moves = en_passant_moves(board, pos)
+    result.concat(moves)
   end
 
   private
@@ -68,5 +71,41 @@ class Pawn
     return if piece.color == color
 
     Move.new(pos, new_pos, new_pos)
+  end
+
+  def en_passant_moves(board, pos)
+    y, x = pos
+    result = []
+
+    return [] unless en_passant_rank?(y)
+
+    xn = x - 1
+    move = en_passant_move(board, pos, xn)
+    result.push(move) unless move.nil?
+
+    xn = x + 1
+    move = en_passant_move(board, pos, xn)
+    result.push(move) unless move.nil?
+    result
+  end
+
+  def en_passant_rank?(y_index)
+    y_index == @start_pos + (direction * 3)
+  end
+
+  def en_passant_move(board, pos, xn)
+    board_array = board.board_array
+    y, x = pos
+
+    piece = xn >= 0 || x < 8 ? board_array[y][x] : nil
+    return unless piece&.color == color
+
+    prev = board.prev_board_array
+    yn = y + (direction * 2)
+    return unless prev[yn][xn].is_a? Pawn
+
+    move = Move.new(pos, [y + direction, xn], [y, xn])
+    move.en_passant = true
+    move
   end
 end
