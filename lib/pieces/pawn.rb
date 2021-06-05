@@ -40,12 +40,14 @@ class Pawn
     return result unless board_array[yn][x].nil?
 
     move = Move.new(pos, [yn, x])
+    move.promotion = true if yn.zero? || yn == 7
     result.push(move)
 
     return result unless y == @start_pos
 
     yn = y + (direction * 2)
     move = Move.new(pos, [yn, x])
+    move.promotion = true if yn.zero? || yn == 7
     result.push(move)
 
     result
@@ -73,7 +75,10 @@ class Pawn
     piece = xn >= 0 || x < 8 ? board_array[yn][xn] : nil
     return if piece.nil? || piece.color == color
 
-    Move.new(pos, new_pos, new_pos)
+    move = Move.new(pos, new_pos, new_pos)
+    move.promotion = true if yn.zero? || yn == 7
+
+    move
   end
 
   def en_passant_moves(board, pos)
