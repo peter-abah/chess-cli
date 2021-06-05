@@ -39,18 +39,23 @@ class Pawn
     yn = y + direction
     return result unless board_array[yn][x].nil?
 
-    move = Move.new(pos, [yn, x])
-    move.promotion = true if yn.zero? || yn == 7
-    result.push(move)
+    result.push(normal_move(pos, yn))
 
     return result unless y == @start_pos
 
     yn = y + (direction * 2)
-    move = Move.new(pos, [yn, x])
-    move.promotion = true if yn.zero? || yn == 7
-    result.push(move)
+    result.push(normal_move(pos, yn))
 
     result
+  end
+
+  def normal_move(pos, yn)
+    _y, x = pos
+
+    move = Move.new(pos, [yn, x])
+    move.promotion = true if yn.zero? || yn == 7
+
+    move
   end
 
   def capture_moves(board_array, pos)
