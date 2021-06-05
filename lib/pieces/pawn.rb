@@ -100,8 +100,8 @@ class Pawn
     board_array = board.board_array
     y, x = pos
 
-    piece = xn >= 0 || x < 8 ? board_array[y][x] : nil
-    return unless piece&.color == color
+    piece = xn >= 0 || x < 8 ? board_array[y][xn] : nil
+    return if piece.nil? || piece.color == color
 
     prev = board.prev_board_array
     yn = y + (direction * 2)
