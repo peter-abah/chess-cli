@@ -117,7 +117,7 @@ describe Rook do
         board_array[3][3] = described_class.new('black')
         board_array[5][3] = described_class.new('black')
         board_array[4][2] = described_class.new('black')
-        board_array[4][5] = described_class.new('black')
+        board_array[4][4] = described_class.new('black')
 
         board = double(board_array: board_array, prev_board_array: nil)
 
@@ -130,17 +130,17 @@ describe Rook do
       it 'returns moves that stop at the enemy pieces' do
         board_array = Array.new(8) { Array.new(8) }
         board_array[4][3] = rook
-        board_array[3][3] = described_class.new('black')
-        board_array[5][3] = described_class.new('black')
-        board_array[4][2] = described_class.new('black')
-        board_array[4][5] = described_class.new('black')
+        board_array[3][3] = described_class.new('white')
+        board_array[5][3] = described_class.new('white')
+        board_array[4][2] = described_class.new('white')
+        board_array[4][4] = described_class.new('white')
 
         board = double(board_array: board_array, prev_board_array: nil)
 
         array = rook.possible_moves(board, [4, 3])
         result = array.map(&:moved).to_set
         expected = Set[{ [4, 3] => [3, 3] }, { [4, 3] => [5, 3] }, { [4, 3] => [4, 2] },
-                       { [4, 3] => [4, 5] }]
+                       { [4, 3] => [4, 4] }]
 
         expect(result).to eq(expected)
       end
@@ -148,15 +148,15 @@ describe Rook do
       it 'returns moves that leads to capture of the enemy pieces' do
         board_array = Array.new(8) { Array.new(8) }
         board_array[4][3] = rook
-        board_array[3][3] = described_class.new('black')
-        board_array[5][3] = described_class.new('black')
-        board_array[4][2] = described_class.new('black')
-        board_array[4][5] = described_class.new('black')
+        board_array[3][3] = described_class.new('white')
+        board_array[5][3] = described_class.new('white')
+        board_array[4][2] = described_class.new('white')
+        board_array[4][4] = described_class.new('white')
 
         board = double(board_array: board_array, prev_board_array: nil)
 
         array = rook.possible_moves(board, [4, 3])
-        result = array.map(:removed).to_set
+        result = array.map(&:removed).to_set
         expected = Set[[3, 3], [5, 3], [4, 2], [4, 4]]
 
         expect(result).to eq(expected)
