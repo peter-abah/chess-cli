@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative '../lib/knight'
+require_relative '../lib/pieces/knight'
 
 describe Knight do
   describe '#initialize' do
@@ -50,39 +50,39 @@ describe Knight do
         expect(result).to eq(expected)
       end
     end
-  end
 
-  context 'when there is an enemy piece where the knight is going' do
-    it 'returns moves that lead to capture of the enemy piece' do
-      board_array = Array.new(8) { Array.new(8) }
-      board_array[4][3] = knight
-      board_array[2][2] = described_class.new('black')
+    context 'when there is an enemy piece where the knight is going' do
+      it 'returns moves that lead to capture of the enemy piece' do
+        board_array = Array.new(8) { Array.new(8) }
+        board_array[4][3] = knight
+        board_array[2][2] = described_class.new('black')
 
-      board = double(board_array: board_array, prev_board_array: nil)
+        board = double(board_array: board_array, prev_board_array: nil)
 
-      array = knight.possible_moves(board, [4, 3])
-      result = array.map(&:removed).reject(:nil?)
-      expected = [[2, 2]]
-      expect(result).to eq(expected)
+        array = knight.possible_moves(board, [4, 3])
+        result = array.map(&:removed).reject(&:nil?)
+        expected = [[2, 2]]
+        expect(result).to eq(expected)
+      end
     end
-  end
 
-  context 'when there is player piece where knight is going' do
-    it 'does not return moves where the player piece is' do
-      board_array = Array.new(8) { Array.new(8) }
-      board_array[4][3] = knight
-      board_array[2][2] = described_class.new('white')
-      board_array[3][5] = described_class.new('white')
+    context 'when there is player piece where knight is going' do
+      it 'does not return moves where the player piece is' do
+        board_array = Array.new(8) { Array.new(8) }
+        board_array[4][3] = knight
+        board_array[2][2] = described_class.new('white')
+        board_array[3][5] = described_class.new('white')
 
-      board = double(board_array: board_array, prev_board_array: nil)
+        board = double(board_array: board_array, prev_board_array: nil)
 
-      array = knight.possible_moves(board, [4, 3])
-      result = array.map(&:moved).to_set
+        array = knight.possible_moves(board, [4, 3])
+        result = array.map(&:moved).to_set
 
-      expected = Set[{ [4, 3] => [3, 1] }, { [4, 3] => [2, 4] }, { [4, 3] => [5, 1] }, { [4, 3] => [6, 2] },
-                     { [4, 3] => [6, 4] }, { [4, 3] => [5, 5] }]
+        expected = Set[{ [4, 3] => [3, 1] }, { [4, 3] => [2, 4] }, { [4, 3] => [5, 1] }, { [4, 3] => [6, 2] },
+                       { [4, 3] => [6, 4] }, { [4, 3] => [5, 5] }]
 
-      expect(result).to eq(expected)
+        expect(result).to eq(expected)
+      end
     end
   end
 end
