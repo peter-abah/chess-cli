@@ -23,7 +23,7 @@ describe King do
 
       it 'creates an object with @has_moved as false' do
         has_moved = king.instance_variable_get(:@has_moved)
-        expect(has_moved).to be_false
+        expect(has_moved).to be false
       end
     end
   end
@@ -92,7 +92,7 @@ describe King do
         board = double(board_array: board_array, prev_board_array: nil)
 
         array = king.possible_moves(board, [3, 3])
-        result = array.map(&:removed).reject(:nil?).to_set
+        result = array.map(&:removed).reject(&:nil?).to_set
         expected = Set[[2, 2], [3, 2], [3, 4]]
 
         expect(result).to eq(expected)
