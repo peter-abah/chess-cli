@@ -7,11 +7,12 @@ require_relative '../move_generator'
 class Rook
   include MoveGenerator
 
-  attr_reader :color, :directions
+  attr_reader :color, :directions, :has_moved
 
   def initialize(color)
     @color = color
     @directions = [[0, 1], [0, -1], [1, 0], [-1, 0]]
+    @has_moved = false
   end
 
   def possible_moves(board, pos)
