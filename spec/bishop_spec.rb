@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative '../lib/pieces/knight'
+require_relative '../lib/pieces/bishop'
 
 describe Bishop do
   describe '#initialize' do
@@ -58,9 +58,9 @@ describe Bishop do
       it 'returns moves that stop at the enemy piece position' do
         board_array = Array.new(8) { Array.new(8) }
         board_array[4][3] = bishop
-        board_array[2][1] = described_class.new('black')
-        board_array[1][6] = described_class.new('black')
-        board_array[6][5] = described_class.new('black')
+        board_array[2][1] = described_class.new('white')
+        board_array[1][6] = described_class.new('white')
+        board_array[6][5] = described_class.new('white')
 
         board = double(board_array: board_array, prev_board_array: nil)
 
@@ -82,7 +82,6 @@ describe Bishop do
         board_array[6][5] = described_class.new('white')
 
         board = double(board_array: board_array, prev_board_array: nil)
-
         array = bishop.possible_moves(board, [4, 3])
         result = array.map(&:removed).reject(&:nil?).to_set
         expected = Set[[2, 1], [1, 6], [6, 5]]

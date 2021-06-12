@@ -9,6 +9,8 @@ module MoveGenerator
       moves = valid_moves(board_array, pos, dir)
       result.concat(moves)
     end
+
+    result
   end
 
   def valid_moves(board_array, pos, step)
@@ -28,7 +30,7 @@ module MoveGenerator
 
   def valid_move?(board_array, pos)
     y, x = pos
-    return false unless y.between?(0, 7) && x.between(0, 7)
+    return false unless y.between?(0, 7) && x.between?(0, 7)
 
     board_array[y][x].nil? || board_array[y][x].color != color
   end
