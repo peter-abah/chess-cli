@@ -6,7 +6,7 @@ describe Queen do
   describe '#initialize' do
     context 'when called with one argument' do
       let(:color) { 'white' }
-      subject(:queen) { described_class.new|(color) }
+      subject(:queen) { described_class.new(color) }
 
       it 'creates a new object with @color as its 1st argument' do
         result = queen.instance_variable_get(:@color)
