@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+require_relative '../move'
+require_relative 'rook'
+
 # A class to represent a kong in chess
 class King
   attr_reader :color, :has_moved, :directions
@@ -88,7 +91,7 @@ class King
     return unless rook.is_a?(Rook) && rook.color == color && !rook.has_moved
 
     move = Move.new(pos, [y, x - 2])
-    move.moved[[y, 0]] = [y, x -1]
+    move.moved[[y, 0]] = [y, x - 1]
     move.castle = true
 
     move
