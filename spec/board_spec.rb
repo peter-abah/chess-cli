@@ -23,7 +23,7 @@ describe Board do
       it '@board_array element at index 6 is an array of white pawns' do
         board_array = board.instance_variable_get(:@board_array)
         row = board_array[6]
-        result = row.all { |p| p.is_a?(Pawn) && p.color == 'white' }
+        result = row.all? { |p| p.is_a?(Pawn) && p.color == 'white' }
         expect(result).to be true
       end
 
@@ -93,10 +93,8 @@ describe Board do
 
       it 'the rest rows are empty arrays' do
         board_array = board.instance_variable_get(:@board_array)
-        result = board_array.all?.with_index do |e, i|
-          next if [0, 1, 6, 7].include?(i)
-
-          e.empty?
+        result = board_array[2..5].all? do |e|
+          e.reject(&:nil?).empty?
         end
 
         expect(result).to be true
@@ -134,7 +132,7 @@ describe Board do
       end
 
       it 'returns a new board with @prev_board_array as the board board_array' do
-        board_array = board.board_array
+        board_array = board.instance_variable_get(:@board_array)
         move = double(moved: { [1, 3] => [3, 3] }, removed: nil)
 
         prev_board_array = board.update(move).instance_variable_get(:@prev_board_array)
@@ -154,7 +152,7 @@ describe Board do
 
     context 'when called with a move to remove a piece' do
       it 'returns a new board updated with the board' do
-        move = double(moved: { [0, 1] => [2, 0] }, removed: [[7, 5]])
+        move = double(moved: { [0, 1] => [2, 0] }, removed: [7, 5])
 
         new_board_array = board.update(move).instance_variable_get(:@board_array)
         result = new_board_array[7][5]
