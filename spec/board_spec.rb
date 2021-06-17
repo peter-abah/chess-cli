@@ -99,6 +99,10 @@ describe Board do
 
         expect(result).to be true
       end
+
+      it 'saves pieces positions in @pieces' do
+        # TO DO
+      end
     end
 
     context 'when called with two arguments' do
