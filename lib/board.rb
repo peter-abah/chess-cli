@@ -14,17 +14,6 @@ class Board
     update_pieces_positions
   end
 
-  def update_pieces_positions
-    0.upto(7) do |y|
-      0.upto(7) do |x|
-        piece = @board_array[y][x]
-        next if piece.nil?
-
-        @pieces[piece.color][piece] = [y, x]
-      end
-    end
-  end
-
   def update(move)
     new_board_array = @board_array.map(&:dup)
 
@@ -90,5 +79,16 @@ class Board
 
   def pawn_array(color)
     Array.new(8) { Pawn.new(color) }
+  end
+
+  def update_pieces_positions
+    0.upto(7) do |y|
+      0.upto(7) do |x|
+        piece = @board_array[y][x]
+        next if piece.nil?
+
+        @pieces[piece.color][piece] = [y, x]
+      end
+    end
   end
 end
