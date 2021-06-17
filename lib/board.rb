@@ -23,6 +23,10 @@ class Board
     Board.new(new_board_array, @board_array)
   end
 
+  def player_pieces(color)
+    @pieces[color]
+  end
+
   def remove_piece(array, move)
     return unless move.removed
 
