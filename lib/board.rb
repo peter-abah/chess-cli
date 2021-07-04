@@ -47,6 +47,7 @@ class Board
 
     y, x = new_pos
     array[y][x] = piece
+    piece.has_moved = true
   end
 
   def create_board_array
