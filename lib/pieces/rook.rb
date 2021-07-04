@@ -2,17 +2,17 @@
 
 require_relative '../move'
 require_relative '../move_generator'
+require_relative 'piece'
 
 # A class to represent a rook in a chess game
-class Rook
+class Rook < Piece
   include MoveGenerator
 
-  attr_reader :color, :directions, :has_moved
+  attr_reader :directions
 
   def initialize(color)
-    @color = color
+    super
     @directions = [[0, 1], [0, -1], [1, 0], [-1, 0]]
-    @has_moved = false
   end
 
   def possible_moves(board, pos)
