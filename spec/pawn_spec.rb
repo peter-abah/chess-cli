@@ -12,6 +12,11 @@ describe Pawn do
         result = pawn.instance_variable_get(:@color)
         expect(result).to eq(color)
       end
+
+      it 'has an attribute @has_moved with value of false' do
+        result = pawn.instance_variable_get(:@has_moved)
+        expect(result).to be false
+      end
     end
   end
 
