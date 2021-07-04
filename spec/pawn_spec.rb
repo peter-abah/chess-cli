@@ -176,6 +176,26 @@ describe Pawn do
       end
     end
 
+    context 'when another piece is at the en_passant position' do
+      let(:pawn) { described_class.new('white') }
+
+      it 'does not return en passant move' do
+        board_array = Array.new(8) { Array.new(8) }
+        board_array[3][3] = pawn
+        board_array[3][4] = double(color: 'black')
+
+        prev_board_array = Array.new(8) { Array.new(8) }
+        prev_board_array[3][3] = pawn
+        prev_board_array[1][4] = described_class.new('black')
+
+        board = double('Board', :board_array => board_array, :prev_board_array => prev_board_array)
+
+        array = pawn.possible_moves(board, [3, 3])
+        result = array.any?(&:en_passant)
+        expect(result).to be false
+      end
+    end
+
     context 'when the pawn is at the 7th rank' do
       let(:pawn) { described_class.new('white') }
 
