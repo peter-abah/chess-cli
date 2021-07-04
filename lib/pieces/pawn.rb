@@ -1,13 +1,14 @@
 # frozen_string_literal: true
 
 require_relative '../move'
+require_relative 'piece'
 
 # A class to reperesnt a chess pawn
-class Pawn
-  attr_reader :color, :direction
+class Pawn < Piece
+  attr_reader :direction
 
   def initialize(color)
-    @color = color
+    super
     @start_pos = color == 'white' ? 6 : 1 # the index in the board which is the pawn's position in the board
     @direction = color == 'white' ? -1 : 1 # where the pawn is facing -1 for up, 1 for down
   end
