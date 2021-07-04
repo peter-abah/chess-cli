@@ -12,6 +12,11 @@ describe Rook do
         result = rook.instance_variable_get(:@color)
         expect(result).to eq(color)
       end
+
+      it 'has a @has_moved attribute with value of false' do
+        result = rook.instance_variable_get(:@has_moved)
+        expect(result).to be false
+      end
     end
   end
 
