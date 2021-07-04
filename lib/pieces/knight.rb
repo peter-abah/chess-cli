@@ -1,13 +1,12 @@
 # frozen_string_literal: true
 
 require_relative '../move'
+require_relative 'piece'
 
 # A class to represent a knight in a chess game
-class Knight
-  attr_reader :color
-
+class Knight < Piece
   def initialize(color)
-    @color = color
+    super
   end
 
   def possible_moves(board, pos)
