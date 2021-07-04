@@ -2,14 +2,14 @@
 
 require_relative '../move'
 require_relative 'rook'
+require_relative 'piece'
 
 # A class to represent a kong in chess
-class King
-  attr_reader :color, :has_moved, :directions
+class King < Piece
+  attr_reader :directions
 
   def initialize(color)
-    @color = color
-    @has_moved = false
+    super
     @directions = [[-1, -1], [1, 1], [1, -1], [-1, 1], [0, -1], [0, 1], [-1, 0], [1, 0]]
   end
 
