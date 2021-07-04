@@ -2,15 +2,16 @@
 
 require_relative '../move'
 require_relative '../move_generator'
+require_relative 'piece'
 
 # A class to represent a queen in a chess game
-class Queen
+class Queen < Piece
   include MoveGenerator
 
-  attr_reader :color, :directions
+  attr_reader :directions
 
   def initialize(color)
-    @color = color
+    super
     @directions = [[1, 1], [-1, 1], [-1, -1], [1, -1], [0, 1], [0, -1],
                    [1, 0], [-1, 0]]
   end

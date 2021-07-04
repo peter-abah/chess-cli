@@ -20,6 +20,11 @@ describe Queen do
         result = queen.instance_variable_get(:@directions).to_set
         expect(result).to eq(directions)
       end
+
+      it 'has a @has_moved attribute with value of false' do
+        result = queen.instance_variable_get(:@has_moved)
+        expect(result).to be false
+      end
     end
   end
 
