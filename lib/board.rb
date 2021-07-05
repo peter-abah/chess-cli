@@ -37,6 +37,7 @@ class Board
   def move_pieces(array, move)
     move.moved.each do |piece_pos, new_pos|
       move_piece(array, piece_pos, new_pos)
+      promote_piece(array, new_pos, move.promotion)
     end
   end
 
@@ -48,6 +49,14 @@ class Board
     y, x = new_pos
     array[y][x] = piece
     piece.has_moved = true
+  end
+
+  def promote_piece(array, piece_pos, piece_class)
+    return unless piece_class
+
+    y, x = piece_pos
+    color = array[y][x].color
+    array[y][x] = piece_class.new(color)
   end
 
   def create_board_array
