@@ -163,5 +163,15 @@ describe Board do
         expect(result).to be_nil
       end
     end
+
+    context 'when called with a move that promotes a pawn' do
+      it 'returns a new board with the piece being promoted' do
+        move = double(moved: { [1, 1] => [2, 1] }, removed: nil, promotion: Queen)
+
+        new_board_array = board.update(move).instance_variable_get(:@board_array)
+        result = new_board_array[2][1]
+        expect(result).to be_a Queen
+      end
+    end
   end
 end
