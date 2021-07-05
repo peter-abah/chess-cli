@@ -20,7 +20,7 @@ class Queen < Piece
     x, y = pos
     board_array = board.board_array
     piece = board_array[y][x]
-    return unless piece&.color == color && piece.is_a?(Queen)
+    return [] unless piece&.color == color && piece.is_a?(Queen)
 
     gen_moves(board_array, pos)
   end
