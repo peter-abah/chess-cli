@@ -5,6 +5,8 @@ require_rel 'pieces'
 
 # A class to represent a chess board
 class Board
+  attr_reader :board_array
+
   def initialize(board_array = nil, prev_board_array = nil)
     @pieces = { 'white' => {}, 'black' => {} }
 
