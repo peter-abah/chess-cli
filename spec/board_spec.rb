@@ -127,7 +127,7 @@ describe Board do
 
     context 'when called with a move to move a pawn' do
       it 'returns a new board updated with the move' do
-        move = double(moved: { [1, 3] => [3, 3] }, removed: nil)
+        move = double(moved: { [1, 3] => [3, 3] }, removed: nil, promotion: false)
 
         new_board_array = board.update(move).instance_variable_get(:@board_array)
         result = new_board_array[3][3]
@@ -137,7 +137,7 @@ describe Board do
 
       it 'returns a new board with @prev_board_array as the board board_array' do
         board_array = board.instance_variable_get(:@board_array)
-        move = double(moved: { [1, 3] => [3, 3] }, removed: nil)
+        move = double(moved: { [1, 3] => [3, 3] }, removed: nil, promotion: false)
 
         prev_board_array = board.update(move).instance_variable_get(:@prev_board_array)
         expect(prev_board_array).to eq(board_array)
@@ -146,7 +146,7 @@ describe Board do
 
     context 'when called with a move to move a knight' do
       it 'returns a new board updated with the move' do
-        move = double(moved: { [0, 1] => [2, 0] }, removed: nil)
+        move = double(moved: { [0, 1] => [2, 0] }, removed: nil, promotion: false)
 
         new_board_array = board.update(move).instance_variable_get(:@board_array)
         result = new_board_array[2][0]
@@ -156,7 +156,7 @@ describe Board do
 
     context 'when called with a move to remove a piece' do
       it 'returns a new board updated with the board' do
-        move = double(moved: { [0, 1] => [2, 0] }, removed: [7, 5])
+        move = double(moved: { [0, 1] => [2, 0] }, removed: [7, 5], promotion: false)
 
         new_board_array = board.update(move).instance_variable_get(:@board_array)
         result = new_board_array[7][5]
