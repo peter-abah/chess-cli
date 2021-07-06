@@ -13,4 +13,18 @@ class Move
     @moved = {}
     @moved[position] = destination
   end
+
+  def to_s
+    result = []
+    @moved.each do |pos, dest|
+      y, x = pos
+      pos = "#{(97 + y).chr}#{8 - x}"
+
+      y, x = dest
+      dest = "#{(97 + y).chr}#{8 - x}"
+      result.push("|#{pos} => #{dest}|")
+    end
+
+    result.join(', ')
+  end
 end

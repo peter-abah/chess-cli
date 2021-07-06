@@ -54,8 +54,8 @@ class Game
   end
 
   def valid_choice?(pos, color)
-    y = pos[0].ord - 96
-    x = pos[1].to_i - 1
+    y = pos[0].ord - 97
+    x = 8 - pos[1].to_i
     return false unless y.between?(0, 7) && x.between?(0, 7)
 
     piece = board.board_array[y][x]
@@ -76,8 +76,8 @@ class Game
   end
 
   def get_all_moves(pos)
-    y = pos[0].ord - 96
-    x = pos[1].to_i - 1
+    y = pos[0].ord - 97
+    x = 8 - pos[1].to_i
 
     piece = board.board_array[y][x]
     piece.possible_moves(board, [y, x])
