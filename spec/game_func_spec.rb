@@ -4,10 +4,10 @@ require_relative '../lib/game_func'
 require_relative '../lib/board'
 
 describe GameFunc do
-  describe '#check?' do
-    let(:dummy_class) { Class.new { extend GameFunc } }
-    let(:board_array) { Board.new.board_array }
+  let(:dummy_class) { Class.new { extend GameFunc } }
+  let(:board_array) { Board.new.board_array }
 
+  describe '#check?' do
     context 'when called for white player with a starting board' do
       it 'returns false' do
         board = Board.new
