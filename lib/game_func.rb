@@ -5,7 +5,20 @@ require_relative 'board'
 
 # A module for game class functions that will be used by other classes
 module GameFunc
+  def legal_moves(board, player)
+    result = []
+
+    pieces = board.player_pieces(player.color)
+    pieces.each do |piece, pos|
+      move = piece.possible_moves(board, pos)
+      result.concat(move)
+    end
+
+    result.select { |move| legal_move?(move, player, board) }
+  end
+
   def legal_move?(move, player, board)
+    move.promotion = Queen if move.promotion
     new_board = board.update(move)
     return false if check?(player, new_board)
 

@@ -13,19 +13,10 @@ class RandomAIPlayer
   end
 
   def play_move(board)
-    moves = legal_moves(board)
-    moves.sample
-  end
+    moves = legal_moves(board, self)
+    move = moves.sample
 
-  def legal_moves(board)
-    result = []
-
-    pieces = board.player_pieces(color)
-    pieces.each do |piece, pos|
-      move = piece.possible_moves(board, pos)
-      result.concat(move)
-    end
-
-    result.select { |move| legal_move?(move, self, board) }
+    puts "computer played #{move}"
+    move
   end
 end

@@ -18,10 +18,10 @@ class Move
     result = []
     @moved.each do |pos, dest|
       y, x = pos
-      pos = "#{(97 + y).chr}#{8 - x}"
+      pos = "#{(97 + x).chr}#{8 - y}"
 
       y, x = dest
-      dest = "#{(97 + y).chr}#{8 - x}"
+      dest = "#{(97 + x).chr}#{8 - y}"
       result.push("|#{pos} => #{dest}|")
     end
 

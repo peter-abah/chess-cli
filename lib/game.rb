@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 require 'yaml'
+require_relative 'human_player'
+require_relative 'random_ai_player'
 require_relative 'board'
 require_relative 'game_func'
 
@@ -8,31 +10,51 @@ require_relative 'game_func'
 class Game
   include GameFunc
 
+  attr_reader :player, :board
+
   def initialize(black, white)
     @black = black
     @white = white
-    @current_player = white
+    @player = white
 
     @board = Board.new
+    @player_check = { 'black' => false, 'white' => false }
+    @winner = nil
   end
 
   def play
     game_turns until game_end?
-    display_end_game_message
+    #display_end_game_message
+  end
+
+  def game_end?
+    check = check?(player, board)
+    checkmate = check && @player_check[player.color]
+
+    if checkmate
+      @winner = player == white ? black : white
+      return true
+    end
+
+    return true if legal_moves(board, player).empty?
+
+    @player_check[player.color] = true
+    false
   end
 
   def game_turns
     board.display
-    move = player_move(@current_player)
-    board = board.update(move)
-    @current_player = @current_player == white ? black : white
+    move = player_move
+    @board = board.update(move)
+    @player = @player == @white ? @black : @white
   end
 
-  def player_move(player)
-    player.is_a?(HumanPlayer) ? get_player_move(player) : player.play_move
+  def player_move
+    player.is_a?(HumanPlayer) ? prompt_player_move : player.play_move(board)
   end
 
-  def get_player_move(player)
+  def prompt_player_move
+    pos = nil
     loop do
       puts "#{player.color} enter position of piece to move (e4 or c7)"
       pos = gets.chomp.downcase
@@ -43,19 +65,31 @@ class Game
 
     moves = get_all_moves(pos)
 
+    input = nil
     loop do
-      diplay_moves(moves)
+      display_moves(moves)
       puts 'Choose a move (e.g 1)'
-      input = gets.chomp.to_i
-      break if input.between?(1, moves.length)
+      input = gets.chomp.to_i - 1
+      break if input.between?(0, moves.length - 1)
     end
 
-    moves[input]
+    move = moves[input]
+    move.promotion = prompt_promotion_choice if move.promotion
+    move
+  end
+
+  def prompt_promotion_choice
+    puts '1. Queen | 2. Rook | 3. Bishop | 4. Knight | 5. Pawn'
+    puts 'Enter an option (e.g 1 or 3)'
+    choice = gets.to_i
+
+    PROMOTION_CHOICES[choice] 
   end
 
   def valid_choice?(pos, color)
-    y = pos[0].ord - 97
-    x = 8 - pos[1].to_i
+    x = pos[0].ord - 97
+    y = 8 - pos[1].to_i
+
     return false unless y.between?(0, 7) && x.between?(0, 7)
 
     piece = board.board_array[y][x]
@@ -76,8 +110,8 @@ class Game
   end
 
   def get_all_moves(pos)
-    y = pos[0].ord - 97
-    x = 8 - pos[1].to_i
+    x = pos[0].ord - 97
+    y = 8 - pos[1].to_i
 
     piece = board.board_array[y][x]
     piece.possible_moves(board, [y, x])
@@ -89,3 +123,6 @@ class Game
     end
   end
 end
+
+game = Game.new(HumanPlayer.new('a', 'black'), RandomAIPlayer.new('white'))
+game.play
