@@ -5,9 +5,10 @@ require_relative 'pieces/king'
 # A module for game class functions that will be used by other classes
 module GameFunc
   def check?(player, board)
-    board_array = board.instance_variable_get(:@board_array)
+    board_array = board.board_array
 
-    opponent_moves(player, board).each do |move|
+    moves = opponent_moves(player, board)
+    moves.each do |move|
       next unless move.removed
 
       y, x = move.removed
@@ -20,7 +21,8 @@ module GameFunc
   def opponent_moves(player, board)
     result = []
 
-    opponent_pieces(player.color, board).each do |piece, pos|
+    pieces = opponent_pieces(player.color, board)
+    pieces.each do |piece, pos|
       move = piece.possible_moves(board, pos)
       result.concat(move)
     end

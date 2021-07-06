@@ -17,7 +17,7 @@ class Queen < Piece
   end
 
   def possible_moves(board, pos)
-    x, y = pos
+    y, x = pos
     board_array = board.board_array
     piece = board_array[y][x]
     return [] unless piece&.color == color && piece.is_a?(Queen)
