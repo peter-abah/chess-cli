@@ -1,10 +1,13 @@
 # frozen_string_literal: true
 
 require 'require_all'
+require_relative 'letter_display'
 require_rel 'pieces'
 
 # A class to represent a chess board
 class Board
+  include LetterDisplay
+
   attr_reader :board_array, :prev_board_array
 
   def initialize(board_array = nil, prev_board_array = nil)
