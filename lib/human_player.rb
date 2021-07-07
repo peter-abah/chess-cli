@@ -2,10 +2,9 @@
 
 # a class to represent a human player in a chess game
 class HumanPlayer
-  attr_reader :color, :name
+  attr_reader :color
 
-  def initialize(name, color)
+  def initialize(color)
     @color = color
-    @name = name
   end
 end

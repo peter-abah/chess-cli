@@ -46,6 +46,7 @@ class Pawn < Piece
 
     yn = y + (direction * 2)
     return result unless board_array[yn][x].nil?
+
     result.push(normal_move(pos, yn))
 
     result

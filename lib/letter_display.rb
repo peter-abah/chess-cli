@@ -11,7 +11,26 @@ module LetterDisplay
     'King' => 'K'
   }.freeze
 
-  COLUMN_LABELS = '   a  b  c  d  e  f  g  h  '
+  UNICODE_DISPLAY = {
+    'white' => {
+      'Pawn' => "\u2659",
+      'Rook' =>  "\u2656",
+      'Knight' => "\u2658",
+      'Bishop' => "\u2657",
+      'Queen' => "\u2655",
+      'King' => "\u2654"
+    },
+    'black' => {
+      'Pawn' => "\u265F",
+      'Rook' =>  "\u265C",
+      'Knight' => "\u265E",
+      'Bishop' => "\u265D",
+      'Queen' => "\u265B",
+      'King' => "\u265A"
+    }
+  }
+
+  COLUMN_LABELS = '   a b c d e f g h  '
 
   def display
     result = [COLUMN_LABELS, "\n"]
@@ -27,10 +46,11 @@ module LetterDisplay
   def create_row(row, i)
     result = ["#{i} "]
     row.each do |piece|
-      result.push('--') && next if piece.nil?
+      result.push('-') && next if piece.nil?
 
-      prefix = piece.color[0].upcase
-      str = prefix + LETTER_MAPPING[piece.class.name]
+      color = piece.color
+      str = LETTER_MAPPING[piece.class.name]
+      str = color == 'white' ? str.upcase : str.downcase
       result.push(str)
     end
 

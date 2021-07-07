@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
 require 'yaml'
-require_relative 'human_player'
-require_relative 'random_ai_player'
+
 require_relative 'board'
 require_relative 'game_func'
 
@@ -12,7 +11,7 @@ class Game
 
   attr_reader :player, :board
 
-  def initialize(black, white)
+  def initialize(white, black)
     @black = black
     @white = white
     @player = white
@@ -124,8 +123,11 @@ class Game
   end
 
   def save_game
-    saved_game = to_yaml
-    file_name = "#{Time.now.to_s[0..-7].gsub(' ', '_')}.yaml"
+    Dir.mkdir('saved_games') unless Dir.exist?('saved_games')
+
+    saved_game = YAML.dump(self)
+
+    file_name = "saved_games/#{Time.now.to_s[0..-7].gsub(' ', '_')}.yaml"
     file_name = file_name.gsub(':', "'")
 
     File.open(file_name, 'w') do |file|
@@ -149,6 +151,3 @@ class Game
     end
   end
 end
-
-game = Game.new(HumanPlayer.new('a', 'black'), RandomAIPlayer.new('white'))
-game.play
