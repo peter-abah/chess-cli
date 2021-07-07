@@ -5,6 +5,14 @@ require_relative 'board'
 
 # A module for game class functions that will be used by other classes
 module GameFunc
+  PROMOTION_CHOICES = {
+    1 => Queen,
+    2 => Rook,
+    3 => Bishop,
+    4 => Knight,
+    5 => Pawn
+  }
+
   def legal_moves(board, player)
     result = []
 

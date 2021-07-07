@@ -24,21 +24,23 @@ class Game
 
   def play
     game_turns until game_end?
-    #display_end_game_message
+    display_end_game_message
   end
 
   def game_end?
-    check = check?(player, board)
-    checkmate = check && @player_check[player.color]
+    @player_check[player.color] = false
 
-    if checkmate
-      @winner = player == white ? black : white
+    check = check?(player, board)
+    stalemate = legal_moves(board, player).empty?
+
+    if stalemate && check
+      @winner = player == @white ? @black : @white
       return true
     end
 
-    return true if legal_moves(board, player).empty?
+    return true if stalemate
 
-    @player_check[player.color] = true
+    @player_check[player.color] = check
     false
   end
 
@@ -47,6 +49,15 @@ class Game
     move = player_move
     @board = board.update(move)
     @player = @player == @white ? @black : @white
+  end
+
+  def display_end_game_message
+    board.display
+    if @winner
+      puts "#{@winner.color} won this round, checkmate"
+    else
+      puts 'A stalemate, better luck to both sides next time'
+    end
   end
 
   def player_move
@@ -83,10 +94,12 @@ class Game
     puts 'Enter an option (e.g 1 or 3)'
     choice = gets.to_i
 
-    PROMOTION_CHOICES[choice] 
+    PROMOTION_CHOICES[choice]
   end
 
   def valid_choice?(pos, color)
+    return false if pos.length < 2
+
     x = pos[0].ord - 97
     y = 8 - pos[1].to_i
 
@@ -95,12 +108,14 @@ class Game
     piece = board.board_array[y][x]
     return false unless piece&.color == color
 
-    piece.possible_moves(board, [y, x]).length.positive?
+    moves = piece.possible_moves(board, [y, x]).select { |move| legal_move?(move, player, board) }
+    moves.length.positive?
   end
 
   def save_game
     saved_game = to_yaml
     file_name = "#{Time.now.to_s[0..-7].gsub(' ', '_')}.yaml"
+    file_name = file_name.gsub(':', "'")
 
     File.open(file_name, 'w') do |file|
       file.write(saved_game)
@@ -114,7 +129,7 @@ class Game
     y = 8 - pos[1].to_i
 
     piece = board.board_array[y][x]
-    piece.possible_moves(board, [y, x])
+    piece.possible_moves(board, [y, x]).select { |move| legal_move?(move, player, board) }
   end
 
   def display_moves(moves)

@@ -16,6 +16,7 @@ class RandomAIPlayer
     moves = legal_moves(board, self)
     move = moves.sample
 
+    move.promotion = PROMOTION_CHOICES.values.sample if move.promotion
     puts "computer played #{move}"
     move
   end
