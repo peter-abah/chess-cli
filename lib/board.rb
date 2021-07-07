@@ -6,7 +6,7 @@ require_rel 'pieces'
 
 # A class to represent a chess board
 class Board
-  include LetterDisplay
+  include UnicodeDisplay
 
   attr_reader :board_array, :prev_board_array
 
