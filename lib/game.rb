@@ -65,7 +65,19 @@ class Game
   end
 
   def prompt_player_move
+    pos = prompt_for_piece_pos
+    moves = get_all_moves(pos)
+
+    input = prompt_for_move_choice(moves)
+    move = moves[input]
+
+    move.promotion = prompt_promotion_choice if move.promotion
+    move
+  end
+
+  def prompt_for_piece_pos
     pos = nil
+
     loop do
       puts "#{player.color} enter position of piece to move (e4 or c7)"
       pos = gets.chomp.downcase
@@ -73,20 +85,19 @@ class Game
 
       save_game if pos == 'save'
     end
+    pos
+  end
 
-    moves = get_all_moves(pos)
-
+  def prompt_for_move_choice(moves)
     input = nil
+
     loop do
       display_moves(moves)
       puts 'Choose a move (e.g 1)'
       input = gets.chomp.to_i - 1
       break if input.between?(0, moves.length - 1)
     end
-
-    move = moves[input]
-    move.promotion = prompt_promotion_choice if move.promotion
-    move
+    input
   end
 
   def prompt_promotion_choice
