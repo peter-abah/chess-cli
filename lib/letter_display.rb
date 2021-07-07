@@ -14,7 +14,7 @@ module LetterDisplay
   COLUMN_LABELS = '   a b c d e f g h  '
 
   def display
-    result = [COLUMN_LABELS, "\n"]
+    result = ["\n", COLUMN_LABELS]
     board_array.each_with_index do |row, i|
       i = 8 - i
       result.push(create_row(row, i))
@@ -40,9 +40,10 @@ module LetterDisplay
   end
 end
 
+# A module to display chess board nicely with unicode characters
 module UnicodeDisplay
   UNICODE_MAPPING = {
-    'white' => {
+    'black' => {
       'Pawn' => "\u2659",
       'Rook' =>  "\u2656",
       'Knight' => "\u2658",
@@ -50,7 +51,7 @@ module UnicodeDisplay
       'Queen' => "\u2655",
       'King' => "\u2654"
     },
-    'black' => {
+    'white' => {
       'Pawn' => "\u265F",
       'Rook' =>  "\u265C",
       'Knight' => "\u265E",
@@ -63,7 +64,7 @@ module UnicodeDisplay
   COLUMN_LABELS = '   a b c d e f g h  '
 
   def display
-    result = ["\n", COLUMN_LABELS, "\n"]
+    result = ["\n", COLUMN_LABELS]
     board_array.each_with_index do |row, i|
       i = 8 - i
       result.push(create_row(row, i))
