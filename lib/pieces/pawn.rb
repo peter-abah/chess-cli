@@ -80,7 +80,7 @@ class Pawn < Piece
   def capture_move(board_array, pos, new_pos)
     yn, xn = new_pos
     _y, x = pos
-    piece = xn >= 0 || x < 8 ? board_array[yn][xn] : nil
+    piece = xn.between?(0, 7) ? board_array[yn][xn] : nil
     return if piece.nil? || piece.color == color
 
     move = Move.new(pos, new_pos, new_pos)
@@ -113,7 +113,7 @@ class Pawn < Piece
     board_array = board.board_array
     y, x = pos
 
-    piece = xn >= 0 || x < 8 ? board_array[y][xn] : nil
+    piece = xn.between?(0, 7) ? board_array[y][xn] : nil
     return unless piece.is_a?(Pawn) && piece.color != color
 
     prev = board.prev_board_array
