@@ -32,6 +32,8 @@ class Board
     @pieces[color]
   end
 
+  private
+  
   def remove_piece(array, move)
     return unless move.removed
 
