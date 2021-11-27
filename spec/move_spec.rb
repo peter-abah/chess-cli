@@ -3,7 +3,7 @@
 require_relative '../lib/move'
 
 describe Move do
-  let(:position) { [1, 9] }
+  let(:position) { [1, 7] }
   let(:destination) { [3, 7] }
   let(:removed) { [2, 4] }
 
@@ -81,6 +81,15 @@ describe Move do
       it 'returns the destination for the position' do
         result = move.destination_for(position: position)
         expect(result).to eq(destination)
+      end
+    end
+  end
+
+  describe '#to_s' do
+    context 'when called' do
+      it 'returns the correct string representation' do
+        expected = "|h7 => h5|"
+        expect(move.to_s).to eq(expected)
       end
     end
   end
