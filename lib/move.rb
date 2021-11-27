@@ -36,7 +36,7 @@ class Move
   def move_to_str(position:, destination:)
     position_str = position_to_str(position: position)
     destination_str = position_to_str(position: destination)
-    "|#{position_str} #{destination_str}|"
+    "|#{position_str} => #{destination_str}|"
   end
 
   def position_to_str(position:)
