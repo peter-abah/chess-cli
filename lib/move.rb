@@ -10,8 +10,7 @@ class Move
     @castle = false
 
     @removed = removed
-    @moved = {}
-    @moved[position] = destination
+    @moved = { position => destination }
   end
 
   def add_move(position:, destination:)
