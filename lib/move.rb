@@ -14,6 +14,10 @@ class Move
     @moved[position] = destination
   end
 
+  def add_move(position:, destination:)
+    moved[position] = destination
+  end
+
   def to_s
     result = []
     @moved.each do |pos, dest|
