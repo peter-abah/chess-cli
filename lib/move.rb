@@ -34,4 +34,11 @@ class Move
 
     result.join(', ')
   end
+
+  private
+
+  def position_to_str(position:)
+    y, x = position
+    "#{(97 + x).chr}#{8 - y}"
+  end
 end
