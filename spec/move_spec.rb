@@ -70,4 +70,15 @@ describe Move do
       end
     end
   end
+
+  describe '#add_move' do
+    context 'when called with position and destination' do
+      it 'adds it to the list of moves' do
+        position = [0, 0]
+        destination = [99, 99]
+        move.add_move(position: position, destination:destination)
+        expect(move.moved[position]).to eq(destination)
+      end
+    end
+  end
 end
