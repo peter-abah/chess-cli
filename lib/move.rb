@@ -37,6 +37,12 @@ class Move
 
   private
 
+  def move_to_str(position:, destination:)
+    position_str = position_to_str(position: position)
+    destination_str = destination_to_str(position: destination)
+    "|#{position_str} #{destination_str}|"
+  end
+
   def position_to_str(position:)
     y, x = position
     "#{(97 + x).chr}#{8 - y}"
