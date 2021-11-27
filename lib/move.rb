@@ -24,12 +24,8 @@ class Move
   def to_s
     result = []
     @moved.each do |pos, dest|
-      y, x = pos
-      pos = "#{(97 + x).chr}#{8 - y}"
-
-      y, x = dest
-      dest = "#{(97 + x).chr}#{8 - y}"
-      result.push("|#{pos} => #{dest}|")
+      move_str = move_to_str(position: pos, destination: dest)
+      result.push(move_str)
     end
 
     result.join(', ')
@@ -39,7 +35,7 @@ class Move
 
   def move_to_str(position:, destination:)
     position_str = position_to_str(position: position)
-    destination_str = destination_to_str(position: destination)
+    destination_str = position_to_str(position: destination)
     "|#{position_str} #{destination_str}|"
   end
 
