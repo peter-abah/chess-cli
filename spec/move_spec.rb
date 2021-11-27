@@ -16,17 +16,6 @@ describe Move do
         expect(result).to be_nil
       end
 
-      it 'creates an object with @moved which is a hash' do
-        result = move.instance_variable_get(:@moved)
-        expect(result).to be_a Hash
-      end
-
-      it '@moved atrribute has a key which is the first argument and the coreesponding value is the second argument' do
-        moved = move.instance_variable_get(:@moved)
-        result = moved[position]
-        expect(result).to eq(destination)
-      end
-
       it 'creates an object with @promotion as false' do
         result = move.instance_variable_get(:@promotion)
         expect(result).to be false
