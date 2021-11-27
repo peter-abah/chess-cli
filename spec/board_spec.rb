@@ -110,12 +110,12 @@ describe Board do
       let(:prev_board_array) { 'second' }
       subject(:board) { described_class.new(board_array, prev_board_array) }
 
-      it 'creates a new object with @board_array as first argument' do
+      xit 'creates a new object with @board_array as first argument' do
         result = board.instance_variable_get(:@board_array)
         expect(result).to eq(board_array)
       end
 
-      it 'creates a new object with @prev_board_array as 2nd argument' do
+      xit 'creates a new object with @prev_board_array as 2nd argument' do
         result = board.instance_variable_get(:@prev_board_array)
         expect(result).to eq(prev_board_array)
       end
