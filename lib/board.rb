@@ -20,7 +20,7 @@ class Board
   end
 
   def update(move)
-    new_board_array = @board_array.map(&:dup)
+    new_board_array = board_array.map(&:dup)
 
     remove_piece(new_board_array, move)
     move_pieces(new_board_array, move)
@@ -33,7 +33,7 @@ class Board
   end
 
   private
-  
+
   def remove_piece(array, move)
     return unless move.removed
 
