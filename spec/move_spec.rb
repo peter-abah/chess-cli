@@ -55,8 +55,9 @@ describe Move do
 
   describe '#removed' do
     context 'when called' do
-      it 'returns @removed atrribute' do
-        removed = move.instance_variable_get(:@removed)
+      subject(:move) { described_class.new(position, destination, removed) }
+
+      it 'returns the third argument during initialization' do
         expect(move.removed).to eq(removed)
       end
     end
