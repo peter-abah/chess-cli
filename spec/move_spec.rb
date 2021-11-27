@@ -81,4 +81,18 @@ describe Move do
       end
     end
   end
+
+  describe '#destination_for' do
+    let(:position) { [0, 0] }
+    let(:destination) { [99, 99] }
+
+    before { move.add_move(position: position, destination: destination) }
+
+    context 'when called with a valid position' do
+      it 'returns the destination for the position' do
+        result = move.destination_for(position: position)
+        expect(result).to eq(destination)
+      end
+    end
+  end
 end
