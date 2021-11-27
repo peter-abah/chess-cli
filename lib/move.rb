@@ -22,12 +22,9 @@ class Move
   end
 
   def to_s
-    result = []
-    @moved.each do |pos, dest|
-      move_str = move_to_str(position: pos, destination: dest)
-      result.push(move_str)
+    result = moved.reduce([]) do |moves_str, (pos, dest)|
+      moves_str << move_to_str(position: pos, destination: dest)
     end
-
     result.join(', ')
   end
 
