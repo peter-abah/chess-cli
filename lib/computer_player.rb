@@ -3,7 +3,7 @@
 require_relative 'game_func'
 
 # A class to represent an ai that plays random legal chess moves
-class RandomAIPlayer
+class ComputerPlayer
   include GameFunc
 
   attr_reader :color

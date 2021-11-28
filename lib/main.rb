@@ -3,8 +3,8 @@
 require 'yaml'
 
 require_relative 'game'
-require_relative 'human_player'
-require_relative 'random_ai_player'
+require_relative 'player'
+require_relative 'computer_player'
 
 def main
   display_tutorial
@@ -104,7 +104,7 @@ def get_player_choice(color)
   display_players_choice
   choice = gets.chomp.to_i
 
-  choice == 1 ? HumanPlayer.new(color) : RandomAIPlayer.new(color)
+  choice == 1 ? Player.new(color) : ComputerPlayer.new(color)
 end
 
 def display_players_choice

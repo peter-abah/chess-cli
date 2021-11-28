@@ -60,7 +60,7 @@ class Game
   end
 
   def player_move
-    player.is_a?(HumanPlayer) ? prompt_player_move : player.play_move(board)
+    player.is_a?(ComputerPlayer) ? player.play_move(board) : prompt_player_move
   end
 
   def prompt_player_move

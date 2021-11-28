@@ -2,7 +2,7 @@
 
 require_relative '../lib/human_player'
 
-describe HumanPlayer do
+describe Player do
   let(:color) { 'white' }
   subject(:player) { described_class.new(color) }
 

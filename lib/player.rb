@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-# a class to represent a human player in a chess game
-class HumanPlayer
+# a class to represent a player in a chess game
+class Player
   attr_reader :color
 
   def initialize(color)
