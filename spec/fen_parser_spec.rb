@@ -23,4 +23,19 @@ describe FENParser do
       end
     end
   end
+
+  describe '#parse' do
+    context 'when called for a valid fen' do
+      let(:notation) { '8/8/8/r7/8/8/8/8' }
+      let(:fen_parser) { described_class.new(notation) }
+
+      it 'should return an 8 x 8 multidimensional array' do
+        result = fen_parser.parse
+
+        expect(result.length).to eq(8)
+        expect(result).to all(be_a Array)
+        expect(result).to all(have(8).items)
+      end
+    end
+  end
 end
