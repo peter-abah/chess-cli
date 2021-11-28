@@ -174,4 +174,20 @@ describe Board do
       end
     end
   end
+
+  describe '#piece_at' do
+    subject(:board) { described_class.new }
+
+    context 'when called with y and x' do
+      it 'should return a piece' do
+        piece = board.piece_at(y: 0, x: 0)
+        expect(piece).to be_a Piece
+      end
+
+      it 'should return the correct piece at y and x position' do
+        piece = board.piece_at(y: 0, x: 0)
+        expect(piece).to be_a Rook
+      end
+    end
+  end
 end
