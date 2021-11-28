@@ -14,7 +14,7 @@ end
 
 def display_tutorial
   puts <<-HEREDOC
-  
+
   Welcome to Chess.
 
   Players take turns by choosing pieces
@@ -56,6 +56,7 @@ end
 def start_game(option)
   game = option == 1 ? new_game : load_game
   return if game.nil?
+
   game.play
 end
 
