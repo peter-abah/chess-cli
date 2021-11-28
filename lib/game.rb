@@ -115,7 +115,7 @@ class Game
 
     return false unless y.between?(0, 7) && x.between?(0, 7)
 
-    piece = board.board_array[y][x]
+    piece = board.piece_at(y: y, x: x)
     return false unless piece&.color == color
 
     moves = piece.possible_moves(board, [y, x]).select { |move| legal_move?(move, player, board) }
@@ -141,7 +141,7 @@ class Game
     x = pos[0].ord - 97
     y = 8 - pos[1].to_i
 
-    piece = board.board_array[y][x]
+    piece = board.piece_at(y: y, x: x)
     piece.possible_moves(board, [y, x]).select { |move| legal_move?(move, player, board) }
   end
 
