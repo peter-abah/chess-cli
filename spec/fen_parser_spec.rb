@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative '../lib/fen_parser'
+require_rel '../lib/pieces'
 
 describe FENParser do
   subject(:default_fen) { 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR' }
@@ -26,8 +27,8 @@ describe FENParser do
 
   describe '#parse' do
     context 'when called for a valid fen' do
-      let(:notation) { '8/8/8/r7/8/8/8/8' }
-      let(:fen_parser) { described_class.new(notation) }
+      let(:valid_notation) { '8/8/8/r7/8/8/8/8' }
+      let(:fen_parser) { described_class.new(valid_notation) }
 
       it 'should return an 8 x 8 multidimensional array' do
         result = fen_parser.parse
@@ -35,6 +36,23 @@ describe FENParser do
         expect(result.length).to eq(8)
         expect(result).to all(be_a Array)
         expect(result).to all(have(8).items)
+      end
+
+      it 'should return a correct representation of the board' do
+        piece = fen_parser.parse[3][0]
+        empty = fen_parser.parse[7][7]
+
+        expect(piece).to be_a Rook
+        expect(empty).to be_nil
+      end
+    end
+
+    context 'when called for an invalid fen' do
+      let(:invalid_notation) { '3/8/1/3/asdfghjk/10d/8/pppppppp/8' }
+      subject(:fen_parser) { described_class.new(:invalid_fen) }
+
+      it 'should raise an Error' do
+        expect { fen_parser.parse }.to raise_error StandardError
       end
     end
   end
