@@ -32,6 +32,10 @@ class Board
     @pieces[color]
   end
 
+  def piece_at(y:, x:)
+    board_array[y][x]
+  end
+
   private
 
   def remove_piece(array, move)
