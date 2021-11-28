@@ -1,19 +1,22 @@
 # frozen_string_literal: true
 
 require 'require_all'
-require_relative 'letter_display'
+require_relative './letter_display'
+require_relative './fen_parser'
 require_rel 'pieces'
 
 # A class to represent a chess board
 class Board
   include LetterDisplay
 
+  DEFAULT_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR'
+
   attr_reader :board_array, :prev_board_array
 
-  def initialize(board_array = nil, prev_board_array = nil)
+  def initialize(board_array = nil, prev_board_array = nil, board_fen: DEFAULT_FEN, prev_state: nil)
     @pieces = { 'white' => {}, 'black' => {} }
 
-    @board_array = board_array || create_board_array
+    @board_array = board_array || FENParser.new(board_fen).parse
     @prev_board_array = prev_board_array
 
     update_pieces_positions
