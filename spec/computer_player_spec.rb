@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require_relative '../lib/random_ai_player'
+require_relative '../lib/computer_player'
 require_relative '../lib/board'
 
-describe RandomAIPlayer do
+describe ComputerPlayer do
   subject(:random_ai) { described_class.new('white') }
 
   describe '#play_move' do
