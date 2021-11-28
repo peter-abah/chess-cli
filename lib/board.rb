@@ -25,7 +25,7 @@ class Board
     remove_piece(new_board_array, move)
     move_pieces(new_board_array, move)
 
-    Board.new(new_board_array, @board_array)
+    Board.new(new_board_array, board_array)
   end
 
   def player_pieces(color)
@@ -109,7 +109,7 @@ class Board
   def update_pieces_positions
     0.upto(7) do |y|
       0.upto(7) do |x|
-        piece = @board_array[y][x]
+        piece = board_array[y][x]
         next if piece.nil?
 
         @pieces[piece.color][piece] = [y, x]
