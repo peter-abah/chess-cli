@@ -7,16 +7,6 @@ describe Pawn do
     context 'when called with one argument' do
       let(:color) { 'white' }
       subject(:pawn) { described_class.new(color) }
-
-      it 'has an attribute @color' do
-        result = pawn.instance_variable_get(:@color)
-        expect(result).to eq(color)
-      end
-
-      it 'has an attribute @has_moved with value of false' do
-        result = pawn.instance_variable_get(:@has_moved)
-        expect(result).to be false
-      end
     end
   end
 
