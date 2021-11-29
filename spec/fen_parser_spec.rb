@@ -68,6 +68,34 @@ describe FENParser do
         fen_notation = described_class.board_to_fen(board: board)
         expect(fen_notation).to eq expected_fen_notation
       end
+
+      it 'should return the valid fen notation' do
+        board = Array.new(8) { Array.new(8) }
+        board[7][7] = Pawn.new('black')
+        expected_fen_notation = '8/8/8/8/8/8/8/7p'
+
+        fen_notation = described_class.board_to_fen(board: board)
+        expect(fen_notation).to eq expected_fen_notation
+      end
+
+      it 'should return the valid fen notation' do
+        board = Array.new(8) { Array.new(8) }
+        board[4][4] = Pawn.new('black')
+        board[7][3] = Knight.new('white')
+        expected_fen_notation = '8/8/8/8/4p3/8/8/3N4'
+
+        fen_notation = described_class.board_to_fen(board: board)
+        expect(fen_notation).to eq expected_fen_notation
+      end
+
+      it 'should return the valid fen notation' do
+        board = Array.new(8) { Array.new(8) }
+        board[1] = Array.new(8) { Pawn.new('black') }
+        expected_fen_notation = '8/pppppppp/8/8/8/8/8/8'
+
+        fen_notation = described_class.board_to_fen(board: board)
+        expect(fen_notation).to eq expected_fen_notation
+      end
     end
   end
 end
