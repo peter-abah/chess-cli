@@ -46,21 +46,17 @@ class FENParser
 
   def self.rank_to_fen(rank)
     no_of_consecutive_empty_cells = 0
+
     rank.each_with_index.reduce('') do |rank_fen, (piece, index)|
-      if index == (BOARD_WIDTH - 1) && piece.nil?
+      if piece.nil?
         no_of_consecutive_empty_cells += 1
+        index == (BOARD_WIDTH - 1) ? rank_fen + no_of_consecutive_empty_cells.to_s : rank_fen
+      elsif no_of_consecutive_empty_cells != 0
         rank_fen + no_of_consecutive_empty_cells.to_s
-      elsif piece.nil?
-        no_of_consecutive_empty_cells += 1
-        rank_fen
       else
-        if no_of_consecutive_empty_cells != 0
-          rank_fen + no_of_consecutive_empty_cells.to_s
-        else
-          letter = PIECE_CLASS_TO_LETTER[piece.class.name.to_sym]
-          letter = piece.color == 'white' ? letter.upcase : letter
-          rank_fen + letter
-        end
+        letter = PIECE_CLASS_TO_LETTER[piece.class.name.to_sym]
+        letter = piece.color == 'white' ? letter.upcase : letter
+        rank_fen + letter
       end
     end
   end
