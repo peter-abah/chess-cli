@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'pry-byebug'
 require_rel 'pieces'
 # A class to parse Chess FEN notation
 # It only parses the chess board part and will raise an error
@@ -12,13 +13,22 @@ class FENParser
 
   DEFAULT_NOTATION = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR'
   FEN_TOKEN_REGEX = /[pkqrbn\d]/i.freeze
-  PIECE_CLASSES = {
+  LETTER_TO_PIECE_CLASS = {
     p: Pawn,
     k: King,
     q: Queen,
     r: Rook,
     b: Bishop,
     n: Knight
+  }.freeze
+
+  PIECE_CLASS_TO_LETTER = {
+    Pawn: 'p',
+    Rook: 'r',
+    Knight: 'n',
+    Bishop: 'b',
+    Queen: 'q',
+    King: 'k'
   }.freeze
 
   ERROR_MESSAGES = {
@@ -28,6 +38,32 @@ class FENParser
   }.freeze
 
   attr_reader :fen_notation
+
+  def self.board_to_fen(board:)
+    board = board.map { |rank| rank_to_fen(rank) }
+    board.join('/')
+  end
+
+  def self.rank_to_fen(rank)
+    no_of_consecutive_empty_cells = 0
+    rank.each_with_index.reduce('') do |rank_fen, (piece, index)|
+      if index == (BOARD_WIDTH - 1) && piece.nil?
+        no_of_consecutive_empty_cells += 1
+        rank_fen + no_of_consecutive_empty_cells.to_s
+      elsif piece.nil?
+        no_of_consecutive_empty_cells += 1
+        rank_fen
+      else
+        if no_of_consecutive_empty_cells != 0
+          rank_fen + no_of_consecutive_empty_cells.to_s
+        else
+          letter = PIECE_CLASS_TO_LETTER[piece.class.name.to_sym]
+          letter = piece.color == 'white' ? letter.upcase : letter
+          rank_fen + letter
+        end
+      end
+    end
+  end
 
   def initialize(fen_notation = DEFAULT_NOTATION)
     @fen_notation = fen_notation
@@ -54,7 +90,7 @@ class FENParser
     return Array.new(token.to_i) if is_integer?(token)
 
     color = token == token.upcase ? 'white' : 'black'
-    piece = PIECE_CLASSES[token.downcase.to_sym].new(color)
+    piece = LETTER_TO_PIECE_CLASS[token.downcase.to_sym].new(color)
     [piece]
   end
 

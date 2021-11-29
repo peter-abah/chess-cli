@@ -58,14 +58,14 @@ describe FENParser do
   end
 
   # class method
-  describe '#fen_to_board' do
+  describe '#board_to_fen' do
     context 'when called with a board array' do
       it 'should return the valid fen notation' do
-        board = Array.new(8) { Array.new  }
+        board = Array.new(8) { Array.new(8) }
         board[0][0] = Pawn.new('white')
         expected_fen_notation = 'P7/8/8/8/8/8/8/8'
-        
-        fen_notation = described_class.fen_to_board(board: board)
+
+        fen_notation = described_class.board_to_fen(board: board)
         expect(fen_notation).to eq expected_fen_notation
       end
     end
