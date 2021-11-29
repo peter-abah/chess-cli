@@ -51,9 +51,12 @@ class FENParser
       if piece.nil?
         no_of_consecutive_empty_cells += 1
         index == (BOARD_WIDTH - 1) ? rank_fen + no_of_consecutive_empty_cells.to_s : rank_fen
-      elsif no_of_consecutive_empty_cells != 0
-        rank_fen + no_of_consecutive_empty_cells.to_s
       else
+        if no_of_consecutive_empty_cells != 0
+          rank_fen = rank_fen + no_of_consecutive_empty_cells.to_s 
+          no_of_consecutive_empty_cells = 0
+        end
+        
         letter = PIECE_CLASS_TO_LETTER[piece.class.name.to_sym]
         letter = piece.color == 'white' ? letter.upcase : letter
         rank_fen + letter
