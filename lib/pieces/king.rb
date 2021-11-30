@@ -76,7 +76,7 @@ class King < Piece
     return unless rook.is_a?(Rook) && rook.color == color && !rook.has_moved
 
     move = Move.new(pos, [y, x + 2])
-    move.add_move(position: [y, 7], destination: [y, x + 1])
+    move.add_move(from: [y, 7], destination: [y, x + 1])
     move.castle = true
 
     move
@@ -91,7 +91,7 @@ class King < Piece
     return unless rook.is_a?(Rook) && rook.color == color && !rook.has_moved
 
     move = Move.new(pos, [y, x - 2])
-    move.add_move(position: [y, 0], destination: [y, x - 1])
+    move.add_move(from: [y, 0], destination: [y, x - 1])
     move.castle = true
 
     move

@@ -13,25 +13,25 @@ class Move
     @moved = { position => destination }
   end
 
-  def add_move(position:, destination:)
-    moved[position] = destination
+  def add_move(from:, destination:)
+    moved[from] = destination
   end
 
-  def destination_for(position:)
-    moved[position]
+  def destination_for(from:)
+    moved[from]
   end
 
   def to_s
     result = moved.reduce([]) do |moves_str, (pos, dest)|
-      moves_str << move_to_str(position: pos, destination: dest)
+      moves_str << move_to_str(from: pos, destination: dest)
     end
     result.join(', ')
   end
 
   private
 
-  def move_to_str(position:, destination:)
-    position_str = position_to_str(position: position)
+  def move_to_str(from:, destination:)
+    position_str = position_to_str(position: from)
     destination_str = position_to_str(position: destination)
     "|#{position_str} => #{destination_str}|"
   end

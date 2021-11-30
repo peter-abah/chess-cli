@@ -65,7 +65,7 @@ describe Move do
       it 'adds it to the list of moves' do
         position = [0, 0]
         destination = [99, 99]
-        move.add_move(position: position, destination:destination)
+        move.add_move(from: position, destination: destination)
         expect(move.moved[position]).to eq(destination)
       end
     end
@@ -75,11 +75,11 @@ describe Move do
     let(:position) { [0, 0] }
     let(:destination) { [99, 99] }
 
-    before { move.add_move(position: position, destination: destination) }
+    before { move.add_move(from: position, destination: destination) }
 
     context 'when called with a valid position' do
       it 'returns the destination for the position' do
-        result = move.destination_for(position: position)
+        result = move.destination_for(from: position)
         expect(result).to eq(destination)
       end
     end
