@@ -33,7 +33,7 @@ class FENParser
 
   ERROR_MESSAGES = {
     invalid_token: 'Invalid FEN notation, token not valid',
-    invalid_board_width: "Invalid FEN notation, Board width is not longer than #{BOARD_WIDTH}",
+    invalid_board_width: "Invalid FEN notation, Board width is not equal to #{BOARD_WIDTH}",
     invalid_board_height: "Invalid FEN notation, Board height not equal to #{BOARD_HEIGHT}"
   }.freeze
 
@@ -83,13 +83,13 @@ class FENParser
   def parse_rank_fen(rank_fen)
     rank = rank_fen.split('')
     rank = rank.reduce([]) { |result, token| result + parse_fen_token(token) }
-    raise ArgumentError, ERROR_MESSAGES[invalid_board_width] if rank.length != BOARD_WIDTH
+    raise ArgumentError, ERROR_MESSAGES[:invalid_board_width] if rank.length != BOARD_WIDTH
 
     rank
   end
 
   def parse_fen_token(token)
-    raise ArgumentError, ERROR_MESSAGES[invalid_token] unless FEN_TOKEN_REGEX.match(token)
+    raise ArgumentError, ERROR_MESSAGES[:invalid_token] unless FEN_TOKEN_REGEX.match(token)
 
     return Array.new(token.to_i) if is_integer?(token)
 
