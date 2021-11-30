@@ -13,10 +13,10 @@ class Board
 
   attr_reader :board_array, :prev_board_array
 
-  def initialize(board_array = nil, prev_board_array = nil, board_fen: DEFAULT_FEN, prev_state: nil)
+  def initialize(board_array = nil, prev_board_array = nil, fen_notation: DEFAULT_FEN, prev_state: nil)
     @pieces = { 'white' => {}, 'black' => {} }
 
-    @board_array = board_array || FENParser.new(board_fen).parse
+    @board_array = board_array || FENParser.new(fen_notation).parse
     @prev_board_array = prev_board_array
 
     update_pieces_positions
@@ -28,7 +28,8 @@ class Board
     remove_piece(new_board_array, move)
     move_pieces(new_board_array, move)
 
-    Board.new(new_board_array, board_array)
+    new_fen_notation = FENParser.board_to_fen(board: new_board_array)
+    Board.new(nil, board_array, fen_notation: new_fen_notation)
   end
 
   def player_pieces(color)
