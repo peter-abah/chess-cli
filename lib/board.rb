@@ -11,13 +11,14 @@ class Board
 
   DEFAULT_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR'
 
-  attr_reader :board_array, :prev_board_array
+  attr_reader :board_array, :prev_board_array, :prev_state
 
   def initialize(board_array = nil, prev_board_array = nil, fen_notation: DEFAULT_FEN, prev_state: nil)
     @pieces = { 'white' => {}, 'black' => {} }
 
     @board_array = board_array || FENParser.new(fen_notation).parse
     @prev_board_array = prev_board_array
+    @prev_state = prev_state || self
 
     update_pieces_positions
   end
@@ -29,7 +30,7 @@ class Board
     move_pieces(new_board_array, move)
 
     new_fen_notation = FENParser.board_to_fen(board: new_board_array)
-    Board.new(nil, board_array, fen_notation: new_fen_notation)
+    Board.new(nil, board_array, fen_notation: new_fen_notation, prev_state: self)
   end
 
   def player_pieces(color)
