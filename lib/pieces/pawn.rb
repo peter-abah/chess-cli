@@ -15,111 +15,95 @@ class Pawn < Piece
   end
 
   def possible_moves(board, pos)
-    board_array = board.board_array
-    result = []
     y, x = pos
-    piece = board_array[y][x]
+    piece = board.piece_at(y: y, x: x)
+    raise error unless piece == self
 
-    return result unless piece.is_a? Pawn
-
-    moves = normal_moves(board_array, pos)
-    result.concat(moves)
-
-    moves = capture_moves(board_array, pos)
-    result.concat(moves)
-
-    moves = en_passant_moves(board, pos)
-    result.concat(moves)
+    moves = [
+      normal_moves(board, pos),
+      capture_moves(board, pos),
+      en_passant_moves(board, pos)
+    ]
+    moves.reduce { |total, m| total + m }
   end
 
   private
 
-  def normal_moves(board_array, pos)
-    y, x = pos
-    result = []
-
-    yn = y + direction
-    return result unless board_array[yn][x].nil? || yn > 7
-
-    result.push(normal_move(pos, yn))
-
-    return result unless y == start_pos
-
-    yn = y + (direction * 2)
-    return result unless board_array[yn][x].nil? || yn > 7
-
-    result.push(normal_move(pos, yn))
-
-    result
+  def normal_moves(board, pos)
+    y, = pos
+    result = [normal_move(board, pos, direction)]
+    result.push(normal_move(board, pos, direction * 2)) if y == start_pos
+    result.reject(&:nil?)
   end
 
-  def normal_move(pos, yn)
-    _y, x = pos
+  def normal_move(board, pos, y_amount)
+    y, x = pos
+    yn = y + y_amount
+    return unless normal_move_possible?(board, [yn, x])
 
     move = Move.new(pos, [yn, x])
     move.promotion = true if yn.zero? || yn == 7
-
     move
   end
 
-  def capture_moves(board_array, pos)
-    y, x = pos
-    yn = y + direction
-    result = []
-
-    xn = x - 1
-    move = capture_move(board_array, pos, [yn, xn])
-    result.push(move) unless move.nil?
-
-    xn = x + 1
-    move = capture_move(board_array, pos, [yn, xn])
-    result.push(move) unless move.nil?
-
-    result
+  def normal_move_possible?(board, (y, x))
+    y > 7 || board.piece_at(y: y, x: x).nil?
   end
 
-  def capture_move(board_array, pos, new_pos)
-    yn, xn = new_pos
-    _y, x = pos
-    piece = xn.between?(0, 7) ? board_array[yn][xn] : nil
-    return if piece.nil? || piece.color == color
+  def capture_moves(board, pos)
+    y, x = pos
+    yn = y + direction
+    x_left = x - 1
+    x_right = x + 1
+
+    moves = [
+      capture_move(board, pos, [yn, x_left]),
+      capture_move(board, pos, [yn, x_right])
+    ]
+    moves.reject(&:nil?)
+  end
+
+  def capture_move(board, pos, new_pos)
+    yn, = new_pos
+    return unless capture_move_possible?(board, new_pos)
 
     move = Move.new(pos, new_pos, new_pos)
     move.promotion = true if yn.zero? || yn == 7
-
     move
+  end
+
+  def capture_move_possible?(board, (y, x))
+    return false unless x.between?(0, 7)
+
+    piece = board.piece_at(y: y, x: x)
+    !(piece.nil? || piece.color == color)
   end
 
   def en_passant_moves(board, pos)
     y, x = pos
-    result = []
-
+    x_left = x - 1
+    x_right = x + 1
     return [] unless en_passant_rank?(y)
 
-    xn = x - 1
-    move = en_passant_move(board, pos, xn)
-    result.push(move) unless move.nil?
-
-    xn = x + 1
-    move = en_passant_move(board, pos, xn)
-    result.push(move) unless move.nil?
-    result
+    moves = [
+      en_passant_move(board, pos, x_left),
+      en_passant_move(board, pos, x_right)
+    ]
+    moves.reject(&:nil?)
   end
 
-  def en_passant_rank?(y_index)
-    y_index == @start_pos + (direction * 3)
+  def en_passant_rank?(y_pos)
+    y_pos == start_pos + (direction * 3)
   end
 
   def en_passant_move(board, pos, xn)
-    board_array = board.board_array
-    y, x = pos
-
-    piece = xn.between?(0, 7) ? board_array[y][xn] : nil
+    y, = pos
+    piece = xn.between?(0, 7) ? board.piece_at(y: y, x: xn) : nil
     return unless piece.is_a?(Pawn) && piece.color != color
 
-    prev = board.prev_board_array
+    prev_state = board.prev_state
     yn = y + (direction * 2)
-    return unless prev[yn][xn].is_a? Pawn
+    return unless prev_state.piece_at(y: yn, x: xn).is_a? Pawn
 
     move = Move.new(pos, [y + direction, xn], [y, xn])
     move.en_passant = true
