@@ -18,8 +18,8 @@ module GameFunc
 
     pieces = board.player_pieces(player.color)
     pieces.each do |piece, pos|
-      move = piece.possible_moves(board, pos)
-      result.concat(move)
+      moves = piece.possible_moves(board, pos)
+      result.concat(moves)
     end
 
     result.select { |move| legal_move?(move, player, board) }
@@ -30,25 +30,24 @@ module GameFunc
     new_board = board.update(move)
     return false if check?(player, new_board)
 
-    move.castle ? legal_castle_move?(move, player, board) : true
+    move.castle ? legal_castle_move?(player, board) : true
   end
 
   def legal_castle_move?(player, board)
     return false if check?(player, board)
 
-    y, x = player.color == 'white' ? [7, 4] : [0, 4]
-
-    new_board = move_piece(board.board_array, y, x)
+    king_pos = player.color == 'white' ? [7, 4] : [0, 4]
+    new_board = move_piece_sideways_by(x_amount: 1, piece_pos: king_pos, board: board)
     return false if check?(player, new_board)
 
-    new_board = move_piece(new_board.board_array, y, x + 1)
+    new_board = move_piece_sideways_by(x_amount: 2, piece_pos: king_pos, board: board)
     !check?(player, new_board)
   end
 
-  def move_piece(board_array, y, x)
-    board_array[y][x + 1] = board_array[y][x]
-    board_array[y][x] = nil
-    Board.new(board_array)
+  def move_piece_sideways_by(x_amount:, piece_pos:, board:)
+    y, x = piece_pos
+    move = Move.new(piece_pos, [y, x + x_amount])
+    board.update(move)
   end
 
   def check?(player, board)

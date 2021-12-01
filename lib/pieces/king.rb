@@ -16,7 +16,7 @@ class King < Piece
   def possible_moves(board, pos)
     y, x = pos
     board_array = board.board_array
-    piece = board_array[y][x]
+    piece = board.piece_at(y: y, x: x)
     return [] unless piece&.color == color && piece.is_a?(King)
 
     gen_moves(board_array, pos)
