@@ -1,11 +1,12 @@
 # frozen_string_literal: true
 
+require 'pry-byebug'
 require_relative '../move'
 require_relative 'piece'
 
 # A class to reperesnt a chess pawn
 class Pawn < Piece
-  attr_reader :direction
+  attr_reader :direction, :start_pos
 
   def initialize(color)
     super
@@ -38,14 +39,14 @@ class Pawn < Piece
     result = []
 
     yn = y + direction
-    return result unless board_array[yn][x].nil?
+    return result unless board_array[yn][x].nil? || yn > 7
 
     result.push(normal_move(pos, yn))
 
-    return result unless y == @start_pos
+    return result unless y == start_pos
 
     yn = y + (direction * 2)
-    return result unless board_array[yn][x].nil?
+    return result unless board_array[yn][x].nil? || yn > 7
 
     result.push(normal_move(pos, yn))
 
