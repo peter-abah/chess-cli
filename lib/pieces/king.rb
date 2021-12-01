@@ -6,94 +6,96 @@ require_relative 'piece'
 
 # A class to represent a kong in chess
 class King < Piece
-  attr_reader :directions
+  attr_reader :directions, :default_position
 
   def initialize(color)
     super
+    @default_position = color == 'white' ? [7, 4] : [0, 4]
     @directions = [[-1, -1], [1, 1], [1, -1], [-1, 1], [0, -1], [0, 1], [-1, 0], [1, 0]]
   end
 
   def possible_moves(board, pos)
     y, x = pos
-    board_array = board.board_array
     piece = board.piece_at(y: y, x: x)
-    return [] unless piece&.color == color && piece.is_a?(King)
+    raise ArgumentError unless piece == self
 
-    gen_moves(board_array, pos)
+    gen_moves(board, pos)
   end
 
-  def gen_moves(board_array, pos)
-    normal_moves(board_array, pos) + castle_moves(board_array, pos)
+  def gen_moves(board, pos)
+    normal_moves(board, pos) + castle_moves(board, pos)
   end
 
-  def normal_moves(board_array, pos)
+  def normal_moves(board, pos)
     result = []
     directions.each do |dir|
-      move = normal_move(board_array, pos, dir)
+      move = normal_move(board, pos, dir)
       result.push(move)
     end
 
     result.reject(&:nil?)
   end
 
-  def normal_move(board_array, pos, dir)
+  def normal_move(board, pos, dir)
     y, x = pos
     yn, xn = y + dir[0], x + dir[1]
-    return unless valid_move?(board_array, [yn, xn])
+    return unless valid_move?(board, [yn, xn])
 
     move = Move.new(pos, [yn, xn])
-    move.removed = [yn, xn] unless board_array[yn][xn].nil?
-
+    move.removed = [yn, xn] unless board.piece_at(y: yn, x: xn).nil?
     move
   end
 
-  def valid_move?(board_array, pos)
+  def valid_move?(board, pos)
     y, x = pos
     return false unless y.between?(0, 7) && x.between?(0, 7)
 
-    piece = board_array[y][x]
+    piece = board.piece_at(y: y, x: x)
     piece.nil? || piece&.color != color
   end
 
-  def castle_moves(board_array, pos)
-    return [] if has_moved
+  def castle_moves(board, pos)
+    return [] unless default_position == pos
 
-    result = []
-    move = kingside(board_array, pos)
-    result.push(move) if move
-
-    move = queenside(board_array, pos)
-    result.push(move) if move
-
-    result
+    moves = [
+      kingside_castle_move(board, pos),
+      queenside_castle_move(board, pos)
+    ]
+    moves.reject(&:nil?)
   end
 
-  def kingside(board_array, pos)
+  def kingside_castle_move(board, pos)
     y, x = pos
-    return unless board_array[y][5].nil? && board_array[y][6].nil?
-
-    rook = board_array[y][7]
-    return unless rook.is_a?(Rook) && rook.color == color && !rook.has_moved
+    return unless kingside_castle_possible?(board, y)
 
     move = Move.new(pos, [y, x + 2])
     move.add_move(from: [y, 7], destination: [y, x + 1])
     move.castle = true
-
     move
   end
 
-  def queenside(board_array, pos)
-    y, x = pos
-    return unless board_array[y][3].nil? && board_array[y][2].nil? &&
-                  board_array[y][1].nil?
+  def kingside_castle_possible?(board, y)
+    return false unless board.piece_at(y: y, x: 5).nil? && board.piece_at(y: y, x: 6).nil?
 
-    rook = board_array[y][0]
-    return unless rook.is_a?(Rook) && rook.color == color && !rook.has_moved
+    rook = board.piece_at(y: y, x: 7)
+    rook.is_a?(Rook) && rook.color == color
+  end
+
+  def queenside_castle_move(board, pos)
+    y, x = pos
+    return unless queenside_castle_possible?(board, y)
 
     move = Move.new(pos, [y, x - 2])
     move.add_move(from: [y, 0], destination: [y, x - 1])
     move.castle = true
-
     move
+  end
+
+  def queenside_castle_possible?(board, y)
+    return false unless board.piece_at(y: y, x: 3).nil? &&
+                        board.piece_at(y: y, x: 2).nil? && board.piece_at(y: y, x: 1).nil?
+
+    rook = board.piece_at(y: y, x: 0)
+    return unless rook.is_a?(Rook) && rook.color == color
   end
 end
