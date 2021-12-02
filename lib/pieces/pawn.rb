@@ -30,24 +30,27 @@ class Pawn < Piece
   private
 
   def normal_moves(board, pos)
-    y, = pos
-    result = [normal_move(board, pos, direction)]
-    result.push(normal_move(board, pos, direction * 2)) if y == start_pos
+    result = [forward_move(board, pos, direction)]
+    result.push(forward_move(board, pos, direction * 2)) if double_move_possible?(board, pos)
     result.reject(&:nil?)
   end
 
-  def normal_move(board, pos, y_amount)
+  def forward_move(board, pos, y_amount)
     y, x = pos
     yn = y + y_amount
-    return unless normal_move_possible?(board, [yn, x])
+    return unless forward_move_possible?(board, [yn, x])
 
     move = Move.new(pos, [yn, x])
     move.promotion = true if yn.zero? || yn == 7
     move
   end
 
-  def normal_move_possible?(board, (y, x))
+  def forward_move_possible?(board, (y, x))
     y > 7 || board.piece_at(y: y, x: x).nil?
+  end
+
+  def double_move_possible?(board, (y, x))
+    y == start_pos && board.piece_at(y: y + direction, x: x).nil?
   end
 
   def capture_moves(board, pos)
