@@ -9,7 +9,8 @@ require_relative 'game_func'
 class Game
   include GameFunc
 
-  attr_reader :player, :board
+  attr_accessor :winner
+  attr_reader :player, :board, :black, :white, :player_check, :castling_possible
 
   def initialize(white, black)
     @black = black
@@ -18,6 +19,10 @@ class Game
 
     @board = Board.new
     @player_check = { 'black' => false, 'white' => false }
+    @castling_possible = {
+      black: { queenside: true, kingside: true },
+      white: { queenside: true, kingside: true }
+    }
     @winner = nil
   end
 
@@ -27,19 +32,19 @@ class Game
   end
 
   def game_end?
-    @player_check[player.color] = false
+    player_check[player.color] = false
 
     check = check?(player, board)
     stalemate = legal_moves(board, player).empty?
 
     if stalemate && check
-      @winner = player == @white ? @black : @white
+      @winner = player == white ? black : white
       return true
     end
 
     return true if stalemate
 
-    @player_check[player.color] = check
+    player_check[player.color] = check
     false
   end
 
@@ -47,7 +52,7 @@ class Game
     board.display
     move = player_move
     @board = board.update(move)
-    @player = @player == @white ? @black : @white
+    @player = @player == white ? black : white
   end
 
   def display_end_game_message
