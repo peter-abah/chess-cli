@@ -96,6 +96,6 @@ class King < Piece
                         board.piece_at(y: y, x: 2).nil? && board.piece_at(y: y, x: 1).nil?
 
     rook = board.piece_at(y: y, x: 0)
-    return unless rook.is_a?(Rook) && rook.color == color
+    rook.is_a?(Rook) && rook.color == color
   end
 end
