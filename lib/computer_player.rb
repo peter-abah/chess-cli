@@ -13,7 +13,7 @@ class ComputerPlayer
   end
 
   def play_move(board)
-    moves = legal_moves(board, self)
+    moves = valid_moves(board, self)
     move = moves.sample
 
     move.promotion = PROMOTION_CHOICES.values.sample if move.promotion

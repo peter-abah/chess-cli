@@ -35,7 +35,7 @@ class Game
     player_check[player.color] = false
 
     check = check?(player, board)
-    stalemate = legal_moves(board, player).empty?
+    stalemate = valid_moves(board, player).empty?
 
     if stalemate && check
       @winner = player == white ? black : white

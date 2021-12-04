@@ -13,7 +13,7 @@ module GameFunc
     5 => Pawn
   }
 
-  def legal_moves(board, player)
+  def valid_moves(board, player)
     result = []
 
     pieces = board.player_pieces(player.color)
