@@ -65,7 +65,10 @@ class Game
   end
 
   def player_move
-    player.is_a?(ComputerPlayer) ? player.play_move(board) : prompt_player_move
+    loop do
+      move = player.is_a?(ComputerPlayer) ? player.play_move(board) : prompt_player_move
+      return move if legal_move?(move, player, board)
+    end
   end
 
   def prompt_player_move

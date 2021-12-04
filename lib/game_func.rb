@@ -14,14 +14,10 @@ module GameFunc
   }
 
   def valid_moves(board, player)
-    result = []
-
     pieces = board.player_pieces(player.color)
-    pieces.each do |piece, pos|
-      moves = piece.possible_moves(board, pos)
-      result.concat(moves)
+    result = pieces.reduce([]) do |moves, (piece, pos)|
+      moves + piece.possible_moves(board, pos)
     end
-
     result.select { |move| legal_move?(move, player, board) }
   end
 
