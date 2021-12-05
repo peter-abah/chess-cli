@@ -13,13 +13,13 @@ module Display
     King: 'K'
   }.freeze
 
-  def board_representation(board)
+  def self.board_representation(board)
     ranks = (0..7).map { |rank_no| rank_representation(board, rank_no) }
     board_repr = [COLUMN_LABELS, SEPARATOR] + ranks + [SEPARATOR, COLUMN_LABELS]
     board_repr.join("\n")
   end
 
-  def rank_representation(board, rank_no)
+  def self.rank_representation(board, rank_no)
     rank_repr = (0..7).map do |file_no|
       piece_representation(board, rank_no, file_no)
     end
@@ -29,7 +29,7 @@ module Display
     rank_repr.join(' ')
   end
 
-  def piece_representation(board, rank_no, file_no)
+  def self.piece_representation(board, rank_no, file_no)
     piece = board.piece_at(y: rank_no, x: file_no)
     return '-' if piece.nil?
 

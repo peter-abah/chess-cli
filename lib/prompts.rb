@@ -2,7 +2,7 @@
 
 # A module for game prompts
 module Prompts
-  def welcome_prompt
+  def self.welcome
     <<~HEREDOC
 
       Welcome to Chess.
@@ -23,7 +23,7 @@ module Prompts
     HEREDOC
   end
 
-  def game_choice_prompt
+  def self.game_choice
     <<~HEREDOC
       ---------------------
       1 - New game
@@ -31,7 +31,7 @@ module Prompts
     HEREDOC
   end
 
-  def player_type_prompt(color)
+  def self.player_type(color)
     <<~HEREDOC
       Choose #{color} player
       -------------
@@ -40,22 +40,22 @@ module Prompts
     HEREDOC
   end
 
-  def piece_pos_prompt(color)
+  def self.piece_pos_choice(color)
     "#{color} enter a position to move (e4 or c7)"
   end
 
-  def move_choice_prompt
+  def self.move_choice
     'Choose a move (e.g 1 or 2)'
   end
 
-  def file_name_prompt
+  def self.file_name
     <<~HEREDOC
       Enter the name you want to save your game as.
       Entering a name you have used to save a previous game state will overwrite that game state
     HEREDOC
   end
 
-  def invalid_file_name_prompt
+  def self.invalid_file_name
     'Name invalid. Note that name must not be empty'
   end
 end

@@ -4,10 +4,6 @@ require_relative '../lib/board'
 require_relative '../lib/display'
 
 describe Display do
-  # Creating dummy class that extends display module so
-  # the methods can be tested
-  let(:dummy_class) { Class.new { extend Display } }
-
   describe '#board_representation' do
     context 'when called with a default board' do
       let(:board) { Board.new }
@@ -27,7 +23,7 @@ describe Display do
             _________________
              a b c d e f g h
         BOARD
-        board_display = dummy_class.board_representation(board)
+        board_display = described_class.board_representation(board)
         expect(board_display).to eq(expected)
       end
     end
@@ -50,7 +46,7 @@ describe Display do
             _________________
              a b c d e f g h
         BOARD
-        board_display = dummy_class.board_representation(board)
+        board_display = described_class.board_representation(board)
         expect(board_display).to eq(expected)
       end
     end
@@ -73,7 +69,7 @@ describe Display do
             _________________
              a b c d e f g h
         BOARD
-        board_display = dummy_class.board_representation(board)
+        board_display = described_class.board_representation(board)
         expect(board_display).to eq(expected)
       end
     end
