@@ -40,6 +40,10 @@ module Prompts
     HEREDOC
   end
 
+  def self.no_saved_games
+    'You have not saved any game yet. Play a new game and save'
+  end
+
   def self.piece_pos_choice(color)
     "#{color} enter a position to move (e4 or c7)"
   end

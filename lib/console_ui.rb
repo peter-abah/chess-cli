@@ -65,7 +65,7 @@ class ConsoleUI
     end
 
     saved_game = saved_games_choice(saved_games)
-    Serialize.load_game(saved_game)
+    Serializer.load_game(saved_game)
   end
 
   def saved_game_choice(saved_games)
@@ -83,8 +83,12 @@ class ConsoleUI
 
   def player_move(payload)
     player = @players[payload.color.to_sym]
-    move = player.is_a? ComputerPlayer ? player.move : prompt_move
+    move = player.is_a? ComputerPlayer ? computer_move : prompt_move
     # emit move to game
+  end
+
+  def computer_move
+    move = @current_player.move
   end
 
   def end_game(payload)
