@@ -44,7 +44,7 @@ describe Serializer do
 
   describe '#save_game' do
     context 'when called with a game state' do
-      before do
+      before :each do
         allow(dummy_class).to receive(:gets).and_return('test1')
         allow(dummy_class).to receive(:puts)
       end
@@ -53,7 +53,7 @@ describe Serializer do
         game_state = {}
         expected_file = 'saved_games/test1.yaml'
         dummy_class.save_game(game_state)
-        expect(File.file?(expected_file)).to be_true
+        expect(File.file?(expected_file)).to be true
       end
     end
   end
