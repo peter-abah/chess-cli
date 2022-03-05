@@ -5,7 +5,7 @@ require_relative 'piece'
 
 # A class to represent a bishop in a chess game
 class Bishop < Piece
-  attr_reader :move_set
+  attr_reader :move_sets
 
   def initialize(color)
     super

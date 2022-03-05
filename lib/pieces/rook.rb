@@ -5,8 +5,6 @@ require_relative 'piece'
 
 # A class to represent a rook in a chess game
 class Rook < Piece
-  include MoveGenerator
-
   attr_reader :move_sets
 
   def initialize(color)

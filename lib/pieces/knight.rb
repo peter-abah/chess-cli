@@ -5,6 +5,8 @@ require_relative 'piece'
 
 # A class to represent a knight in a chess game
 class Knight < Piece
+  attr_reader :move_sets
+
   def initialize(color)
     super
     directions = [{ y: 2, x: 1 }, { y: 2, x: -1 }, { y: 1, x: 2 },

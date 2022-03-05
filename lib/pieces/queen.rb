@@ -5,9 +5,7 @@ require_relative 'piece'
 
 # A class to represent a queen in a chess game
 class Queen < Piece
-  include MoveGenerator
-
-  attr_reader :directions
+  attr_reader :move_sets
 
   def initialize(color)
     super
