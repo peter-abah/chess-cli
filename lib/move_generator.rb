@@ -1,4 +1,4 @@
-# frozen_string_literal: true
+# frozen_string_literal: true|
 
 # a module to generate moves for queen, bishop and rook
 module MoveGenerator
