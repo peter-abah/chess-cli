@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
-require_relative '../lib/pieces/king'
-require_relative '../lib/pieces/rook'
+require_relative '../../lib/pieces/king'
 
 describe King do
   let(:color) { 'white' }
