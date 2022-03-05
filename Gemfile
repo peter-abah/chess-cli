@@ -8,5 +8,6 @@ gem 'fakefs'
 gem 'require_all'
 gem 'rocketman', '~> 0.3.0'
 gem 'rspec'
+gem 'pry-byebug'
 gem 'rspec-collection_matchers'
 gem 'simplecov', require: false, group: :test
