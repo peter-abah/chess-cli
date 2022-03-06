@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative 'game_func'
+require_relative '../game_func'
 
 # A class to represent an ai that plays random legal chess moves
 class ComputerPlayer
