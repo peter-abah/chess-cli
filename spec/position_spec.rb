@@ -70,7 +70,7 @@ describe Position do
         expect(position).to have_attributes(y: 0, x: 7)
       end
       
-      it 'raises' an error for invalid position'' do
+      it 'raises an error for invalid position' do
         expect { Position.parse('i0') }.to raise_error StandardError
       end
     end
