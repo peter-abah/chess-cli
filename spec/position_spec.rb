@@ -39,6 +39,42 @@ describe Position do
     end
   end
   
+  describe '#in_bounds?' do
+    context 'when position coordinates are in board positions' do
+      let(:position) { described_class.new(y: 0, x: 1) }
+      
+      it 'returns true' do
+        expect(position).to be_in_bounds
+      end
+    end
+    
+    context 'when position coordinates are outside board positions' do
+      let(:position) { described_class.new(y: 12, x: 9) }
+      
+      it 'returns false' do
+        expect(position).not_to be_in_bounds
+      end
+    end
+  end
+  
+  describe '#out_of_bounds?' do
+    context 'when position coordinates are in board positions' do
+      let(:position) { described_class.new(y: 0, x: 1) }
+      
+      it 'returns false' do
+        expect(position).not_to be_out_of_bounds
+      end
+    end
+    
+    context 'when position coordinates are outside board positions' do
+      let(:position) { described_class.new(y: 12, x: 9) }
+      
+      it 'returns true' do
+        expect(position).to be_out_of_bounds
+      end
+    end
+  end
+  
   describe '#increment' do
     context 'when passed y and x values' do
       it 'returns a new position that is incremented by the value' do

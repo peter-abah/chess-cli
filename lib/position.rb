@@ -30,4 +30,12 @@ class Position
   def increment(y: 0, x: 0)
     Position.new(y: self.y + y, x: self.x + x)
   end
+  
+  def in_bounds?
+    y.between?(0, 7) && x.between?(0, 7)
+  end
+  
+  def out_of_bounds?
+    !in_bounds?
+  end
 end
