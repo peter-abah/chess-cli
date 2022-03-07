@@ -11,10 +11,10 @@ class Pawn < Piece
     super
 
     # where the pawn is facing -1 for up, 1 for down
-    directions = color == 'white' ? [{ y: -1, x: 0 }] : [{ y: 1, x: 0 }]
+    increments = color == 'white' ? [{ y: -1, x: 0 }] : [{ y: 1, x: 0 }]
     repeat = has_moved ? 1 : 2
     @move_sets = [MoveSet.new(
-      directions: directions,
+      increments: increments,
       repeat: repeat,
       blocked_by: :all,
       special_moves: %i[en_passant pawn_capture promotion]

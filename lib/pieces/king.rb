@@ -9,11 +9,11 @@ class King < Piece
 
   def initialize(color)
     super
-    directions = [{ y: -1, x: -1 }, { y: 1, x: 1 }, { y: 1, x: -1 },
+    increments = [{ y: -1, x: -1 }, { y: 1, x: 1 }, { y: 1, x: -1 },
                   { y: -1, x: 1 }, { y: 0, x: -1 }, { y: 0, x: 1 },
                   { y: -1, x: 0 }, { y: 1, x: 0 }]
     @move_sets = [MoveSet.new(
-      directions: directions,
+      increments: increments,
       repeat: 1,
       blocked_by: :player_piece,
       special_moves: %i[kingside_castle queenside_castle]

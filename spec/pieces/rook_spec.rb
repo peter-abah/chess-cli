@@ -25,11 +25,11 @@ describe Rook do
   describe '#move_sets' do
     it 'returns the correct move_sets' do
       move_set, = rook.move_sets
-      expected_directions = [{ y: 1, x: 0 }, { y: -1, x: 0 }, { y: 0, x: 1 },
+      expected_increments = [{ y: 1, x: 0 }, { y: -1, x: 0 }, { y: 0, x: 1 },
                              { y: 0, x: -1 }]
 
       expect(rook.move_sets.size).to eq 1
-      expect(move_set.directions).to eq expected_directions
+      expect(move_set.increments).to eq expected_increments
       expect(move_set.repeat).to eq Float::INFINITY
       expect(move_set.blocked_by).to eq :player_piece
       expect(move_set.special_moves).to be_empty

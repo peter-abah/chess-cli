@@ -17,12 +17,12 @@ describe King do
   describe '#move_sets' do
     it 'returns the correct move_sets' do
       move_set, = king.move_sets
-      expected_directions = [{ y: -1, x: -1 }, { y: 1, x: 1 }, { y: 1, x: -1 },
+      expected_increments = [{ y: -1, x: -1 }, { y: 1, x: 1 }, { y: 1, x: -1 },
                              { y: -1, x: 1 }, { y: 0, x: -1 }, { y: 0, x: 1 },
                              { y: -1, x: 0 }, { y: 1, x: 0 }]
 
       expect(king.move_sets.size).to eq 1
-      expect(move_set.directions).to eq expected_directions
+      expect(move_set.increments).to eq expected_increments
       expect(move_set.repeat).to eq 1
       expect(move_set.blocked_by).to eq :player_piece
       expect(move_set.special_moves).to eq %i[kingside_castle queenside_castle]

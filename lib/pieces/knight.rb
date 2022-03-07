@@ -9,10 +9,10 @@ class Knight < Piece
 
   def initialize(color)
     super
-    directions = [{ y: 2, x: 1 }, { y: 2, x: -1 }, { y: 1, x: 2 },
+    increments = [{ y: 2, x: 1 }, { y: 2, x: -1 }, { y: 1, x: 2 },
                   { y: 1, x: -2 }, { y: -2, x: 1 }, { y: -2, x: -1 },
                   { y: -1, x: 2 }, { y: -1, x: -2 }]
-    @move_sets = [MoveSet.new(directions: directions, repeat: 1,
+    @move_sets = [MoveSet.new(increments: increments, repeat: 1,
                               blocked_by: :player_piece)]
   end
 

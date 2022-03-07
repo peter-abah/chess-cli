@@ -15,10 +15,10 @@ describe Pawn do
   describe '#move_sets' do
     it 'returns the correct move_sets' do
       move_set, = pawn.move_sets
-      expected_directions = [{ y: -1, x: 0 }]
+      expected_increments = [{ y: -1, x: 0 }]
 
       expect(pawn.move_sets.size).to eq 1
-      expect(move_set.directions).to eq expected_directions
+      expect(move_set.increments).to eq expected_increments
       expect(move_set.repeat).to eq 2
       expect(move_set.blocked_by).to eq :all
       expect(move_set.special_moves).to eq %i[en_passant pawn_capture promotion]
@@ -27,10 +27,10 @@ describe Pawn do
     context 'when color is different' do
       subject(:pawn) { described_class.new('black') }
 
-      it 'returns move_set with different directions' do
+      it 'returns move_set with different increments' do
         move_set, = pawn.move_sets
-        expected_directions = [{ y: 1, x: 0 }]
-        expect(move_set.directions).to eq expected_directions
+        expected_increments = [{ y: 1, x: 0 }]
+        expect(move_set.increments).to eq expected_increments
       end
     end
 

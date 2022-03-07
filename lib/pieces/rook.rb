@@ -9,9 +9,9 @@ class Rook < Piece
 
   def initialize(color)
     super
-    directions = [{ y: 1, x: 0 }, { y: -1, x: 0 }, { y: 0, x: 1 },
+    increments = [{ y: 1, x: 0 }, { y: -1, x: 0 }, { y: 0, x: 1 },
                   { y: 0, x: -1 }]
-    @move_sets = [MoveSet.new(directions: directions, repeat: Float::INFINITY,
+    @move_sets = [MoveSet.new(increments: increments, repeat: Float::INFINITY,
                               blocked_by: :player_piece)]
   end
 

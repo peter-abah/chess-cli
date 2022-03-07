@@ -23,12 +23,12 @@ describe Knight do
   describe '#move_sets' do
     it 'returns the correct move_sets' do
       move_set, = knight.move_sets
-      expected_directions = [{ y: 2, x: 1 }, { y: 2, x: -1 }, { y: 1, x: 2 },
+      expected_increments = [{ y: 2, x: 1 }, { y: 2, x: -1 }, { y: 1, x: 2 },
                              { y: 1, x: -2 }, { y: -2, x: 1 }, { y: -2, x: -1 },
                              { y: -1, x: 2 }, { y: -1, x: -2 }]  
 
       expect(knight.move_sets.size).to eq 1
-      expect(move_set.directions).to eq expected_directions
+      expect(move_set.increments).to eq expected_increments
       expect(move_set.repeat).to eq 1
       expect(move_set.blocked_by).to eq :player_piece
       expect(move_set.special_moves).to be_empty
