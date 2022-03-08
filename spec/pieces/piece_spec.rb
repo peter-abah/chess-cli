@@ -18,4 +18,13 @@ RSpec.shared_examples "a chess piece" do |klass|
       expect(piece.position).to eq(position)
     end
   end
+  
+  describe '#update_position' do
+    it 'updates the piece position to the new one' do
+      new_pos = Position.parse('a4')
+      expect {
+        piece.update_position(new_pos)
+      }.to change(piece, :position).to(new_pos)
+    end
+  end
 end
