@@ -5,16 +5,20 @@ require 'require_all'
 require_rel 'pieces'
 require_relative './position'
 
+CastlingRights = Struct.new(:kingside, :queenside, keyword_init: true) do
+  def initialize(*)
+    super
+    self.kingside ||= { white: false, black: false }
+    self.queenside ||= { white: false, black: false}
+  end
+end
+
 # A class to parse Chess FEN notation
-# It only parses the chess board part and will raise an error
-# if  that is not the only part passed
-# Valid FEN: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR'
-# Invalid FEN: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w' or any other
 class FENParser
   BOARD_HEIGHT = 8
   BOARD_WIDTH = 8
 
-  DEFAULT_NOTATION = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR'
+  DEFAULT_NOTATION = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 0'
   FEN_TOKEN_REGEX = /[pkqrbn\d]/i.freeze
   LETTER_TO_PIECE_CLASS = {
     p: Pawn,
@@ -40,7 +44,7 @@ class FENParser
     invalid_board_height: "Invalid FEN notation, Board height not equal to #{BOARD_HEIGHT}"
   }.freeze
 
-  attr_reader :fen_notation
+  attr_reader :pieces, :active, :castling_rights, :en_passant_pos, :halfmove, :fullmove
 
   def self.board_to_fen(board:)
     board = board.map { |rank| rank_to_fen(rank) }
@@ -80,11 +84,43 @@ class FENParser
   end
 
   def initialize(fen_notation = DEFAULT_NOTATION)
-    @fen_notation = fen_notation
+    segments = fen_notation.split(' ')
+    raise ArgumentError unless segments.size == 6
+    
+    @pieces = segments[0]
+    @active = segments[1]
+    @castling_rights = segments[2]
+    @en_passant_pos = segments[3]
+    @halfmove = segments[4]
+    @fullmove = segments[5]
   end
   
   def parse
-    ranks = fen_notation.split('/')
+    {
+      pieces: parse_pieces,
+      active_color: active == 'w' ? :white : :black,
+      castling_rights: parse_castling_rights,
+      en_passant_square: Position.parse(en_passant_pos),
+      halfmove_clock: halfmove.to_i,
+      fullmove_no: fullmove.to_i
+    }
+  end
+  
+  private
+  
+  def parse_castling_rights
+    res = CastlingRights.new
+
+    res.kingside[:white] = true if castling_rights.include?('K')
+    res.kingside[:black] = true if castling_rights.include?('k')
+    res.queenside[:white] = true if castling_rights.include?('Q')
+    res.queenside[:black] = true if castling_rights.include?('q')
+    
+    res
+  end
+  
+  def parse_pieces
+    ranks = pieces.split('/')
     raise ArgumentError, ERROR_MESSAGES[:invalid_board_height] if ranks.length != BOARD_HEIGHT
     
     ranks.each_with_index.reduce([]) { |res, (rank, y)| res.concat parse_rank_fen(rank, y) }
