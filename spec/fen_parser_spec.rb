@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative '../lib/fen_parser'
+require_relative '../lib/position'
 require_rel '../lib/pieces'
 
 describe FENParser do
@@ -30,20 +31,15 @@ describe FENParser do
       let(:valid_notation) { '8/8/8/r7/8/8/8/8' }
       let(:fen_parser) { described_class.new(valid_notation) }
 
-      it 'should return an 8 x 8 multidimensional array' do
+      it 'should return an array containing the correct pieces' do
         result = fen_parser.parse
-
-        expect(result.length).to eq(8)
-        expect(result).to all(be_a Array)
-        expect(result).to all(have(8).items)
+        expect(result).to contain_exactly(be_a(Rook).and(have_attributes(color: 'black')))
       end
 
-      it 'should return a correct representation of the board' do
-        piece = fen_parser.parse[3][0]
-        empty = fen_parser.parse[7][7]
+      it 'the piece should have the correct position' do
+        piece_pos = fen_parser.parse[0].position
 
-        expect(piece).to be_a Rook
-        expect(empty).to be_nil
+        expect(piece_pos).to have_attributes(y: 3, x: 0)
       end
     end
 
@@ -56,44 +52,42 @@ describe FENParser do
       end
     end
   end
-
-  # class method
-  describe '#board_to_fen' do
-    context 'when called with a board array' do
+  
+  describe '::pieces_to_fen' do
+    context 'when called with an array containing one black rook at a8' do
+      let(:pieces) { [Pawn.new('white', Position.parse('a8'))] }
+      
       it 'should return the valid fen notation' do
-        board = Array.new(8) { Array.new(8) }
-        board[0][0] = Pawn.new('white')
         expected_fen_notation = 'P7/8/8/8/8/8/8/8'
 
-        fen_notation = described_class.board_to_fen(board: board)
+        fen_notation = described_class.pieces_to_fen(pieces)
         expect(fen_notation).to eq expected_fen_notation
       end
+    end
+    
+    context 'when there are more than one pieces' do
+      let(:pieces) { [
+        Pawn.new('black', Position.parse('e4')),
+        Knight.new('white', Position.parse('d1'))
+      ] }
 
       it 'should return the valid fen notation' do
-        board = Array.new(8) { Array.new(8) }
-        board[7][7] = Pawn.new('black')
-        expected_fen_notation = '8/8/8/8/8/8/8/7p'
-
-        fen_notation = described_class.board_to_fen(board: board)
-        expect(fen_notation).to eq expected_fen_notation
-      end
-
-      it 'should return the valid fen notation' do
-        board = Array.new(8) { Array.new(8) }
-        board[4][4] = Pawn.new('black')
-        board[7][3] = Knight.new('white')
         expected_fen_notation = '8/8/8/8/4p3/8/8/3N4'
 
-        fen_notation = described_class.board_to_fen(board: board)
+        fen_notation = described_class.pieces_to_fen(pieces)
         expect(fen_notation).to eq expected_fen_notation
       end
-
+    end
+    
+    context 'when there are more than one piece on a rank' do
+      let(:pieces) do
+        (0..7).map { |x| Pawn.new('black', Position.new(y: 1, x: x)) }
+      end
+ 
       it 'should return the valid fen notation' do
-        board = Array.new(8) { Array.new(8) }
-        board[1] = Array.new(8) { Pawn.new('black') }
         expected_fen_notation = '8/pppppppp/8/8/8/8/8/8'
 
-        fen_notation = described_class.board_to_fen(board: board)
+        fen_notation = described_class.pieces_to_fen(pieces)
         expect(fen_notation).to eq expected_fen_notation
       end
     end

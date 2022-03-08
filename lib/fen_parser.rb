@@ -1,7 +1,10 @@
 # frozen_string_literal: true
 
 require 'pry-byebug'
+require 'require_all'
 require_rel 'pieces'
+require_relative './position'
+
 # A class to parse Chess FEN notation
 # It only parses the chess board part and will raise an error
 # if  that is not the only part passed
@@ -43,24 +46,31 @@ class FENParser
     board = board.map { |rank| rank_to_fen(rank) }
     board.join('/')
   end
-
-  def self.rank_to_fen(rank)
+  
+  def self.pieces_to_fen(pieces)
+    (0..7).map { |y| build_rank_fen(pieces, y) }.join('/')
+  end
+  
+  def self.build_rank_fen(pieces, y)
+    rank = ''
     no_of_consecutive_empty_cells = 0
 
-    rank.each_with_index.reduce('') do |rank_fen, (piece, index)|
+    0.upto(7) do |x|
+      piece = pieces.find { |piece| piece.position.y == y && piece.position.x == x }
+
       if piece.nil?
         no_of_consecutive_empty_cells += 1
-        rank_fen += no_of_consecutive_empty_cells.to_s if index == (BOARD_WIDTH - 1)
+        rank += no_of_consecutive_empty_cells.to_s if x == (BOARD_WIDTH - 1)
       else
-        rank_fen += piece_to_fen(piece, no_of_consecutive_empty_cells)
+        rank += get_piece_letter(piece, no_of_consecutive_empty_cells)
         no_of_consecutive_empty_cells = 0
       end
-
-      rank_fen
     end
+    
+    rank
   end
 
-  def self.piece_to_fen(piece, no_of_consecutive_empty_cells)
+  def self.get_piece_letter(piece, no_of_consecutive_empty_cells)
     result = ''
     result += no_of_consecutive_empty_cells.to_s if no_of_consecutive_empty_cells != 0
 
@@ -72,33 +82,45 @@ class FENParser
   def initialize(fen_notation = DEFAULT_NOTATION)
     @fen_notation = fen_notation
   end
-
+  
   def parse
-    board = fen_notation.split('/')
-    raise ArgumentError, ERROR_MESSAGES[:invalid_board_height] if board.length != BOARD_HEIGHT
-
-    board.map { |rank_fen| parse_rank_fen(rank_fen) }
+    ranks = fen_notation.split('/')
+    raise ArgumentError, ERROR_MESSAGES[:invalid_board_height] if ranks.length != BOARD_HEIGHT
+    
+    ranks.each_with_index.reduce([]) { |res, (rank, y)| res.concat parse_rank_fen(rank, y) }
   end
+  
+  def parse_rank_fen(rank_fen, y)
+    tokens = rank_fen.split('')
+    pos = Position.new(y: y, x: -1)
 
-  def parse_rank_fen(rank_fen)
-    rank = rank_fen.split('')
-    rank = rank.reduce([]) { |result, token| result + parse_fen_token(token) }
-    raise ArgumentError, ERROR_MESSAGES[:invalid_board_width] if rank.length != BOARD_WIDTH
-
-    rank
+    pieces = tokens.reduce([]) do |res, token|
+      piece, pos = parse_token(token, pos)
+      res.push(piece)
+    end
+    
+    raise ArgumentError, ERROR_MESSAGES[:invalid_board_width] if pos.x + 1 != BOARD_WIDTH
+    pieces.reject(&:nil?)
   end
-
-  def parse_fen_token(token)
+  
+  def parse_token(token, pos)
     raise ArgumentError, ERROR_MESSAGES[:invalid_token] unless FEN_TOKEN_REGEX.match(token)
 
-    return Array.new(token.to_i) if is_integer?(token)
-
-    color = token == token.upcase ? 'white' : 'black'
-    piece = LETTER_TO_PIECE_CLASS[token.downcase.to_sym].new(color)
-    [piece]
+    if is_integer? token
+      pos = pos.increment(x: token.to_i)
+      piece = nil
+    else
+      color = token.upcase == token ? 'white' : 'black'
+      piece_class = LETTER_TO_PIECE_CLASS[token.downcase.to_sym]
+      
+      pos = pos.increment(x: 1)
+      piece = piece_class.new(color, pos)
+    end
+    
+    [piece, pos]
   end
 
   def is_integer?(string)
-    string.to_i.to_s == string
+    /^\d+$/.match string
   end
 end
