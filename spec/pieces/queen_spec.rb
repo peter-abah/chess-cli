@@ -1,26 +1,13 @@
 # frozen_string_literal: true
 
 require_relative '../../lib/pieces/queen'
+require_relative './piece_spec'
 
 describe Queen do
-  subject(:queen) { described_class.new('white') }
+  let(:position) { Position.new(y: 1, x: 1) }
+  subject(:queen) { described_class.new('white', position) }
 
-  describe '#initialize' do
-    context 'when called with one argument' do
-      let(:color) { 'white' }
-      subject(:queen) { described_class.new(color) }
-
-      it 'creates a new object with @color as its 1st argument' do
-        result = queen.instance_variable_get(:@color)
-        expect(result).to eq(color)
-      end
-
-      it 'has a @has_moved attribute with value of false' do
-        result = queen.instance_variable_get(:@has_moved)
-        expect(result).to be false
-      end
-    end
-  end
+  it_behaves_like 'a chess piece', described_class
 
   describe '#move_sets' do
     it 'returns the correct move_sets' do

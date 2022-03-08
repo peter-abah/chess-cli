@@ -5,20 +5,21 @@ require_relative 'piece'
 
 # A class to reperesnt a chess pawn
 class Pawn < Piece
-  attr_reader :move_sets
+  attr_reader :move_sets, :direction
 
-  def initialize(color)
+  def initialize(color, position)
     super
 
     # where the pawn is facing -1 for up, 1 for down
-    increments = color == 'white' ? [{ y: -1, x: 0 }] : [{ y: 1, x: 0 }]
+    direction = color == 'white' ? -1 : 1
+    increments = [{ y: direction, x: 0 }]
     repeat = has_moved ? 1 : 2
     @move_sets = [MoveSet.new(
       increments: increments,
       repeat: repeat,
       blocked_by: :all,
-      special_moves: %i[en_passant pawn_capture promotion]
-    )]
+      special_moves: %i[en_passant promotion]
+    ), MoveSet.new(repeat: 1, increments: [], blocked_by: :player_piece, special_moves: [:pawn_capture])]
   end
 
   # def possible_moves(board, pos)

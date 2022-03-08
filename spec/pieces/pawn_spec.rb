@@ -1,12 +1,16 @@
 # frozen_string_literal: true
 
 require_relative '../../lib/pieces/pawn'
+require_relative './piece_spec'
 
 describe Pawn do
-  subject(:pawn) { described_class.new('white') }
+  let(:position) { Position.new(y: 1, x: 1) }
+  subject(:pawn) { described_class.new('white', position) }
+  
+  it_behaves_like 'a chess piece', described_class
 
-  describe '#initialize' do
-    context 'when called with one argument' do
+  xdescribe '#direction' do
+    context 'when called color is white' do
       let(:color) { 'white' }
       subject(:pawn) { described_class.new(color) }
     end
@@ -17,15 +21,15 @@ describe Pawn do
       move_set, = pawn.move_sets
       expected_increments = [{ y: -1, x: 0 }]
 
-      expect(pawn.move_sets.size).to eq 1
+      expect(pawn.move_sets.size).to eq 2
       expect(move_set.increments).to eq expected_increments
       expect(move_set.repeat).to eq 2
       expect(move_set.blocked_by).to eq :all
-      expect(move_set.special_moves).to eq %i[en_passant pawn_capture promotion]
+      expect(move_set.special_moves).to eq %i[en_passant promotion]
     end
 
     context 'when color is different' do
-      subject(:pawn) { described_class.new('black') }
+      subject(:pawn) { described_class.new('black', position) }
 
       it 'returns move_set with different increments' do
         move_set, = pawn.move_sets

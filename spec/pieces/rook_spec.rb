@@ -1,26 +1,13 @@
 # frozen_string_literal: true
 
 require_relative '../../lib/pieces/rook'
+require_relative './piece_spec'
 
 describe Rook do
-  subject(:rook) { described_class.new('white') }
-
-  describe '#initialize' do
-    context 'when called with one argument' do
-      let(:color) { 'black' }
-      subject(:rook) { described_class.new(color) }
-
-      it 'creates a new object with @color as its first argument' do
-        result = rook.instance_variable_get(:@color)
-        expect(result).to eq(color)
-      end
-
-      it 'has a @has_moved attribute with value of false' do
-        result = rook.instance_variable_get(:@has_moved)
-        expect(result).to be false
-      end
-    end
-  end
+  let(:position) { Position.new(y: 1, x: 1) }
+  subject(:rook) { described_class.new('white', position) }
+  
+  it_behaves_like 'a chess piece', described_class
 
   describe '#move_sets' do
     it 'returns the correct move_sets' do

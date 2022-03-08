@@ -1,18 +1,13 @@
 # frozen_string_literal: true
 
 require_relative '../../lib/pieces/king'
+require_relative './piece_spec'
 
 describe King do
-  let(:color) { 'white' }
-  subject(:king) { described_class.new(color) }
-
-  describe '#color' do
-    context 'when called' do
-      it 'returns the correct color for the piece' do
-        expect(king.color).to eq(color)
-      end
-    end
-  end
+  let(:position) { Position.new(y: 1, x: 1) }
+  subject(:king) { described_class.new('white', position) }
+  
+  it_behaves_like 'a chess piece', described_class
 
   describe '#move_sets' do
     it 'returns the correct move_sets' do

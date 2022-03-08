@@ -7,7 +7,7 @@ require_relative 'piece'
 class Queen < Piece
   attr_reader :move_sets
 
-  def initialize(color)
+  def initialize(color, position)
     super
     increments = [{ y: 1, x: 1 }, { y: -1, x: 1 }, { y: -1, x: -1 },
                   { y: 1, x: -1 }, { y: 1, x: 0 }, { y: -1, x: 0 },

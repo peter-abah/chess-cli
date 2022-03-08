@@ -1,24 +1,13 @@
 # frozen_string_literal: true
 
 require_relative '../../lib/pieces/bishop'
+require_relative './piece_spec'
 
 describe Bishop do
-  subject(:bishop) { described_class.new('white') }
-
-  describe '#initialize' do
-    let(:color) { 'black' }
-    subject(:bishop) { described_class.new(color) }
-
-    it 'creates a new object with @color as its first argument' do
-      result = bishop.instance_variable_get(:@color)
-      expect(result).to eq(color)
-    end
-
-    it 'has a @has_moved attribute with value of false' do
-      result = bishop.instance_variable_get(:@has_moved)
-      expect(result).to be false
-    end
-  end
+  let(:position) { Position.new(y: 1, x: 1) }
+  subject(:bishop) { described_class.new('white', position) }
+  
+  it_behaves_like 'a chess piece', described_class
 
   describe '#move_sets' do
     it 'returns the correct move_sets' do
