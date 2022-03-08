@@ -20,11 +20,10 @@ RSpec.shared_examples "a chess piece" do |klass|
   end
   
   describe '#update_position' do
-    it 'updates the piece position to the new one' do
+    it 'returns a new piece with the new position' do
       new_pos = Position.parse('a4')
-      expect {
-        piece.update_position(new_pos)
-      }.to change(piece, :position).to(new_pos)
+      expect(piece.update_position(new_pos))
+        .to have_attributes(position: new_pos, class: klass, color: piece.color)
     end
   end
 end

@@ -12,6 +12,6 @@ class Piece
   end
   
   def update_position(new_pos)
-    @position = new_pos
+    self.class.new(color, new_pos)
   end
 end
