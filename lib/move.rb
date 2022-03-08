@@ -2,42 +2,30 @@
 
 # A class to represent a chess move
 class Move
-  attr_accessor :moved, :removed, :en_passant, :promotion, :castle
+  attr_reader :moved, :removed, :promotion, :castle
 
-  def initialize(position, destination, removed = nil)
-    @en_passant = false
-    @promotion = false
-    @castle = false
-
+  def initialize(from:, to:, removed: nil, promotion: nil, castle: nil)
+    @promotion = promotion
+    @castle = castle
     @removed = removed
-    @moved = { position => destination }
+    @moved = [{ from: from, to: to }].freeze
   end
 
-  def add_move(from:, destination:)
-    moved[from] = destination
+  def add_move(from:, to:)
+    moved = [*moved, { from: from, to: to }].freeze
   end
 
-  def destination_for(from:)
-    moved[from]
+  def destination_for(from)
+    hash = moved.find { |hash| hash[:from] == from }
+    hash[:to]
   end
 
   def to_s
-    result = moved.reduce([]) do |moves_str, (pos, dest)|
-      moves_str << move_to_str(from: pos, destination: dest)
-    end
-    result.join(', ')
-  end
-
-  private
-
-  def move_to_str(from:, destination:)
-    position_str = position_to_str(position: from)
-    destination_str = position_to_str(position: destination)
-    "|#{position_str} => #{destination_str}|"
-  end
-
-  def position_to_str(position:)
-    y, x = position
-    "#{(97 + x).chr}#{8 - y}"
+    return '0-0' if castle == :kingside
+    
+    return '0-0-0' if castle == :queenside
+    
+    moves = moved.map { |hash| "#{hash[:from]}#{hash[:to]}#{promotion.to_s.upcase}" }
+    moves.join(',')
   end
 end
