@@ -75,6 +75,136 @@ describe Position do
     end
   end
   
+  describe '#starting_pawn_rank?' do
+    context 'when rank is 2 and color is white' do
+      let(:position) { described_class.parse('a2') }
+      
+      it 'returns true' do
+        expect(position).to be_starting_pawn_rank 'white'
+      end
+    end
+    
+    context 'when rank is 7 and color is black' do
+      let(:position) { described_class.parse('a7') }
+      
+      it 'returns true' do
+        expect(position).to be_starting_pawn_rank 'black'
+      end
+    end
+    
+    context 'when rank is 4 and color is white' do
+      let(:position) { described_class.parse('a4') }
+      
+      it 'returns false' do
+        expect(position).not_to be_starting_pawn_rank 'white'
+      end
+    end
+  end
+  
+  describe '#en_passant_rank?' do
+    context 'when rank is 4 and color is white' do
+      let(:position) { described_class.parse('a4') }
+      
+      it 'returns true' do
+        expect(position).to be_en_passant_rank 'white'
+      end
+    end
+    
+    context 'when rank is 5 and color is black' do
+      let(:position) { described_class.parse('a5') }
+      
+      it 'returns true' do
+        expect(position).to be_en_passant_rank 'black'
+      end
+    end
+    
+    context 'when rank is 7 and color is white' do
+      let(:position) { described_class.parse('a7') }
+      
+      it 'returns false' do
+        expect(position).not_to be_en_passant_rank 'white'
+      end
+    end
+  end
+  
+  describe '#king_pos?' do
+    context 'when pos is e1 and color is white' do
+      let(:position) { described_class.parse('e1') }
+      
+      it 'returns true' do
+        expect(position).to be_king_pos :white
+      end
+    end
+    
+    context 'when pos is e8 and color is black' do
+      let(:position) { described_class.parse('e8') }
+      
+      it 'returns true' do
+        expect(position).to be_king_pos :black
+      end
+    end
+    
+    context 'when pos is a4 and color is white' do
+      let(:position) { described_class.parse('a4') }
+      
+      it 'returns false' do
+        expect(position).not_to be_king_pos :white
+      end
+    end
+  end
+  
+  describe '#kingside_rook_pos?' do
+    context 'when pos is h1 and color is white' do
+      let(:position) { described_class.parse('h1') }
+      
+      it 'returns true' do
+        expect(position).to be_kingside_rook_pos :white
+      end
+    end
+    
+    context 'when pos is h8 and color is black' do
+      let(:position) { described_class.parse('h8') }
+      
+      it 'returns true' do
+        expect(position).to be_kingside_rook_pos :black
+      end
+    end
+    
+    context 'when pos is a4 and color is white' do
+      let(:position) { described_class.parse('a4') }
+      
+      it 'returns false' do
+        expect(position).not_to be_kingside_rook_pos :white
+      end
+    end
+  end
+  
+  describe '#queenside_rook_pos?' do
+    context 'when pos is a1 and color is white' do
+      let(:position) { described_class.parse('a1') }
+      
+      it 'returns true' do
+        expect(position).to be_queenside_rook_pos :white
+      end
+    end
+    
+    context 'when pos is a8 and color is black' do
+      let(:position) { described_class.parse('a8') }
+      
+      it 'returns true' do
+        expect(position).to be_queenside_rook_pos :black
+      end
+    end
+    
+    context 'when pos is a4 and color is white' do
+      let(:position) { described_class.parse('a4') }
+      
+      it 'returns false' do
+        expect(position).not_to be_queenside_rook_pos :white
+      end
+    end
+  end
+  
   describe '#increment' do
     context 'when passed y and x values' do
       it 'returns a new position that is incremented by the value' do

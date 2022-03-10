@@ -38,4 +38,27 @@ class Position
   def out_of_bounds?
     !in_bounds?
   end
+  
+  def starting_pawn_rank?(color)
+    (color == 'white' && y == 6) || (color == 'black' && y == 1)
+  end
+  
+  def en_passant_rank?(color)
+    (color == 'white' && y == 4) || (color == 'black' && y == 3)
+  end
+  
+  def king_pos?(color)
+    y = color == :black ? 0 : 7
+    self.y == y && self.x == 4
+  end
+  
+  def kingside_rook_pos?(color)
+    y = color == :black ? 0 : 7
+    self.y == y && self.x == 7
+  end
+
+  def queenside_rook_pos?(color)
+    y = color == :black ? 0 : 7
+    self.y == y && self.x == 0
+  end
 end
