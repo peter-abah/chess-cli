@@ -9,116 +9,130 @@ require_rel 'pieces'
 class Board
   include LetterDisplay
 
-  DEFAULT_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR'
+  DEFAULT_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 0'
 
-  attr_reader :board_array, :prev_board_array, :prev_state
+  attr_reader :pieces, :active_color, :en_passant_square, :halfmove_clock, :fullmove_no
 
-  def initialize(board_array = nil, prev_board_array = nil, fen_notation: DEFAULT_FEN, prev_state: nil)
-    @pieces = { 'white' => {}, 'black' => {} }
-
-    @board_array = board_array || FENParser.new(fen_notation).parse
-    @prev_board_array = prev_board_array
-    @prev_state = prev_state || self
-
-    update_pieces_positions
+  def initialize(fen_notation: DEFAULT_FEN, segments: nil)
+    segments ||= FENParser.new(fen_notation).parse
+    @pieces = segments[:pieces].freeze
+    @active_color = segments[:active_color]
+    @castling_rights = segments[:castling_rights]
+    @en_passant_square = segments[:en_passant_square]
+    @halfmove_clock = segments[:halfmove_clock]
+    @fullmove_no = segments[:fullmove_no]
   end
 
   def update(move)
-    new_board_array = board_array.map(&:dup)
+    segments = {
+      pieces: update_pieces(move),
+      active_color: active_color == :white ? :black : white,
+      castling_rights: update_castling_rights(move),
+      en_passant_square: update_en_passant_square(move),
+      halfmove_clock: update_halfmove_clock(move),
+      fullmove_no: active_color == :black ? fullmove_no + 1 : fullmove_no
+    }
 
-    remove_piece(new_board_array, move)
-    move_pieces(new_board_array, move)
-
-    new_fen_notation = FENParser.board_to_fen(board: new_board_array)
-    Board.new(nil, board_array, fen_notation: new_fen_notation, prev_state: self)
+    Board.new(segments: segments)
   end
 
   def player_pieces(color)
-    @pieces[color]
+    pieces.select { |piece| piece.color == color }
   end
 
-  def piece_at(y:, x:)
-    board_array[y][x]
+  def piece_at(pos, piecesn: pieces)
+    piecesn.find { |piece| piece.position == pos }
+  end
+  
+  def can_castle_kingside?(color)
+    castling_rights.kingside[color]
+  end
+  
+  def can_castle_queenside?(color)
+    castling_rights.queenside[color]
   end
 
   private
-
-  def remove_piece(array, move)
-    return unless move.removed
-
-    y, x = move.removed
-    array[y][x] = nil
+  
+  attr_reader :castling_rights
+  
+  def update_castling_rights
+    new_castling_rights = castling_rights.dup
+    
+    new_castling_rights.kingside[:white] = invalidate_kingside_castling? move, :white
+    new_castling_rights.queenside[:white] = invalidate_queenside_castling? move, :white
+    
+    new_castling_rights.kingside[:black] = invalidate_kingside_castling? move, :black
+    new_castling_rights.queenside[:black] = invalidate_queenside_castling? move, :black
+    
+    new_castling_rights
+  end
+  
+  def invalidate_kingside_castling?(move, color)
+    if color == active_color
+      move.from.king_pos?(color) || move.from.kingside_rook_pos?(color)
+    elsif move.removed
+      move.removed.kingside_rook_pos?(color)
+    end
+  end
+  
+  def invalidate_queenside_castling?(move, color)
+    if color == active_color
+      move.from.king_pos?(color) || move.from.queenside_rook_pos?(color)
+    elsif move.removed
+      move.removed.queenside_rook_pos?(color)
+    end
+  end
+  
+  def update_pieces(move)
+    pieces = remove_piece(move)
+    move_pieces(pieces, move)
+  end
+  
+  def update_en_passant_square(move)
+    move.moved.reduce('-') do |res, hash|
+      en_passant_possible?(hash) ? hash[:to].to_s : res
+    end
+  end
+  
+  def update_halfmove_clock(move)
+    move.moved.reduce(false) do |increase_clock, hash|
+      piece = piece_at(hash[:from])
+      piece.is_a? Pawn ? true : increase_clock
+    end
+    
+    moved.removed || increase_clock ? halfmove_clock + 1 : 0
   end
 
-  def move_pieces(array, move)
-    move.moved.each do |piece_pos, new_pos|
-      move_piece(array, piece_pos, new_pos)
-      promote_piece(array, new_pos, move.promotion)
+  def en_passant_possible(hash)
+    piece = piece_at(hash[:from])
+
+    piece.is_a?(Pawn) && hash[:from].starting_pawn_rank(piece.color) &&
+      hash[:to].en_passant_rank?(piece.color)
+  end   
+
+  def remove_piece(move)
+    return pieces.dup unless move.removed
+    
+    pieces.reject { |piece| piece.position == move.removed }
+  end
+
+  def move_pieces(pieces, move)
+    move.moved.map do |hash|
+      piece = move_piece(pieces, hash)
+      piece = promote_piece(pieces, hash[:to], move.promotion) if move.promotion
+      pieces = pieces.reject { |piece| piece.position == hash[:from] }
     end
   end
 
-  def move_piece(array, piece_pos, new_pos)
-    y, x = piece_pos
-    piece = array[y][x]
-    array[y][x] = nil
-
-    y, x = new_pos
-    array[y][x] = piece
-    piece.has_moved = true
+  def move_piece(pieces, hash)
+    piece = piece_at(hash[:from], pieces: pieces)
+    piece.update_position(hash[:to])
   end
 
-  def promote_piece(array, piece_pos, piece_class)
-    return unless piece_class
-
-    y, x = piece_pos
-    color = array[y][x].color
-    array[y][x] = piece_class.new(color)
-  end
-
-  def create_board_array
-    array = Array.new(8) { Array.new(8) }
-
-    array[0] = pieces_array('black')
-    array[1] = pawn_array('black')
-
-    array[6] = pawn_array('white')
-    array[7] = pieces_array('white')
-
-    array
-  end
-
-  def pieces_array(color)
-    array = []
-
-    array.concat(side_pieces(color))
-    array.push(Queen.new(color))
-    array.push(King.new(color))
-
-    array.concat(side_pieces(color).reverse)
-  end
-
-  def side_pieces(color)
-    array = Array.new(3)
-
-    array[0] = Rook.new(color)
-    array[1] = Knight.new(color)
-    array[2] = Bishop.new(color)
-
-    array
-  end
-
-  def pawn_array(color)
-    Array.new(8) { Pawn.new(color) }
-  end
-
-  def update_pieces_positions
-    0.upto(7) do |y|
-      0.upto(7) do |x|
-        piece = board_array[y][x]
-        next if piece.nil?
-
-        @pieces[piece.color][piece] = [y, x]
-      end
-    end
+  def promote_piece(pieces, pos, piece_letter)
+    piece_class = LETTER_TO_PIECE_CLASS[piece_letter.downcase.to_sym]
+    color = piece_at(piece_pos).color
+    piece_class.new(color, pos)
   end
 end
