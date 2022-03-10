@@ -12,8 +12,13 @@ class Knight < Piece
     increments = [{ y: 2, x: 1 }, { y: 2, x: -1 }, { y: 1, x: 2 },
                   { y: 1, x: -2 }, { y: -2, x: 1 }, { y: -2, x: -1 },
                   { y: -1, x: 2 }, { y: -1, x: -2 }]
-    @move_sets = [MoveSet.new(increments: increments, repeat: 1,
-                              blocked_by: :player_piece)]
+    @move_sets = [
+      MoveSet.new(
+        increments: increments,
+        repeat: 1,
+        blocked_by: [:same]
+      )
+    ]
   end
 
   # def possible_moves(board, pos)

@@ -11,16 +11,10 @@ class Rook < Piece
     super
     increments = [{ y: 1, x: 0 }, { y: -1, x: 0 }, { y: 0, x: 1 },
                   { y: 0, x: -1 }]
-    @move_sets = [MoveSet.new(increments: increments, repeat: Float::INFINITY,
-                              blocked_by: :player_piece)]
+    @move_sets = [
+      MoveSet.new(
+        increments: increments,
+        repeat: Float::INFINITY,
+        blocked_by: [:same])]
   end
-
-  # def possible_moves(board, pos)
-  #   y, x = pos
-  #   board_array = board.board_array
-  #   piece = board_array[y][x]
-  #   return [] unless piece&.color == color && piece.is_a?(Rook)
-
-  #   gen_moves(board_array, pos)
-  # end
 end
