@@ -80,7 +80,7 @@ describe Position do
       let(:position) { described_class.parse('a2') }
       
       it 'returns true' do
-        expect(position).to be_starting_pawn_rank 'white'
+        expect(position).to be_starting_pawn_rank :white
       end
     end
     
@@ -88,7 +88,7 @@ describe Position do
       let(:position) { described_class.parse('a7') }
       
       it 'returns true' do
-        expect(position).to be_starting_pawn_rank 'black'
+        expect(position).to be_starting_pawn_rank :black
       end
     end
     
@@ -96,7 +96,7 @@ describe Position do
       let(:position) { described_class.parse('a4') }
       
       it 'returns false' do
-        expect(position).not_to be_starting_pawn_rank 'white'
+        expect(position).not_to be_starting_pawn_rank :white
       end
     end
   end
@@ -106,7 +106,7 @@ describe Position do
       let(:position) { described_class.parse('a4') }
       
       it 'returns true' do
-        expect(position).to be_en_passant_rank 'white'
+        expect(position).to be_en_passant_rank :white
       end
     end
     
@@ -114,7 +114,7 @@ describe Position do
       let(:position) { described_class.parse('a5') }
       
       it 'returns true' do
-        expect(position).to be_en_passant_rank 'black'
+        expect(position).to be_en_passant_rank :black
       end
     end
     
@@ -122,7 +122,7 @@ describe Position do
       let(:position) { described_class.parse('a7') }
       
       it 'returns false' do
-        expect(position).not_to be_en_passant_rank 'white'
+        expect(position).not_to be_en_passant_rank :white
       end
     end
   end

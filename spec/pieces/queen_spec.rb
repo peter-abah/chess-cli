@@ -5,7 +5,7 @@ require_relative './piece_spec'
 
 describe Queen do
   let(:position) { Position.new(y: 1, x: 1) }
-  subject(:queen) { described_class.new('white', position) }
+  subject(:queen) { described_class.new(:white, position) }
 
   it_behaves_like 'a chess piece', described_class
 

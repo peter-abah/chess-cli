@@ -40,11 +40,11 @@ class Position
   end
   
   def starting_pawn_rank?(color)
-    (color == 'white' && y == 6) || (color == 'black' && y == 1)
+    (color == :white && y == 6) || (color == :black && y == 1)
   end
   
   def en_passant_rank?(color)
-    (color == 'white' && y == 4) || (color == 'black' && y == 3)
+    (color == :white && y == 4) || (color == :black && y == 3)
   end
   
   def king_pos?(color)

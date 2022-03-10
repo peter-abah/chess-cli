@@ -4,7 +4,7 @@ require_relative '../../lib/position'
 
 RSpec.shared_examples "a chess piece" do |klass|
   let(:position) { Position.new(y: 1, x: 1) }
-  let(:color) { 'black' }
+  let(:color) { :black }
   subject(:piece) { klass.new(color, position) }
 
   describe '#color' do

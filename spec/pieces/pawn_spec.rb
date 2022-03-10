@@ -5,7 +5,7 @@ require_relative './piece_spec'
 
 describe Pawn do
   let(:position) { Position.new(y: 1, x: 1) }
-  subject(:pawn) { described_class.new('white', position) }
+  subject(:pawn) { described_class.new(:white, position) }
   
   it_behaves_like 'a chess piece', described_class
 
@@ -29,7 +29,7 @@ describe Pawn do
     end
 
     context 'when color is different' do
-      subject(:pawn) { described_class.new('black', position) }
+      subject(:pawn) { described_class.new(:black, position) }
 
       it 'returns move_set with different increments' do
         move_set, = pawn.move_sets
@@ -39,7 +39,7 @@ describe Pawn do
     end
 
     xcontext 'when the pawn has moved' do
-      subject(:pawn) { described_class.new('white') }
+      subject(:pawn) { described_class.new(:white) }
 
       before { pawn.has_moved = true }
 

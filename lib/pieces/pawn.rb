@@ -11,7 +11,7 @@ class Pawn < Piece
     super
 
     # where the pawn is facing -1 for up, 1 for down
-    direction = color == 'white' ? -1 : 1
+    direction = color == :white ? -1 : 1
     increments = [{ y: direction, x: 0 }]
     repeat = has_moved ? 1 : 2
     @move_sets = [MoveSet.new(
