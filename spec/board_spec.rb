@@ -5,6 +5,7 @@ require 'require_all'
 require_relative 'board_matchers'
 require_relative '../lib/board'
 require_relative '../lib/position'
+require_relative '../lib/move'
 require_relative '../lib/castling_rights'
 require_rel '../lib/pieces'
 
@@ -230,6 +231,173 @@ describe Board do
       expect(board.player_pieces(:white)).to(
         all(have_attributes(color: :white)).and(have_attributes(size: 16))
       )
+    end
+  end
+  
+  describe '#make_move' do
+    context 'when called with a move that moves pawn from a2 to a4' do
+      let(:move) { 
+        Move.new(from: Position.parse('a2'), to: Position.parse('a4'))
+      }
+      let(:new_board) { board.make_move(move) }
+
+      it 'returns a new board with the updated pieces' do
+        expect(new_board.piece_at(Position.parse('a2'))).to be_nil
+        expect(new_board.piece_at(Position.parse('a4'))).to(
+          be_a(Pawn).and have_attributes(color: :white)
+        )
+      end
+      
+      it 'the halfmove_clock remains board halfmove_clock' do
+        expect(new_board.halfmove_clock).to eq board.halfmove_clock
+      end
+      
+      it 'the fullmove_no remains the same' do
+        expect(new_board.fullmove_no).to eq board.fullmove_no
+      end
+      
+      it 'the active color becomes black' do
+        expect(new_board.active_color).to eq :black
+      end
+      
+      it 'the en passant square is set to a3' do
+        expect(new_board.en_passant_square).to eq Position.parse('a3')
+      end
+      
+      it 'the castling_rights remain the same' do
+        expect(new_board.can_castle_kingside?(:white)).to eq true
+        expect(new_board.can_castle_kingside?(:black)).to eq true
+        expect(new_board.can_castle_queenside?(:white)).to eq true
+        expect(new_board.can_castle_queenside?(:black)).to eq true
+      end
+    end
+    
+    context 'when the move is a promotion move' do
+      let(:board) { described_class.new(fen_notation: '8/P7/8/8/8/8/8/8 w - - 3 5') }
+      let(:move) { 
+        Move.new(from: Position.parse('a7'), to: Position.parse('a8'), promotion: 'Q')
+      }
+
+      it 'promotes the piece' do
+        new_board = board.make_move move
+        expect(new_board.piece_at(Position.parse('a8'))).to(
+          be_a(Queen).and have_attributes(color: :white)
+        )
+        expect(new_board.piece_at(Position.parse('a7'))).to be_nil
+      end
+    end
+    
+    context 'when the move moves a white king' do
+      let(:board) { described_class.new(fen_notation: '8/8/8/8/8/8/8/R3K2R w KQ - 3 5') }
+      let(:move) {
+        Move.new(from: Position.parse('e1'), to: Position.parse('e2'))
+      }
+
+      it 'invalidates castling for white' do
+        new_board = board.make_move move
+
+        expect(new_board.can_castle_kingside?(:white)).to eq false
+        expect(new_board.can_castle_queenside?(:white)).to eq false
+      end
+    end
+    
+    context 'when the move moves a kingside white rook' do
+      let(:board) { described_class.new(fen_notation: '8/8/8/8/8/8/8/R3K2R w KQ - 3 5') }
+      let(:move) {
+        Move.new(from: Position.parse('h1'), to: Position.parse('h2'))
+      }
+
+      it 'invalidates kingside castling for white' do
+        new_board = board.make_move move
+
+        expect(new_board.can_castle_kingside?(:white)).to eq false
+        expect(new_board.can_castle_queenside?(:white)).to eq true
+      end
+    end
+    
+    context 'when the move moves a queenide white rook' do
+      let(:board) { described_class.new(fen_notation: '8/8/8/8/8/8/8/R3K2R w KQ - 3 5') }
+      let(:move) {
+        Move.new(from: Position.parse('a1'), to: Position.parse('a2'))
+      }
+
+      it 'invalidates queenside castling for white' do
+        new_board = board.make_move move
+
+        expect(new_board.can_castle_kingside?(:white)).to eq true
+        expect(new_board.can_castle_queenside?(:white)).to eq false
+      end
+    end
+    
+    context 'when the move moves a black king' do
+      let(:board) { described_class.new(fen_notation: 'r3k2r/8/8/8/8/8/8/8 b kq - 3 5') }
+      let(:move) {
+        Move.new(from: Position.parse('e8'), to: Position.parse('e7'))
+      }
+
+      it 'invalidates castling for black' do
+        new_board = board.make_move move
+        expect(new_board.can_castle_kingside?(:black)).to eq false
+        expect(new_board.can_castle_queenside?(:black)).to eq false
+      end
+    end
+    
+    context 'when the move moves a kingside black rook' do
+      let(:board) { described_class.new(fen_notation: 'r3k2r/8/8/8/8/8/8/8 b kq - 3 5') }
+      let(:move) {
+        Move.new(from: Position.parse('h8'), to: Position.parse('h7'))
+      }
+
+      it 'invalidates kingside castling for black' do
+        new_board = board.make_move move
+
+        expect(new_board.can_castle_kingside?(:black)).to eq false
+        expect(new_board.can_castle_queenside?(:black)).to eq true
+      end
+    end
+    
+    context 'when the move moves a queenide black rook' do
+      let(:board) { described_class.new(fen_notation: 'r3k2r/8/8/8/8/8/8/8 b kq - 3 5') }
+      let(:move) {
+        Move.new(from: Position.parse('a8'), to: Position.parse('a2'))
+      }
+
+      it 'invalidates queenside castling for black' do
+        new_board = board.make_move move
+
+        expect(new_board.can_castle_kingside?(:black)).to eq true
+        expect(new_board.can_castle_queenside?(:black)).to eq false
+      end
+    end
+    
+    context 'when the move does not move a pawn and is not a capture move' do
+      let(:board) { described_class.new }
+      let(:move) { Move.new(from: Position.parse('g1'), to: Position.parse('f3')) }
+      
+      it 'increases halfmove_clock by 1' do
+        new_board = board.make_move move
+        expect(new_board.halfmove_clock).to eq board.halfmove_clock + 1
+      end
+    end
+    
+    context 'when black moves' do
+      let(:board) { described_class.new(fen_notation: '8/p7/8/8/8/8/8/8 b - - 0 1') }
+      let(:move) { Move.new(from: Position.parse('a7'), to: Position.parse('a6')) }
+      
+      it 'increases fullmove_no by 1' do
+        new_board = board.make_move move
+        expect(new_board.fullmove_no).to eq board.fullmove_no + 1
+      end
+    end
+    
+    context 'when the move is a capture move' do
+      let(:board) { described_class.new(fen_notation: '8/p7/8/8/R7/8/8/8 w - - 0 1') }
+      let(:move) { Move.new(from: Position.parse('a4'), to: Position.parse('a7'), removed: Position.parse('a7')) }
+      
+      it 'increases removes the captured piece' do
+        new_board = board.make_move move
+        expect(new_board.pieces.size).to eq 1
+      end
     end
   end
 end

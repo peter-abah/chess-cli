@@ -3,10 +3,11 @@
 require 'require_all'
 require_relative './letter_display'
 require_relative './fen_parser'
-require_rel 'pieces'
+require_rel 'pieces/pawn', 'pieces/piece_constants'
 
 # A class to represent a chess board
 class Board
+  include PieceConstants
   include LetterDisplay
 
   DEFAULT_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 0'
@@ -23,25 +24,25 @@ class Board
     @fullmove_no = segments[:fullmove_no]
   end
 
-  def update(move)
+  def make_move(move)
     segments = {
       pieces: update_pieces(move),
-      active_color: active_color == :white ? :black : white,
+      active_color: active_color == :white ? :black : :white,
       castling_rights: update_castling_rights(move),
       en_passant_square: update_en_passant_square(move),
       halfmove_clock: update_halfmove_clock(move),
       fullmove_no: active_color == :black ? fullmove_no + 1 : fullmove_no
     }
 
-    Board.new(segments: segments)
+    self.class.new(segments: segments)
   end
 
   def player_pieces(color)
     pieces.select { |piece| piece.color == color }
   end
 
-  def piece_at(pos, piecesn: pieces)
-    piecesn.find { |piece| piece.position == pos }
+  def piece_at(pos, pieces_n: pieces)
+    pieces_n.find { |piece| piece.position == pos }
   end
   
   def can_castle_kingside?(color)
@@ -56,32 +57,40 @@ class Board
   
   attr_reader :castling_rights
   
-  def update_castling_rights
+  def update_castling_rights(move)
     new_castling_rights = castling_rights.dup
     
-    new_castling_rights.kingside[:white] = invalidate_kingside_castling? move, :white
-    new_castling_rights.queenside[:white] = invalidate_queenside_castling? move, :white
+    new_castling_rights.kingside[:white] = invalidate_kingside_castling(move, :white)
+    new_castling_rights.queenside[:white] = invalidate_queenside_castling(move, :white)
     
-    new_castling_rights.kingside[:black] = invalidate_kingside_castling? move, :black
-    new_castling_rights.queenside[:black] = invalidate_queenside_castling? move, :black
+    new_castling_rights.kingside[:black] = invalidate_kingside_castling(move, :black)
+    new_castling_rights.queenside[:black] = invalidate_queenside_castling(move, :black)
     
     new_castling_rights
   end
   
-  def invalidate_kingside_castling?(move, color)
-    if color == active_color
-      move.from.king_pos?(color) || move.from.kingside_rook_pos?(color)
-    elsif move.removed
-      move.removed.kingside_rook_pos?(color)
+  def invalidate_kingside_castling(move, color)
+    invalidate = move.moved.all? do |hash|
+      if color == active_color
+        hash[:from].king_pos?(color) || hash[:from].kingside_rook_pos?(color)
+      elsif move.removed
+        move.removed.kingside_rook_pos?(color)
+      end
     end
+    
+    !invalidate
   end
   
-  def invalidate_queenside_castling?(move, color)
-    if color == active_color
-      move.from.king_pos?(color) || move.from.queenside_rook_pos?(color)
-    elsif move.removed
-      move.removed.queenside_rook_pos?(color)
+  def invalidate_queenside_castling(move, color)
+    invalidate = move.moved.all? do |hash|
+      if color == active_color
+        hash[:from].king_pos?(color) || hash[:from].queenside_rook_pos?(color)
+      elsif move.removed
+        move.removed.queenside_rook_pos?(color)
+      end
     end
+    
+    !invalidate
   end
   
   def update_pieces(move)
@@ -91,48 +100,57 @@ class Board
   
   def update_en_passant_square(move)
     move.moved.reduce('-') do |res, hash|
-      en_passant_possible?(hash) ? hash[:to].to_s : res
+      if en_passant_possible?(hash)
+        direction = piece_at(hash[:from]).direction
+        return hash[:to]. increment(y: -direction)
+      end
+      
+      res
     end
   end
   
   def update_halfmove_clock(move)
-    move.moved.reduce(false) do |increase_clock, hash|
+    reset_clock = move.moved.reduce(false) do |res, hash|
       piece = piece_at(hash[:from])
-      piece.is_a? Pawn ? true : increase_clock
+      piece.is_a?(Pawn) ? true : res
     end
     
-    moved.removed || increase_clock ? halfmove_clock + 1 : 0
+    move.removed || reset_clock ? 0 : halfmove_clock + 1
   end
 
-  def en_passant_possible(hash)
+  def en_passant_possible?(hash)
     piece = piece_at(hash[:from])
 
-    piece.is_a?(Pawn) && hash[:from].starting_pawn_rank(piece.color) &&
+    piece.is_a?(Pawn) && hash[:from].starting_pawn_rank?(piece.color) &&
       hash[:to].en_passant_rank?(piece.color)
   end   
 
   def remove_piece(move)
     return pieces.dup unless move.removed
-    
+    raise ArgumentError, 'Cannot remove your own piece' if piece_at(move.removed).color == active_color
+
     pieces.reject { |piece| piece.position == move.removed }
   end
 
   def move_pieces(pieces, move)
-    move.moved.map do |hash|
-      piece = move_piece(pieces, hash)
-      piece = promote_piece(pieces, hash[:to], move.promotion) if move.promotion
-      pieces = pieces.reject { |piece| piece.position == hash[:from] }
+    move.moved.reduce(pieces) do |res, hash|
+      piece = move_piece(res, hash)
+      piece = promote_piece(pieces, hash, move.promotion) if move.promotion
+      res = res.reject { |piece| piece.position == hash[:from] }
+      res.push(piece)
     end
   end
 
   def move_piece(pieces, hash)
-    piece = piece_at(hash[:from], pieces: pieces)
+    piece = piece_at(hash[:from], pieces_n: pieces)
+    raise ArgumentError, 'Can only move your own piece' unless piece.color == active_color
+
     piece.update_position(hash[:to])
   end
 
-  def promote_piece(pieces, pos, piece_letter)
+  def promote_piece(pieces, hash, piece_letter)
     piece_class = LETTER_TO_PIECE_CLASS[piece_letter.downcase.to_sym]
-    color = piece_at(piece_pos).color
-    piece_class.new(color, pos)
+    color = piece_at(hash[:from], pieces_n: pieces).color
+    piece_class.new(color, hash[:to])
   end
 end
