@@ -31,6 +31,10 @@ class Position
     Position.new(y: self.y + y, x: self.x + x)
   end
   
+  def square_type
+    (y + x).even? ? :light : :dark
+  end
+  
   def in_bounds?
     y.between?(0, 7) && x.between?(0, 7)
   end

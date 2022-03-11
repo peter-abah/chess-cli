@@ -39,6 +39,20 @@ describe Position do
     end
   end
   
+  describe '#square_type' do
+    context 'when position is a1' do
+      subject(:position) { described_class.parse('a1') }
+      
+      it { is_expected.to have_attributes(square_type: :dark) }
+    end
+    
+    context 'when position is a8' do
+      subject(:position) { described_class.parse('a8') }
+      
+      it { is_expected.to have_attributes(square_type: :light) }
+    end
+  end
+  
   describe '#in_bounds?' do
     context 'when position coordinates are in board positions' do
       let(:position) { described_class.new(y: 0, x: 1) }
