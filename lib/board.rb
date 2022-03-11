@@ -3,6 +3,7 @@
 require 'require_all'
 require_relative './letter_display'
 require_relative './fen_parser'
+require_relative './position'
 require_rel 'pieces/pawn', 'pieces/piece_constants'
 
 # A class to represent a chess board
@@ -42,6 +43,8 @@ class Board
   end
 
   def piece_at(pos, pieces_n: pieces)
+    pos = Position.parse(pos) unless pos.is_a? Position
+
     pieces_n.find { |piece| piece.position == pos }
   end
   
@@ -102,7 +105,7 @@ class Board
     move.moved.reduce('-') do |res, hash|
       if en_passant_possible?(hash)
         direction = piece_at(hash[:from]).direction
-        return hash[:to]. increment(y: -direction)
+        return hash[:to].increment(y: -direction)
       end
       
       res

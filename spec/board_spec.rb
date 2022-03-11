@@ -15,21 +15,21 @@ describe Board do
   describe '#piece_at' do
     context 'when called with position a2' do
       it 'should return a white Pawn' do
-        piece = board.piece_at(Position.parse('a2'))
+        piece = board.piece_at('a2')
         expect(piece).to be_a(Pawn).and have_attributes(color: :white)
       end
     end
     
     context 'when called with position e8' do
       it 'should return a black King' do
-        piece = board.piece_at(Position.parse('e8'))
+        piece = board.piece_at('e8')
         expect(piece).to be_a(King).and have_attributes(color: :black)
       end
     end
     
     context 'when called with position h4' do
       it 'should return nil' do
-        piece = board.piece_at(Position.parse('h4'))
+        piece = board.piece_at('h4')
         expect(piece).to be_nil
       end
     end
@@ -44,21 +44,10 @@ describe Board do
       end
     end
     
-    context 'when board is initialized with a segments hash' do
-      segments = { pieces: [Rook.new(:white, Position.parse('a3'))] }
-      let(:board) { described_class.new(segments: segments) }
- 
-      it 'returns the pieces set in the segments hash' do
-        expect(board.pieces).to contain_exactly(
-          be_a(Rook).and have_attributes(color: :white, position: Position.parse('a3'))
-        )
-      end
-    end
-    
     context 'when board is initialized with fen notation' do
       let(:board) { described_class.new(fen_notation: '8/8/8/8/8/R7/8/8 w - - 0 1') }
  
-      it 'returns the pieces set in the segments hash' do
+      it 'returns the pieces set in the fen notation' do
         expect(board.pieces).to contain_exactly(
           be_a(Rook).and have_attributes(color: :white, position: Position.parse('a3'))
         )
@@ -72,15 +61,6 @@ describe Board do
 
       it 'returns white' do
         expect(board.active_color).to eq :white
-      end
-    end
-    
-    context 'when board is initialized with a segments hash' do
-      segments = { active_color: :black }
-      let(:board) { described_class.new(segments: segments) }
- 
-      it 'returns the active_color set in segments hash' do
-        expect(board.active_color).to eq :black
       end
     end
     
@@ -99,15 +79,6 @@ describe Board do
 
       it 'returns nil' do
         expect(board.en_passant_square).to be_nil
-      end
-    end
-    
-    context 'when board is initialized with a segments hash' do
-      segments = { en_passant_square: Position.parse('e4') }
-      let(:board) { described_class.new(segments: segments) }
- 
-      it 'returns the en_passant_square set in segments hash' do
-        expect(board.en_passant_square).to eq Position.parse('e4')
       end
     end
     
@@ -181,15 +152,6 @@ describe Board do
       end
     end
     
-    context 'when board is initialized with a segments hash' do
-      segments = { halfmove_clock: 10 }
-      let(:board) { described_class.new(segments: segments) }
- 
-      it 'returns the halfmove_clock set in segments hash' do
-        expect(board.halfmove_clock).to eq 10
-      end
-    end
-    
     context 'when board is initialized with a fen notation with halfmove_clock set to 1' do
       let(:board) { described_class.new(fen_notation: '8/8/8/8/8/R7/8/8 b - f5 1 1') }
  
@@ -205,15 +167,6 @@ describe Board do
 
       it 'returns 0' do
         expect(board.fullmove_no).to eq 0
-      end
-    end
-    
-    context 'when board is initialized with a segments hash' do
-      segments = { fullmove_no: 5 }
-      let(:board) { described_class.new(segments: segments) }
- 
-      it 'returns the fullmove_no set in segments hash' do
-        expect(board.fullmove_no).to eq 5
       end
     end
     
@@ -237,13 +190,13 @@ describe Board do
   describe '#make_move' do
     context 'when called with a move that moves pawn from a2 to a4' do
       let(:move) { 
-        Move.new(from: Position.parse('a2'), to: Position.parse('a4'))
+        Move.new(from: 'a2', to: 'a4')
       }
       let(:new_board) { board.make_move(move) }
 
       it 'returns a new board with the updated pieces' do
-        expect(new_board.piece_at(Position.parse('a2'))).to be_nil
-        expect(new_board.piece_at(Position.parse('a4'))).to(
+        expect(new_board.piece_at('a2')).to be_nil
+        expect(new_board.piece_at('a4')).to(
           be_a(Pawn).and have_attributes(color: :white)
         )
       end
@@ -275,22 +228,22 @@ describe Board do
     context 'when the move is a promotion move' do
       let(:board) { described_class.new(fen_notation: '8/P7/8/8/8/8/8/8 w - - 3 5') }
       let(:move) { 
-        Move.new(from: Position.parse('a7'), to: Position.parse('a8'), promotion: 'Q')
+        Move.new(from: 'a7', to: 'a8', promotion: 'Q')
       }
 
       it 'promotes the piece' do
         new_board = board.make_move move
-        expect(new_board.piece_at(Position.parse('a8'))).to(
+        expect(new_board.piece_at('a8')).to(
           be_a(Queen).and have_attributes(color: :white)
         )
-        expect(new_board.piece_at(Position.parse('a7'))).to be_nil
+        expect(new_board.piece_at('a7')).to be_nil
       end
     end
     
     context 'when the move moves a white king' do
       let(:board) { described_class.new(fen_notation: '8/8/8/8/8/8/8/R3K2R w KQ - 3 5') }
       let(:move) {
-        Move.new(from: Position.parse('e1'), to: Position.parse('e2'))
+        Move.new(from: 'e1', to: 'e2')
       }
 
       it 'invalidates castling for white' do
@@ -304,7 +257,7 @@ describe Board do
     context 'when the move moves a kingside white rook' do
       let(:board) { described_class.new(fen_notation: '8/8/8/8/8/8/8/R3K2R w KQ - 3 5') }
       let(:move) {
-        Move.new(from: Position.parse('h1'), to: Position.parse('h2'))
+        Move.new(from: 'h1', to: 'h2')
       }
 
       it 'invalidates kingside castling for white' do
@@ -318,7 +271,7 @@ describe Board do
     context 'when the move moves a queenide white rook' do
       let(:board) { described_class.new(fen_notation: '8/8/8/8/8/8/8/R3K2R w KQ - 3 5') }
       let(:move) {
-        Move.new(from: Position.parse('a1'), to: Position.parse('a2'))
+        Move.new(from: 'a1', to: 'a2')
       }
 
       it 'invalidates queenside castling for white' do
@@ -332,7 +285,7 @@ describe Board do
     context 'when the move moves a black king' do
       let(:board) { described_class.new(fen_notation: 'r3k2r/8/8/8/8/8/8/8 b kq - 3 5') }
       let(:move) {
-        Move.new(from: Position.parse('e8'), to: Position.parse('e7'))
+        Move.new(from: 'e8', to: 'e7')
       }
 
       it 'invalidates castling for black' do
@@ -345,7 +298,7 @@ describe Board do
     context 'when the move moves a kingside black rook' do
       let(:board) { described_class.new(fen_notation: 'r3k2r/8/8/8/8/8/8/8 b kq - 3 5') }
       let(:move) {
-        Move.new(from: Position.parse('h8'), to: Position.parse('h7'))
+        Move.new(from: 'h8', to: 'h7')
       }
 
       it 'invalidates kingside castling for black' do
@@ -359,7 +312,7 @@ describe Board do
     context 'when the move moves a queenide black rook' do
       let(:board) { described_class.new(fen_notation: 'r3k2r/8/8/8/8/8/8/8 b kq - 3 5') }
       let(:move) {
-        Move.new(from: Position.parse('a8'), to: Position.parse('a2'))
+        Move.new(from: 'a8', to: 'a2')
       }
 
       it 'invalidates queenside castling for black' do
@@ -372,7 +325,7 @@ describe Board do
     
     context 'when the move does not move a pawn and is not a capture move' do
       let(:board) { described_class.new }
-      let(:move) { Move.new(from: Position.parse('g1'), to: Position.parse('f3')) }
+      let(:move) { Move.new(from: 'g1', to: 'f3') }
       
       it 'increases halfmove_clock by 1' do
         new_board = board.make_move move
@@ -382,7 +335,7 @@ describe Board do
     
     context 'when black moves' do
       let(:board) { described_class.new(fen_notation: '8/p7/8/8/8/8/8/8 b - - 0 1') }
-      let(:move) { Move.new(from: Position.parse('a7'), to: Position.parse('a6')) }
+      let(:move) { Move.new(from: 'a7', to: 'a6') }
       
       it 'increases fullmove_no by 1' do
         new_board = board.make_move move
@@ -392,7 +345,7 @@ describe Board do
     
     context 'when the move is a capture move' do
       let(:board) { described_class.new(fen_notation: '8/p7/8/8/R7/8/8/8 w - - 0 1') }
-      let(:move) { Move.new(from: Position.parse('a4'), to: Position.parse('a7'), removed: Position.parse('a7')) }
+      let(:move) { Move.new(from: 'a4', to: 'a7', removed: 'a7') }
       
       it 'increases removes the captured piece' do
         new_board = board.make_move move

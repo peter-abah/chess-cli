@@ -7,12 +7,12 @@ class Move
   def initialize(from:, to:, removed: nil, promotion: nil, castle: nil)
     @promotion = promotion
     @castle = castle
-    @removed = removed
-    @moved = [{ from: from, to: to }].freeze
+    @removed = Position.parse(removed) if removed
+    @moved = [{ from: Position.parse(from), to: Position.parse(to) }].freeze
   end
 
   def add_move(from:, to:)
-    moved = [*moved, { from: from, to: to }].freeze
+    moved = [*moved, { from: Position.parse(from), to: Position.parse(to) }].freeze
   end
 
   def destination_for(from)
