@@ -17,7 +17,7 @@ class King < Piece
         increments: increments,
         repeat: 1,
         blocked_by: [:same],
-        special_moves: %i[kingside_castle queenside_castle]
+        special_moves: %i[castle]
       )
     ]
   end

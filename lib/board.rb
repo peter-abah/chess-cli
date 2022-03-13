@@ -11,12 +11,10 @@ class Board
   include PieceConstants
   include LetterDisplay
 
-  DEFAULT_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 0'
-
   attr_reader :pieces, :active_color, :en_passant_square, :halfmove_clock, :fullmove_no
 
-  def initialize(fen_notation: DEFAULT_FEN, segments: nil)
-    segments ||= FENParser.new(fen_notation).parse
+  def initialize(fen_notation: nil, segments: nil)
+    segments ||= fen_notation ? FENParser.new(fen_notation).parse : FENParser.new.parse
     @pieces = segments[:pieces].freeze
     @active_color = segments[:active_color]
     @castling_rights = segments[:castling_rights]

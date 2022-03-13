@@ -32,12 +32,12 @@ class Pawn < Piece
     ]
   end
   
-  def can_promote?
-    rank = color == :white ? 1  : 6
-    position.y == rank
+  def can_promote?(pos)
+    rank = color == :white ? 0 : 7
+    pos.y == rank
   end
   
   def promotion_pieces
-    [:Knight, :Rook, :Bishop, :Queen]
+    %w[n r q b]
   end
 end
