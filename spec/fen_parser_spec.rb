@@ -16,7 +16,7 @@ describe FENParser do
       it 'returns a result containing the correct pieces' do
         result = fen_parser.parse[:pieces]
         expect(result).to contain_exactly(
-          be_a(Rook).and(have_attributes(color: 'black', position: Position.parse('a5')))
+          be_a(Rook).and(have_attributes(color: :black, position: Position.parse('a5')))
         )
       end
 
@@ -49,46 +49,6 @@ describe FENParser do
 
       it 'should raise an Error' do
         expect { fen_parser.parse }.to raise_error StandardError
-      end
-    end
-  end
-  
-  describe '::pieces_to_fen' do
-    context 'when called with an array containing one black rook at a8' do
-      let(:pieces) { [Pawn.new('white', Position.parse('a8'))] }
-      
-      it 'should return the valid fen notation' do
-        expected_fen_notation = 'P7/8/8/8/8/8/8/8'
-
-        fen_notation = described_class.pieces_to_fen(pieces)
-        expect(fen_notation).to eq expected_fen_notation
-      end
-    end
-    
-    context 'when there are more than one pieces' do
-      let(:pieces) { [
-        Pawn.new('black', Position.parse('e4')),
-        Knight.new('white', Position.parse('d1'))
-      ] }
-
-      it 'should return the valid fen notation' do
-        expected_fen_notation = '8/8/8/8/4p3/8/8/3N4'
-
-        fen_notation = described_class.pieces_to_fen(pieces)
-        expect(fen_notation).to eq expected_fen_notation
-      end
-    end
-    
-    context 'when there are more than one piece on a rank' do
-      let(:pieces) do
-        (0..7).map { |x| Pawn.new('black', Position.new(y: 1, x: x)) }
-      end
- 
-      it 'should return the valid fen notation' do
-        expected_fen_notation = '8/pppppppp/8/8/8/8/8/8'
-
-        fen_notation = described_class.pieces_to_fen(pieces)
-        expect(fen_notation).to eq expected_fen_notation
       end
     end
   end

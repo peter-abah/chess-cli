@@ -35,6 +35,12 @@ describe Board do
     end
   end
   
+  describe '#to_fen' do
+    it 'returns fen notation of board' do
+      expect(board.to_fen).to eq 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 0'
+    end
+  end
+  
   describe '#pieces' do
     context 'when board is initialized without arguments' do
       let(:board) { described_class.new }

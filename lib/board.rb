@@ -11,7 +11,7 @@ class Board
   include PieceConstants
   include LetterDisplay
 
-  attr_reader :pieces, :active_color, :en_passant_square, :halfmove_clock, :fullmove_no
+  attr_reader :pieces, :active_color, :en_passant_square, :halfmove_clock, :fullmove_no, :castling_rights
 
   def initialize(fen_notation: nil, segments: nil)
     segments ||= fen_notation ? FENParser.new(fen_notation).parse : FENParser.new.parse
@@ -53,10 +53,12 @@ class Board
   def can_castle_queenside?(color)
     castling_rights.queenside[color]
   end
+  
+  def to_fen
+    FENParser.board_to_fen self
+  end
 
   private
-  
-  attr_reader :castling_rights
   
   def update_castling_rights(move)
     new_castling_rights = castling_rights.dup
