@@ -1,6 +1,18 @@
 # frozen_string_literal: true
 
 RSpec.shared_examples "move generator" do
+  describe '#all_moves' do
+    subject(:game) { described_class.new }
+    
+    it 'returns all possible moves' do
+      expect(game.all_moves).to contain_exactly(
+        'a2a3', 'a2a4', 'b2b3', 'b2b4', 'c2c3', 'c2c4', 'd2d3', 'd2d4',
+        'e2e3', 'e2e4', 'f2f3', 'f2f4', 'g2g3', 'g2g4', 'h2h3', 'h2h4',
+        'b1a3', 'b1c3', 'g1h3', 'g1f3'
+      )
+    end
+  end
+
   describe '#moves_at' do
     context 'When the game is at starting positions' do
       subject(:game) { described_class.new }

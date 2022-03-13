@@ -29,7 +29,9 @@ class Game
   end
   
   def all_moves
-  
+    board.player_pieces(current_player).reduce([]) do |moves, piece|
+      moves.concat moves_for_piece(piece).map(&:to_s)
+    end
   end
   
   def moves_at(pos)
