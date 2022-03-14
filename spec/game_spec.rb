@@ -135,5 +135,23 @@ describe Game do
         expect { game.make_move 'd7e8' }.to raise_error ChessError
       end
     end
-  end  
+  end
+
+  describe '#current_player' do
+    subject(:game) { described_class.new }
+    
+    it 'returns the color of the player whose turn it is' do
+      expect(game.current_player).to eq(:white)
+    end
+
+    context 'After a move' do
+      subject(:game) { described_class.new }
+
+      before { game.make_move 'a2a3'}
+
+      it 'changes the current player' do
+        expect(game.current_player).to eq :black
+      end
+    end
+  end
 end
