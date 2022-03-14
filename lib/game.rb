@@ -2,12 +2,14 @@
 
 require 'require_all'
 require_relative 'board'
+require_relative 'errors'
 require_rel 'game_modules'
 
 # A class to handle a chess game
 class Game
   include MoveGenerator
   include MoveParser
+  include MoveValidator
 
   attr_reader :board, :history
 
@@ -18,24 +20,25 @@ class Game
   end
   
   def make_move(move)
-    raise StandardError, 'Game over' if game_end?
+    raise ChessError, 'Game Over' if game_over?
  
     move = parse_move move
-    raise ArgumentError, 'Cannot make move king in check' unless legal_move? move
+    raise ChessError, 'Cannot make move king in check' unless legal_move? move
 
-    board = board.make_move move
-    history = [*history, move].freeze
+    @board = board.make_move move
+    @history = [*history, move].freeze
     update_repetitions_count
   end
   
   def all_moves
-    board.player_pieces(current_player).reduce([]) do |moves, piece|
-      moves.concat moves_for_piece(piece).map(&:to_s)
+    moves = board.player_pieces(current_player).reduce([]) do |res, piece|
+      res.concat moves_for_piece(piece, board)
     end
+    moves.filter { |m| legal_move?(m) }.map(&:to_s)
   end
   
   def moves_at(pos)
-    moves_for_pos(pos).map(&:to_s)
+    moves_for_pos(pos, board).filter { |m| legal_move?(m) }.map(&:to_s)
   end
   
   def current_player
@@ -55,11 +58,11 @@ class Game
   end
   
   def seventy_five_moves?
-    board.halfmove_count >= 150
+    board.halfmove_clock >= 150
   end
   
   def fifty_moves?
-    board.halfmove_count >= 100
+    board.halfmove_clock >= 100
   end
   
   def checkmate?
@@ -100,6 +103,5 @@ class Game
   private
   
   attr_reader :repetitions_count
-  attr_writer :history, :board
 end
 
