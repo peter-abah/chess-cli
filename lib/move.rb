@@ -12,7 +12,7 @@ class Move
   end
 
   def add_move(from:, to:)
-    moved = [*moved, { from: Position.parse(from), to: Position.parse(to) }].freeze
+    @moved = [*moved, { from: Position.parse(from), to: Position.parse(to) }].freeze
   end
 
   def destination_for(from)
