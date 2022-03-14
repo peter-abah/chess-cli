@@ -181,4 +181,60 @@ describe Game do
       expect(game.board.to_fen).to eq 'rnbqkbnr/ppp1pppp/8/3p4/4P3/2N5/PPPP1PPP/R1BQKBNR b KQkq - 1 1'
     end
   end
+
+  describe 'threefold?' do
+    context 'when a position has been repeated 3 times' do
+      subject(:game) { described_class.new }
+      
+      # moves the knights back and forth to get the starting position three times
+      before do
+        game.make_moves([
+          'b1c3', 'b8c6', 'c3b1', 'c6b8',
+          'b1c3', 'b8c6', 'c3b1', 'c6b8',
+          'b1c3',
+        ])
+      end
+
+      it 'returns true' do
+        expect(game.threefold?).to be true
+      end
+    end
+
+    context 'when a position has not been repeated 3 times' do
+      subject(:game) { described_class.new }
+      
+      it 'returns false' do
+        expect(game.threefold?).to be false
+      end
+    end
+  end
+
+  describe 'fivefold?' do
+    context 'when a position has been repeated 3 times' do
+      subject(:game) { described_class.new }
+      
+      # moves the knights back and forth to get the starting position five times
+      before do
+        game.make_moves([
+          'b1c3', 'b8c6', 'c3b1', 'c6b8',
+          'b1c3', 'b8c6', 'c3b1', 'c6b8',
+          'b1c3', 'b8c6', 'c3b1', 'c6b8',
+          'b1c3', 'b8c6', 'c3b1', 'c6b8',
+          'b1c3',
+        ])
+      end
+
+      it 'returns true' do
+        expect(game.fivefold?).to be true
+      end
+    end
+
+    context 'when a position has not been repeated 3 times' do
+      subject(:game) { described_class.new }
+      
+      it 'returns false' do
+        expect(game.fivefold?).to be false
+      end
+    end
+  end
 end
