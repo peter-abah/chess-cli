@@ -36,6 +36,10 @@ class Game
     end
     moves.filter { |m| legal_move?(m) }.map(&:to_s)
   end
+
+  def make_moves(moves)
+    moves.each { |m| make_move(m) }
+  end
   
   def moves_at(pos)
     moves_for_pos(pos, board).filter { |m| legal_move?(m) }.map(&:to_s)

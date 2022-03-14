@@ -172,4 +172,13 @@ describe Game do
       end
     end
   end
+
+  describe '#make_moves' do
+    subject(:game) { described_class.new }
+
+    it 'updates the game with the moves given alternating the colors' do
+      game.make_moves(['e2e4', 'd7d5', 'b1c3'])
+      expect(game.board.to_fen).to eq 'rnbqkbnr/ppp1pppp/8/3p4/4P3/2N5/PPPP1PPP/R1BQKBNR b KQkq - 1 1'
+    end
+  end
 end
