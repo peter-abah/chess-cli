@@ -39,6 +39,10 @@ class Board
   def player_pieces(color)
     pieces.select { |piece| piece.color == color }
   end
+  
+  def opponent_color
+    active_color == :white ? :black : :white
+  end
 
   def piece_at(pos, pieces_n: pieces)
     pos = Position.parse(pos) unless pos.is_a? Position
@@ -81,7 +85,7 @@ class Board
       end
     end
     
-    !invalidate
+    castling_rights.kingside[color] && !invalidate
   end
   
   def invalidate_queenside_castling(move, color)
@@ -93,7 +97,7 @@ class Board
       end
     end
     
-    !invalidate
+    castling_rights.queenside[color] && !invalidate
   end
   
   def update_pieces(move)
