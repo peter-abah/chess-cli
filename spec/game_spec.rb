@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
-require 'require_all'
-
+require 'pry-byebug'
 require_relative '../lib/game'
 require_rel './game_modules'
 
@@ -119,18 +118,22 @@ describe Game do
         end
       end
     end
+
+    context 'when given promotion moves' do
+      subject(:game) { described_class.new(fen: '4r3/3P4/4k3/8/8/8/4P3/5K2 w - - 0 4') }
+      
+      it 'promotes the piece' do
+        game.make_move 'd7e8R'
+        expect(game.board.to_fen).to eq '4R3/8/4k3/8/8/8/4P3/5K2 b - - 0 4'
+      end
+    end
+
+    context 'when promotion piece is not added to move' do
+      subject(:game) { described_class.new(fen: '4r3/3P4/4k3/8/8/8/4P3/5K2 w - - 0 4') }
+      
+      it 'raises error' do
+        expect { game.make_move 'd7e8' }.to raise_error ChessError
+      end
+    end
   end  
 end
-
-
-
-
-
-
-
-
-
-
-
-
-
