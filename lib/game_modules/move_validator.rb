@@ -22,7 +22,8 @@ module MoveValidator
   end
   
   def legal_castle_move?(move)
-    move.castle == :kingside ? legal_kingside_castle_move? : legal_queenside_castle_move?
+    can_castle = move.castle == :kingside ? legal_kingside_castle_move? : legal_queenside_castle_move?
+    can_castle && !check?
   end
   
   def legal_kingside_castle_move?
@@ -40,7 +41,7 @@ module MoveValidator
     pieces = board.player_pieces(opponent_color)
     moves = pieces.reduce([]) { |res, piece| res.concat moves_for_piece(piece, board) }
     moves.any? do |move|
-      move.removed == pos
+      move.moved.any? { |hash| hash[:to] == pos }
     end
   end
 end
