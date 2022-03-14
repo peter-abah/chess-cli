@@ -154,4 +154,22 @@ describe Game do
       end
     end
   end
+
+  describe '#stalemate?' do
+    context 'when there is no stalemate' do
+      subject(:game) { described_class.new }
+      
+      it 'returns false' do
+        expect(game.stalemate?).to be false
+      end
+    end
+
+    context 'when there are no valid moves and no check' do
+      subject(:game) { described_class.new(fen: '8/k7/8/8/8/6q1/7p/7K w - - 2 5') }
+      
+      it 'returns true' do
+        expect(game.stalemate?).to be true
+      end
+    end
+  end
 end
