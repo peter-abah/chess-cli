@@ -24,7 +24,7 @@ module MoveParser
     type = move == '0-0' ? :kingside : :queenside
 
     moves = moves_for_pos(pos, board)
-    move = moves.select { |m| m.castle == type }
+    move = moves.find { |m| m.castle == type }
     
     raise ArgumentError, "Invalid move, cannot castle #{type}" unless move
     move
