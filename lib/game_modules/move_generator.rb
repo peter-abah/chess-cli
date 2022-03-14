@@ -136,8 +136,6 @@ module MoveGenerator
     move = Move.new(from: king_from, to: king_to, castle: :queenside)
     move.add_move(from: rook_from, to: rook_to)
     move
-  rescue
-    binding.pry
   end
   
   def kingside_castle_squares_available?(board, piece)

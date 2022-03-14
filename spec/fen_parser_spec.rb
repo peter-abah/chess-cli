@@ -48,7 +48,7 @@ describe FENParser do
       subject(:fen_parser) { described_class.new(:invalid_fen) }
 
       it 'should raise an Error' do
-        expect { fen_parser.parse }.to raise_error StandardError
+        expect { fen_parser.parse }.to raise_error ChessError
       end
     end
   end

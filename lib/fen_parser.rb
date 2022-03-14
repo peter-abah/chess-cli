@@ -1,10 +1,9 @@
 # frozen_string_literal: true
 
-require 'pry-byebug'
-
 require_relative './pieces/piece_constants'
 require_relative './position'
 require_relative './castling_rights'
+require_relative './errors'
 
 # A class to parse Chess FEN notation
 class FENParser
@@ -67,7 +66,7 @@ class FENParser
 
   def initialize(fen_notation = DEFAULT_NOTATION)
     segments = fen_notation.split(' ')
-    raise ArgumentError unless segments.size == 6
+    raise ChessError unless segments.size == 6
     
     @pieces = segments[0]
     @active = segments[1]
@@ -105,7 +104,7 @@ class FENParser
   
   def parse_pieces
     ranks = pieces.split('/')
-    raise ArgumentError, ERROR_MESSAGES[:invalid_board_height] if ranks.length != BOARD_HEIGHT
+    raise ChessError, ERROR_MESSAGES[:invalid_board_height] if ranks.length != BOARD_HEIGHT
     
     ranks.each_with_index.reduce([]) { |res, (rank, y)| res.concat parse_rank_fen(rank, y) }
   end
@@ -119,12 +118,12 @@ class FENParser
       res.push(piece)
     end
     
-    raise ArgumentError, ERROR_MESSAGES[:invalid_board_width] if pos.x + 1 != BOARD_WIDTH
+    raise ChessError, ERROR_MESSAGES[:invalid_board_width] if pos.x + 1 != BOARD_WIDTH
     pieces.reject(&:nil?)
   end
   
   def parse_token(token, pos)
-    raise ArgumentError, ERROR_MESSAGES[:invalid_token] unless FEN_TOKEN_REGEX.match(token)
+    raise ChessError, ERROR_MESSAGES[:invalid_token] unless FEN_TOKEN_REGEX.match(token)
 
     if is_integer? token
       pos = pos.increment(x: token.to_i)

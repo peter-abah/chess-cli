@@ -1,11 +1,13 @@
 # frozen_string_literal: true
 
+require_relative './errors'
+
 # a class to represent a position in a chess game
 class Position
   attr_reader :y, :x
   
   def self.parse(string)
-    raise ArgumentError.new 'invalid position' unless /^[a-h][1-8]$/.match string
+    raise ChessError, 'invalid position' unless /^[a-h][1-8]$/.match string
     
     x = string[0].ord - 97
     y = 8 - string[1].to_i

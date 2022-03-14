@@ -4,6 +4,7 @@ require 'require_all'
 require_relative './letter_display'
 require_relative './fen_parser'
 require_relative './position'
+require_relative './errors'
 require_rel 'pieces/pawn', 'pieces/piece_constants'
 
 # A class to represent a chess board
@@ -134,7 +135,7 @@ class Board
 
   def remove_piece(move)
     return pieces.dup unless move.removed
-    raise ArgumentError, 'Cannot remove your own piece' if piece_at(move.removed).color == active_color
+    raise ChessError, 'Cannot remove your own piece' if piece_at(move.removed).color == active_color
 
     pieces.reject { |piece| piece.position == move.removed }
   end
@@ -150,7 +151,7 @@ class Board
 
   def move_piece(pieces, hash)
     piece = piece_at(hash[:from], pieces_n: pieces)
-    raise ArgumentError, 'Can only move your own piece' unless piece.color == active_color
+    raise ChessError, 'Can only move your own piece' unless piece.color == active_color
 
     piece.update_position(hash[:to])
   end

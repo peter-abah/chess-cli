@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'move_generator'
+require_relative '../errors'
 
 module MoveParser
   include MoveGenerator
@@ -9,7 +10,7 @@ module MoveParser
 
   def parse_move(move)
     unless MOVE_REGEX.match move
-      raise ArgumentError, "Invalid move format cannot parse: #{move}"
+      raise ChessError, "Invalid move format cannot parse: #{move}"
     end
     
     castling_move?(move) ? castling_move(move) : normal_move(move)
@@ -26,7 +27,7 @@ module MoveParser
     moves = moves_for_pos(pos, board)
     move = moves.find { |m| m.castle == type }
     
-    raise ArgumentError, "Invalid move, cannot castle #{type}" unless move
+    raise ChessError, "Invalid move, cannot castle #{type}" unless move
     move
   end
   
@@ -34,7 +35,7 @@ module MoveParser
     _, pos, to, promotion = * /^(\w{2})(\w{2})(\w?)$/.match(move_str)
     moves = moves_for_pos(pos, board)
     move = moves.find { |m| m.to_s.downcase == move_str.downcase }
-    raise ArgumentError, "Invalid move: #{move}" unless move
+    raise ChessError, "Invalid move: #{move}" unless move
     
     move
   end

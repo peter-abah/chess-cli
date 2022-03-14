@@ -251,7 +251,7 @@ describe Position do
       end
       
       it 'raises an error for invalid position' do
-        expect { Position.parse('i0') }.to raise_error StandardError
+        expect { Position.parse('i0') }.to raise_error ChessError
       end
     end
   end
