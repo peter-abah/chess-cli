@@ -273,4 +273,40 @@ describe Game do
       end
     end
   end
+
+  describe '#check?' do
+    context 'when white is in check' do
+      subject(:game) { described_class.new(fen: 'rk6/8/8/8/8/8/8/K6R w - - 97 50') }
+      
+      it 'returns true' do
+        expect(game.check?).to be true
+      end
+    end
+
+    context 'when white is not in check' do
+      subject(:game) { described_class.new(fen: 'rk6/8/8/8/8/8/8/6KR w - - 80 80') }
+      
+      it 'returns true' do
+        expect(game.check?).to be false
+      end
+    end
+  end
+
+  describe '#checkmate?' do
+    context 'when white is in check and has no valid moved' do
+      subject(:game) { described_class.new(fen: 'rrk5/8/8/8/8/8/8/K6R w - - 97 50') }
+      
+      it 'returns true' do
+        expect(game.checkmate?).to be true
+      end
+    end
+
+    context 'when white is in check but still has valid moves' do
+      subject(:game) { described_class.new(fen: 'rk6/8/8/8/8/8/8/K6R w - - 80 80') }
+      
+      it 'returns true' do
+        expect(game.checkmate?).to be false
+      end
+    end
+  end
 end
