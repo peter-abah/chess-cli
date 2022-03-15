@@ -237,4 +237,40 @@ describe Game do
       end
     end
   end
+
+  describe '#seventy_five_moves?' do
+    context 'when halfmove clock is less than 150' do
+      subject(:game) { described_class.new(fen: 'rk6/8/8/8/8/8/8/6KR w - - 130 80') }
+      
+      it 'returns false' do
+        expect(game.seventy_five_moves?).to be false
+      end
+    end
+
+    context 'when halfmove clock is  150' do
+      subject(:game) { described_class.new(fen: 'rk6/8/8/8/8/8/8/6KR w - - 150 80') }
+      
+      it 'returns true' do
+        expect(game.seventy_five_moves?).to be true
+      end
+    end
+  end
+
+  describe '#fifty_moves?' do
+    context 'when halfmove clock is less than 100' do
+      subject(:game) { described_class.new(fen: 'rk6/8/8/8/8/8/8/6KR w - - 97 50') }
+      
+      it 'returns false' do
+        expect(game.fifty_moves?).to be false
+      end
+    end
+
+    context 'when halfmove clock is 100' do
+      subject(:game) { described_class.new(fen: 'rk6/8/8/8/8/8/8/6KR w - - 100 80') }
+      
+      it 'returns true' do
+        expect(game.fifty_moves?).to be true
+      end
+    end
+  end
 end
