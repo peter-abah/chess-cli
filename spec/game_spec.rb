@@ -309,4 +309,62 @@ describe Game do
       end
     end
   end
+
+  describe '#insufficient_material?' do
+    context 'when there are only kings' do
+      subject(:game) { described_class.new(fen: '2k5/8/8/8/8/8/8/K7 w - - 97 50') }
+      
+      it 'returns true' do
+        expect(game.insufficient_material?).to be true
+      end
+    end
+
+    context 'when there are kings and one knight ' do
+      subject(:game) { described_class.new(fen: 'k7/8/8/8/8/8/8/K6N w - - 80 80') }
+      
+      it 'returns true' do
+        expect(game.insufficient_material?).to be true
+      end
+    end
+
+    context 'when there are kings and one bishop ' do
+      subject(:game) { described_class.new(fen: 'k7/8/8/8/8/8/8/K6B w - - 80 80') }
+      
+      it 'returns true' do
+        expect(game.insufficient_material?).to be true
+      end
+    end
+
+    context 'when there are kings and one black and one white bishop in the same square color' do
+      subject(:game) { described_class.new(fen: 'k7/8/8/8/8/8/b7/K6B w - - 80 80') }
+      
+      it 'returns true' do
+        expect(game.insufficient_material?).to be true
+      end
+    end
+
+    context 'when there are kings and one black and one white bishop in the different square color' do
+      subject(:game) { described_class.new(fen: 'k7/b7/8/8/8/8/8/K6B w - - 80 80') }
+      
+      it 'returns false' do
+        expect(game.insufficient_material?).to be false
+      end
+    end
+
+    context 'when there are kings and one rook' do
+      subject(:game) { described_class.new(fen: 'k7/8/8/8/8/8/8/K6R w - - 80 80') }
+      
+      it 'returns false' do
+        expect(game.insufficient_material?).to be false
+      end
+    end
+
+    context 'when is a new game' do
+      subject(:game) { described_class.new }
+      
+      it 'returns false' do
+        expect(game.insufficient_material?).to be false
+      end
+    end
+  end
 end
