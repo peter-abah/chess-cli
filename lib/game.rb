@@ -89,7 +89,10 @@ class Game
   end
 
   def draw?
-    stalemate? || fivefold? || insufficient_material? || seventy_five_moves?
+    !checkmate? && (
+      stalemate? || fivefold? || insufficient_material? || 
+      seventy_five_moves?
+    )
   end
   
   def game_over?

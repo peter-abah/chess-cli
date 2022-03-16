@@ -367,4 +367,30 @@ describe Game do
       end
     end
   end
+  
+  describe '#draw?' do
+    context 'when it is a new game' do
+      subject(:game) { described_class.new }
+      
+      it 'returns false' do
+        expect(game.draw?).to be false
+      end
+    end
+    
+    context 'when it is a checkmate' do
+      subject(:game) { described_class.new(fen: 'rrk5/8/8/8/8/8/8/K6R w - - 97 50') }
+      
+      it 'returns false' do
+        expect(game.draw?).to be false
+      end
+    end
+    
+    context 'when there is a draw' do
+      subject(:game) { described_class.new(fen: '8/k7/8/8/8/6q1/7p/7K w - - 2 5') }
+      
+      it 'returns true' do
+        expect(game.draw?).to be true
+      end
+    end
+  end
 end
