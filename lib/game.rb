@@ -50,7 +50,7 @@ class Game
   end
   
   def stalemate?
-    all_moves.empty?
+    no_moves?
   end
   
   def threefold?
@@ -104,7 +104,12 @@ class Game
     repetitions_count[board_fen] = repetitions_count[board_fen] + 1
   end
   
-  private
+  def no_moves?
+    moves = board.player_pieces(current_player).reduce([]) do |res, piece|
+      res.concat moves_for_piece(piece, board)
+    end
+    moves.none? { |m| legal_move?(m) }
+  end
   
   attr_reader :repetitions_count
 end
