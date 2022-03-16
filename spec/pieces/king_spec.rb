@@ -20,7 +20,7 @@ describe King do
       expect(move_set.increments).to eq expected_increments
       expect(move_set.repeat).to eq 1
       expect(move_set.blocked_by).to eq [:same]
-      expect(move_set.special_moves).to eq %i[kingside_castle queenside_castle]
+      expect(move_set.special_moves).to eq [:castle]
       expect(move_set.promotable).to be false
     end
   end

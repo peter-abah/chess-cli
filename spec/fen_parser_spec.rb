@@ -45,7 +45,7 @@ describe FENParser do
 
     context 'when called for an invalid fen' do
       let(:invalid_notation) { '3/8/1/3/asdfghjk/10d/8/pppppppp/8' }
-      subject(:fen_parser) { described_class.new(:invalid_fen) }
+      subject(:fen_parser) { described_class.new(invalid_notation) }
 
       it 'should raise an Error' do
         expect { fen_parser.parse }.to raise_error ChessError

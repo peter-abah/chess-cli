@@ -81,42 +81,42 @@ describe Pawn do
   end
   
   describe '#can_promote?' do
-    context 'when pawn color is white and position is at rank 7' do
+    context 'when pawn color is white and position is at rank 8' do
       let(:pawn) { described_class.new(:white, Position.parse('a7')) }
       
       it 'returns true' do
-        expect(pawn.can_promote?).to be true
+        expect(pawn.can_promote?(Position.parse('a8'))).to be true
       end
     end
     
-    context 'when pawn color is white and position is not at rank 7' do
+    context 'when pawn color is white and position is not at rank 8' do
       let(:pawn) { described_class.new(:white, Position.parse('a5')) }
       
       it 'returns false' do
-        expect(pawn.can_promote?).to be false
+        expect(pawn.can_promote?(Position.parse('a7'))).to be false
       end
     end
     
-    context 'when pawn color is black and position is at rank 2' do
+    context 'when pawn color is black and position is at rank 1' do
       let(:pawn) { described_class.new(:black, Position.parse('a2')) }
       
       it 'returns true' do
-        expect(pawn.can_promote?).to be true
+        expect(pawn.can_promote?(Position.parse('a1'))).to be true
       end
     end
     
-    context 'when pawn color is black and position is not at rank 2' do
+    context 'when pawn color is black and position is not at rank 1' do
       let(:pawn) { described_class.new(:black, Position.parse('a7')) }
       
       it 'returns false' do
-        expect(pawn.can_promote?).to be false
+        expect(pawn.can_promote?(Position.parse('a5'))).to be false
       end
     end
   end
   
   describe '#promotion_pieces' do
     it 'returns the correct promotion pieces for pawn' do
-      expect(pawn.promotion_pieces).to contain_exactly(:Queen, :Knight, :Rook, :Bishop)
+      expect(pawn.promotion_pieces).to match_array %w[q b n r]
     end
   end
 

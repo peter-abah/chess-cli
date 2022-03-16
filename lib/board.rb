@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'require_all'
-require_relative './letter_display'
+
 require_relative './fen_parser'
 require_relative './position'
 require_relative './errors'
@@ -10,7 +10,6 @@ require_rel 'pieces/pawn', 'pieces/piece_constants'
 # A class to represent a chess board
 class Board
   include PieceConstants
-  include LetterDisplay
 
   attr_reader :pieces, :active_color, :en_passant_square, :halfmove_clock, :fullmove_no, :castling_rights
 
