@@ -2,13 +2,15 @@
 
 require 'require_all'
 
-require_relative './fen_parser'
-require_relative './position'
-require_relative './errors'
+require_relative 'fen_parser'
+require_relative 'position'
+require_relative 'errors'
+require_relative 'letter_display'
 require_rel 'pieces/pawn', 'pieces/piece_constants'
 
 # A class to represent a chess board
 class Board
+  include LetterDisplay
   include PieceConstants
 
   attr_reader :pieces, :active_color, :en_passant_square, :halfmove_clock, :fullmove_no, :castling_rights
@@ -60,6 +62,10 @@ class Board
   
   def to_fen
     FENParser.board_to_fen self
+  end
+  
+  def to_s
+    to_fen
   end
 
   private

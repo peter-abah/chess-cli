@@ -41,6 +41,29 @@ describe Board do
     end
   end
   
+  describe '#ascii' do
+    subject(:board) { described_class.new }
+    
+    it 'returns the ascii representation of the board' do
+      expect(board.ascii).to eq(
+        <<~BOARD.chomp
+             a b c d e f g h
+            _________________
+          1  r n b q k b n r  1
+          2  p p p p p p p p  2
+          3  - - - - - - - -  3
+          4  - - - - - - - -  4
+          5  - - - - - - - -  5
+          6  - - - - - - - -  6
+          7  P P P P P P P P  7
+          8  R N B Q K B N R  8
+            _________________
+             a b c d e f g h
+        BOARD
+      )
+    end
+  end
+  
   describe '#pieces' do
     context 'when board is initialized without arguments' do
       let(:board) { described_class.new }
