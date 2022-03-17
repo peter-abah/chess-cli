@@ -2,7 +2,7 @@
 
 require_relative '../../lib/rb_chess/position'
 
-RSpec.shared_examples "a chess piece" do |klass|
+RSpec.shared_examples 'a chess piece' do |klass|
   let(:position) { RbChess::Position.new(y: 1, x: 1) }
   let(:color) { :black }
   subject(:piece) { klass.new(color, position) }
@@ -12,13 +12,13 @@ RSpec.shared_examples "a chess piece" do |klass|
       expect(piece.color).to eq(color)
     end
   end
-  
+
   describe '#position' do
     it 'returns the piece’s position' do
       expect(piece.position).to eq(position)
     end
   end
-  
+
   describe '#update_position' do
     it 'returns a new piece with the new position' do
       new_pos = RbChess::Position.parse('a4')

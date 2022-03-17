@@ -6,7 +6,7 @@ require_relative './piece_spec'
 describe RbChess::Rook do
   let(:position) { RbChess::Position.new(y: 1, x: 1) }
   subject(:rook) { described_class.new(:white, position) }
-  
+
   it_behaves_like 'a chess piece', described_class
 
   describe '#move_sets' do

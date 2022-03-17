@@ -14,7 +14,7 @@ describe RbChess::Knight do
       move_set, = knight.move_sets
       expected_increments = [{ y: 2, x: 1 }, { y: 2, x: -1 }, { y: 1, x: 2 },
                              { y: 1, x: -2 }, { y: -2, x: 1 }, { y: -2, x: -1 },
-                             { y: -1, x: 2 }, { y: -1, x: -2 }]  
+                             { y: -1, x: 2 }, { y: -1, x: -2 }]
 
       expect(knight.move_sets.size).to eq 1
       expect(move_set.increments).to eq expected_increments

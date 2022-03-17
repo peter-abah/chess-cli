@@ -156,7 +156,7 @@ describe RbChess::Queen do
 
   #       array = queen.possible_moves(board, [4, 4])
   #       result = array.map(&:removed).reject(&:nil?)
-        
+
   #       expect(result).to be_empty
   #     end
   #   end

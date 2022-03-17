@@ -23,21 +23,21 @@ describe RbChess::FENParser do
       it 'the correct active color is returned' do
         expect(result[:active_color]).to eq :white
       end
-      
+
       it 'returns the correct castling rights' do
         expect(result[:castling_rights]).to(
           have_attributes(kingside: { white: true, black: true }, queenside: { white: true, black: true })
         )
       end
-      
+
       it 'returns the correct en passant square' do
         expect(result[:en_passant_square]).to eq RbChess::Position.parse('e4')
       end
-      
+
       it 'returns the correct halfmove clock' do
         expect(result[:halfmove_clock]).to eq 2
       end
-      
+
       it 'returns the correct fullmove number' do
         expect(result[:fullmove_no]).to eq 1
       end

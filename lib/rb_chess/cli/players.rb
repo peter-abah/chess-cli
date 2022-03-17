@@ -1,18 +1,20 @@
 # frozen_string_literal: true
 
-class Player
-  attr_reader :color, :name
+module RbChess
+  class Player
+    attr_reader :color, :name
 
-  def initialize (color)
-    @color = color
-    @name = color.to_s.capitalize
+    def initialize(color)
+      @color = color
+      @name = color.to_s.capitalize
+    end
   end
-end
 
-class ComputerPlayer < Player; end
+  class ComputerPlayer < Player; end
 
-class RandomAI < ComputerPlayer
-  def move(game)
-    game.all_moves.sample
+  class RandomAI < ComputerPlayer
+    def move(game)
+      game.all_moves.sample
+    end
   end
 end

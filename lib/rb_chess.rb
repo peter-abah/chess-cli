@@ -1,1 +1,3 @@
-require_relative 'rb_chess/game.rb'
+# frozen_string_literal: true
+
+require_relative 'rb_chess/game'
