@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
+require 'json'
 require 'require_all'
+
 require_relative 'rb_chess/board'
 require_relative 'rb_chess/errors'
 require_rel 'rb_chess/game_modules'
@@ -11,10 +13,11 @@ class RbChess
   include MoveParser
   include MoveValidator
 
-  attr_reader :board, :history
+  attr_reader :board
 
   def initialize(fen: nil)
     @board = Board.new(fen_notation: fen)
+    @starting_board = @board
     @history = [].freeze
     @repetitions_count = Hash.new(0) # for threefold repetition rule
   end
@@ -26,7 +29,7 @@ class RbChess
     raise ChessError, 'Cannot make move king in check' unless legal_move? move
 
     @board = board.make_move move
-    @history = [*history, move].freeze
+    @history = [*@history, move].freeze
     update_repetitions_count
   end
   
@@ -64,6 +67,10 @@ class RbChess
   def seventy_five_moves?
     board.halfmove_clock >= 150
   end
+
+  def history
+    @history.map(&:to_s)
+  end
   
   def fifty_moves?
     board.halfmove_clock >= 100
@@ -98,6 +105,32 @@ class RbChess
   def game_over?
     checkmate? || draw?
   end
+
+  def serialize
+    Marshal.dump(self)
+  end
+
+  def self.deserialize(data)
+    Marshal.load(data)
+  end
+
+  def as_json
+    data = {
+      moves: history,
+      starting_fen: starting_board.to_fen,
+      fen: board.to_fen
+    }
+    return JSON.generate(data)
+  end
+
+  def self.from_json(json_data, with_history: false)
+    data = JSON.parse(json_data)
+    return self.new(fen: data['fen']) unless with_history
+    
+    game = self.new(fen: data['starting_fen'])
+    game.make_moves data['moves']
+    game
+  end
   
   private
   
@@ -114,6 +147,6 @@ class RbChess
     moves.none? { |m| legal_move?(m) }
   end
   
-  attr_reader :repetitions_count
+  attr_reader :repetitions_count, :starting_board
 end
 
