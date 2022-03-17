@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative '../../lib/position'
+require_relative '../../lib/rb_chess/position'
 
 RSpec.shared_examples "a chess piece" do |klass|
   let(:position) { Position.new(y: 1, x: 1) }

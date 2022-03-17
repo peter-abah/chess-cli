@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative '../../lib/pieces/pawn'
+require_relative '../../lib/rb_chess/pieces/pawn'
 require_relative './piece_spec'
 
 describe Pawn do

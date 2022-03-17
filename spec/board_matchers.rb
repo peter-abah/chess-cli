@@ -4,8 +4,8 @@ require 'pry-byebug'
 require 'rspec/expectations'
 require 'require_all'
 
-require_rel '../lib/pieces'
-require_relative '../lib/position'
+require_rel '../lib/rb_chess/pieces'
+require_relative '../lib/rb_chess/position'
 
 RSpec::Matchers.define :have_all_pieces_at_default_positions do
   match do |pieces|

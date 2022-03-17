@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative '../../lib/pieces/king'
+require_relative '../../lib/rb_chess/pieces/king'
 require_relative './piece_spec'
 
 describe King do

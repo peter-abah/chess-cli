@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require_relative '../lib/move'
-require_relative '../lib/position'
+require_relative '../lib/rb_chess/move'
+require_relative '../lib/rb_chess/position'
 
 describe Move do
   let(:from) { 'a1' }

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative '../lib/position'
+require_relative '../lib/rb_chess/position'
 
 describe Position do
   subject(:position) { described_class.new(y: 0, x: 0) }

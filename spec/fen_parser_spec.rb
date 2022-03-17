@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require_relative '../lib/fen_parser'
-require_relative '../lib/position'
-require_rel '../lib/pieces'
+require_relative '../lib/rb_chess/fen_parser'
+require_relative '../lib/rb_chess/position'
+require_rel '../lib/rb_chess/pieces'
 
 describe FENParser do
   let(:default_fen) { 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 0' }

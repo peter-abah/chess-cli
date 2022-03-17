@@ -3,11 +3,11 @@
 require 'require_all'
 
 require_relative 'board_matchers'
-require_relative '../lib/board'
-require_relative '../lib/position'
-require_relative '../lib/move'
-require_relative '../lib/castling_rights'
-require_rel '../lib/pieces'
+require_relative '../lib/rb_chess/board'
+require_relative '../lib/rb_chess/position'
+require_relative '../lib/rb_chess/move'
+require_relative '../lib/rb_chess/castling_rights'
+require_rel '../lib/rb_chess/pieces'
 
 describe Board do
   subject(:board) { described_class.new }

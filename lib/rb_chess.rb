@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
 require 'require_all'
-require_relative 'board'
-require_relative 'errors'
-require_rel 'game_modules'
+require_relative 'rb_chess/board'
+require_relative 'rb_chess/errors'
+require_rel 'rb_chess/game_modules'
 
 # A class to handle a chess game
-class Game
+class RbChess
   include MoveGenerator
   include MoveParser
   include MoveValidator
