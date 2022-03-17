@@ -62,12 +62,15 @@ module RbChess
 
     def play_game
       game_loop until @game.game_over?
+
+      puts @game.board.ascii
       puts end_game_msg
       play_again? && start
     end
 
     def game_loop
       puts @game.board.ascii
+      puts "#{player.name} in check!" if @game.check?
       input = player_input
 
       if commands[input.to_sym]
@@ -81,8 +84,12 @@ module RbChess
       end
     end
 
+    def player
+      @players.find { |p| p.color == @game.current_player }
+    end
+
     def end_game_msg
-      player = @players.find { |p| p.color == @game.current_player }
+      player = @players.find { |p| p.color == @game.winner }
 
       if @game.checkmate?
         "Checkmate #{player.name} wins!"
@@ -106,7 +113,6 @@ module RbChess
     end
 
     def player_input
-      player = @players.find { |p| p.color == @game.current_player }
       return player.move(@game) if player.is_a? ComputerPlayer
 
       puts "#{player.name} Enter move"
@@ -115,30 +121,29 @@ module RbChess
 
     def help
       puts <<~HEREDOC
-                        Moves are in coordinate system format e.g e2e4 with exception of castling moves#{' '}
-                        which are 0-0 for kingside and 0-0-0 for queenside.
-        #{'        '}
-                        You can also enter a piece position e.g b1.
-                        If the piece has legal moves available, the game will display them or the the
-                        player must choose another piece.
-                #{'      '}
-                        For promotion moves append the promotion piece (Q, R, B, N) after the move
-                        e.g a2a1R
-                #{'      '}
-                        If a player is in check, they can only select pieces with moves that take them
-                        out of check.
-                #{'      '}
-                        Enter [moves] or [m] to view all available moves.
-        #{'        '}
-                        Enter [save] or [s] at any time to save the game.
-                #{'    '}
-                        Enter [exit] at any time to end the game
-        #{'        '}
-                        Enter [help] or [h] to view this guide again
-        #{'        '}
-                        The game ends by checkmate or draw (stalemate, fivefold repetition,#{' '}
-                        insufficient material or seventy five turns without a capture or pawn move)
-        #{'        '}
+        Moves are in coordinate system format e.g e2e4 with exception of castling moves
+        which are 0-0 for kingside and 0-0-0 for queenside.
+
+        You can also enter a piece position e.g b1.
+        If the piece has legal moves available, the game will display them or the the
+        player must choose another piece.
+
+        For promotion moves append the promotion piece (Q, R, B, N) after the move
+        e.g a2a1R
+
+        If a player is in check, they can only select pieces with moves that take them
+        out of check.
+
+        Enter [moves] or [m] to view all available moves.
+
+        Enter [save] or [s] at any time to save the game.
+
+        Enter [exit] at any time to end the game
+
+        Enter [help] or [h] to view this guide again
+
+        The game ends by checkmate or draw (stalemate, fivefold repetition,
+        insufficient material or seventy five turns without a capture or pawn move)
       HEREDOC
     end
 

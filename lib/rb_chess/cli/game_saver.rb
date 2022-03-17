@@ -15,13 +15,13 @@ module RbChess
     def save(game, players, filename)
       filename = File.join(dirname, filename)
       data = Marshal.dump([game, players])
-      File.open(filename, 'w') { |f| f.write(data) }
+      File.open(filename, 'wb') { |f| f.write(data) }
       puts 'Game saved'
     end
 
     def load(filename)
       filename = File.join(dirname, filename)
-      data = File.read(filename)
+      data = File.open(filename, 'rb') { |f| f.read }
 
       Marshal.load(data)
     end
