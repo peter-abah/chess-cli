@@ -1,0 +1,5 @@
+#!/usr/bin/env ruby
+
+require 'rb_chess/cli/cli'
+
+RbChess::CLI.new.start
