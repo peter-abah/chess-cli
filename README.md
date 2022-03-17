@@ -50,18 +50,19 @@ end
 puts game.board.to_fen
 ```
 
-You can find the full example of using this library in the [RbChess::CLI](lib/rb_chess/cli/cli.rb) class in lib/rb_chess/cli/cli.rb
+You can find the full example of using this library in the [RbChess::CLI](lib/rb_chess/cli/cli.rb) class in lib/rb_chess/cli/cli.rb.
 
 ## Playing
 - To start run ``` rb_chess ```.
-- Moves are made by typing in coordinate system i.e `e2e4`
-- Castling moves are made by typing `0-0` for kingside and `0-0-0` for queenside
-- To save type `save` or `s` 
-- To quit the game type `exit`
+- Moves are made by typing in coordinate system i.e `e2e4`.
+- Castling moves are made by typing `0-0` for kingside and `0-0-0` for queenside.
+- Promotion moves are made by typing the move with the promotion piece after it e.g `a7a8Q`.
+- To save type `save` or `s`.
+- To quit the game type `exit`.
 
 ## To do
-- Support for PGN
-- Support for SAN move format
+- Support for PGN.
+- Support for SAN move format.
 
 ## License
 Distributed under the MIT License. See LICENSE for more information.
