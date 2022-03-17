@@ -34,6 +34,12 @@ module RbChess
       update_repetitions_count
     end
 
+    def winner
+      return unless checkmate?
+
+      current_player == :white ? :black : :white
+    end
+
     def valid_move?(move)
       move = parse_move move
       legal_move? move
