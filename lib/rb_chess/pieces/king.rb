@@ -4,6 +4,7 @@ require_relative '../move_set'
 require_relative 'piece'
 
 # A class to represent a kong in chess
+module RbChess
 class King < Piece
   attr_reader :move_sets
 
@@ -21,4 +22,5 @@ class King < Piece
       )
     ]
   end
+end
 end

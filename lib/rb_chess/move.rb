@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 # A class to represent a chess move
+module RbChess
 class Move
   attr_reader :moved, :removed, :promotion, :castle
 
@@ -28,4 +29,5 @@ class Move
     moves = moved.map { |hash| "#{hash[:from]}#{hash[:to]}#{promotion.to_s.upcase}" }
     moves.join(',')
   end
+end
 end

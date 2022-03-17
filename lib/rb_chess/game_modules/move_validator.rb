@@ -2,6 +2,7 @@
 
 require_relative 'move_generator'
 
+module RbChess
 module MoveValidator
   include MoveGenerator
 
@@ -44,4 +45,5 @@ module MoveValidator
       move.moved.any? { |hash| hash[:to] == pos }
     end
   end
+end
 end

@@ -4,6 +4,7 @@ require_relative 'position'
 require_relative 'pieces/piece_constants'
 
 # A module to display chess board on console
+module RbChess
 module LetterDisplay
   include PieceConstants
 
@@ -23,8 +24,8 @@ module LetterDisplay
       piece_ascii(rank_no, file_no)
     end
 
-    result.unshift("#{rank_no + 1} ")
-    result.push(" #{rank_no + 1}")
+    result.unshift("#{8 - rank_no} ")
+    result.push(" #{8 - rank_no}")
     result.join(' ')
   end
 
@@ -32,8 +33,10 @@ module LetterDisplay
     pos = Position.new(y: rank_no, x: file_no)
     piece = piece_at(pos)
     return '-' if piece.nil?
-
-    result = PIECE_CLASS_TO_LETTER[piece.class.name.to_sym]
+    
+    key = piece.class.name.split('::').last.to_sym
+    result = PIECE_CLASS_TO_LETTER[key]
     piece.color == :black ? result.downcase : result.upcase
   end
+end
 end

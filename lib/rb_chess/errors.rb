@@ -1,1 +1,3 @@
-class ChessError < StandardError; end
+module RbChess
+  class ChessError < StandardError; end
+end

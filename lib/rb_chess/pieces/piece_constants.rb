@@ -3,6 +3,7 @@
 require 'require_all'
 require_rel './'
 
+module RbChess
 module PieceConstants
   LETTER_TO_PIECE_CLASS = {
     p: Pawn,
@@ -21,4 +22,5 @@ module PieceConstants
     Queen: 'q',
     King: 'k'
   }.freeze
+end
 end

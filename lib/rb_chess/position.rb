@@ -3,6 +3,7 @@
 require_relative './errors'
 
 # a class to represent a position in a chess game
+module RbChess
 class Position
   attr_reader :y, :x
   
@@ -67,4 +68,5 @@ class Position
     y = color == :black ? 0 : 7
     self.y == y && self.x == 0
   end
+end
 end

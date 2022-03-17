@@ -4,6 +4,7 @@ require_relative '../move_set'
 require_relative 'piece'
 
 # A class to represent a rook in a chess game
+module RbChess
 class Rook < Piece
   attr_reader :move_sets
 
@@ -17,4 +18,5 @@ class Rook < Piece
         repeat: Float::INFINITY,
         blocked_by: [:same])]
   end
+end
 end

@@ -9,6 +9,7 @@ require_relative 'letter_display'
 require_rel 'pieces/pawn', 'pieces/piece_constants'
 
 # A class to represent a chess board
+module RbChess
 class Board
   include LetterDisplay
   include PieceConstants
@@ -166,4 +167,5 @@ class Board
     color = piece_at(hash[:from], pieces_n: pieces).color
     piece_class.new(color, hash[:to])
   end
+end
 end

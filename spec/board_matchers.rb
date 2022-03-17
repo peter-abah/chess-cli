@@ -16,46 +16,46 @@ RSpec::Matchers.define :have_all_pieces_at_default_positions do
   
   def has_rooks?(pieces)
     has_piece_of_type?(
-      pieces: pieces, klass: Rook, positions: ['a1', 'h1'], color: :white
+      pieces: pieces, klass: RbChess::Rook, positions: ['a1', 'h1'], color: :white
     )
     has_piece_of_type?(
-      pieces: pieces, klass: Rook, positions: ['a8', 'h8'], color: :black
+      pieces: pieces, klass: RbChess::Rook, positions: ['a8', 'h8'], color: :black
     )
   end
   
   def has_bishops?(pieces)
     has_piece_of_type?(
-      pieces: pieces, klass: Bishop, positions: ['c1', 'f1'], color: :white
+      pieces: pieces, klass: RbChess::Bishop, positions: ['c1', 'f1'], color: :white
     )
     has_piece_of_type?(
-      pieces: pieces, klass: Bishop, positions: ['c8', 'f8'], color: :black
+      pieces: pieces, klass: RbChess::Bishop, positions: ['c8', 'f8'], color: :black
     )
   end
   
   def has_knights?(pieces)
     has_piece_of_type?(
-      pieces: pieces, klass: Knight, positions: ['b1', 'g1'], color: :white
+      pieces: pieces, klass: RbChess::Knight, positions: ['b1', 'g1'], color: :white
     )
     has_piece_of_type?(
-      pieces: pieces, klass: Knight, positions: ['b8', 'g8'], color: :black
+      pieces: pieces, klass: RbChess::Knight, positions: ['b8', 'g8'], color: :black
     )
   end
   
   def has_queens?(pieces)
     has_piece_of_type?(
-      pieces: pieces, klass: Queen, positions: ['d1'], color: :white
+      pieces: pieces, klass: RbChess::Queen, positions: ['d1'], color: :white
     )
     has_piece_of_type?(
-      pieces: pieces, klass: Queen, positions: ['d8'], color: :black
+      pieces: pieces, klass: RbChess::Queen, positions: ['d8'], color: :black
     )
   end
   
   def has_kings?(pieces)
     has_piece_of_type?(
-      pieces: pieces, klass: King, positions: ['e1'], color: :white
+      pieces: pieces, klass: RbChess::King, positions: ['e1'], color: :white
     )
     has_piece_of_type?(
-      pieces: pieces, klass: King, positions: ['e8'], color: :black
+      pieces: pieces, klass: RbChess::King, positions: ['e8'], color: :black
     )
   end
   
@@ -64,10 +64,10 @@ RSpec::Matchers.define :have_all_pieces_at_default_positions do
     black_pawn_positions = ('a'..'h').map { |letter| "#{letter}7" }
 
     has_piece_of_type?(
-      pieces: pieces, klass: Pawn, positions: white_pawn_positions, color: :white
+      pieces: pieces, klass: RbChess::Pawn, positions: white_pawn_positions, color: :white
     )
     has_piece_of_type?(
-      pieces: pieces, klass: Pawn, positions: black_pawn_positions, color: :black
+      pieces: pieces, klass: RbChess::Pawn, positions: black_pawn_positions, color: :black
     )
   end
   
@@ -75,7 +75,7 @@ RSpec::Matchers.define :have_all_pieces_at_default_positions do
     positions.all? do |pos|
       pieces.any? do |piece|
         piece.color == color && 
-        piece.position == Position.parse(pos) &&
+        piece.position == RbChess::Position .parse(pos) &&
         piece.is_a?(klass)
       end
     end

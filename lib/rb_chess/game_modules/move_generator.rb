@@ -5,6 +5,7 @@ require_relative '../pieces/piece_constants'
 require_relative '../move'
 
 # a module to generate moves for a piece
+module RbChess
 module MoveGenerator
   include PieceConstants
 
@@ -151,4 +152,5 @@ module MoveGenerator
       board.piece_at(pos).nil?
     end
   end
+end
 end

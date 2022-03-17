@@ -1,11 +1,12 @@
 # frozen_string_literal: true
-
-require_relative './pieces/piece_constants'
-require_relative './position'
-require_relative './castling_rights'
-require_relative './errors'
+require 'pry-byebug'
+require_relative 'pieces/piece_constants'
+require_relative 'position'
+require_relative 'castling_rights'
+require_relative 'errors'
 
 # A class to parse Chess FEN notation
+module RbChess
 class FENParser
   include PieceConstants
 
@@ -59,7 +60,8 @@ class FENParser
     result = ''
     result += no_of_consecutive_empty_cells.to_s if no_of_consecutive_empty_cells != 0
 
-    letter = PIECE_CLASS_TO_LETTER[piece.class.name.to_sym]
+    key = piece.class.name.split('::').last.to_sym
+    letter = PIECE_CLASS_TO_LETTER[key]
     letter = piece.color == :white ? letter.upcase : letter
     result + letter
   end
@@ -142,4 +144,5 @@ class FENParser
   def is_integer?(string)
     /^\d+$/.match string
   end
+end
 end

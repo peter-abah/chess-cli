@@ -4,6 +4,7 @@ require_relative '../move_set'
 require_relative 'piece'
 
 # A class to represent a bishop in a chess game
+module RbChess
 class Bishop < Piece
   attr_reader :move_sets
 
@@ -19,4 +20,5 @@ class Bishop < Piece
       )
     ]
   end
+end
 end

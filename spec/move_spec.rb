@@ -3,7 +3,7 @@
 require_relative '../lib/rb_chess/move'
 require_relative '../lib/rb_chess/position'
 
-describe Move do
+describe RbChess::Move do
   let(:from) { 'a1' }
   let(:to) { 'c6' }
   let(:removed) { 'c6' }
@@ -23,7 +23,7 @@ describe Move do
       let(:move) { described_class.new(from: from, to: to, removed: removed) }
 
       it 'returns the correct value' do
-        expect(move.removed).to eq Position.parse(removed)
+        expect(move.removed).to eq RbChess::Position.parse(removed)
       end
     end
   end
@@ -33,7 +33,7 @@ describe Move do
       it 'returns an array containing from and to' do
         moved = move.moved
         expect(move.moved).to match_array(
-          [{ from: Position.parse(from), to: Position.parse(to) }]
+          [{ from: RbChess::Position.parse(from), to: RbChess::Position.parse(to) }]
         )
       end
     end
@@ -47,7 +47,7 @@ describe Move do
       it 'adds it to the list of moves' do
         move.add_move(from: from, to: to)
         expect(move.moved).to include (
-          { from: Position.parse(from), to: Position.parse(to) }
+          { from: RbChess::Position.parse(from), to: RbChess::Position.parse(to) }
         )
       end
     end
@@ -55,7 +55,7 @@ describe Move do
 
   describe '#to_s' do
     context 'when called for a normal move' do
-      let(:move) { Move.new(from: 'e2', to: 'e4') }
+      let(:move) { described_class.new(from: 'e2', to: 'e4') }
       
       it 'returns the correct Coordinate  format' do
         expect(move.to_s).to eq 'e2e4'
@@ -63,7 +63,7 @@ describe Move do
     end
     
     context 'when called for a kingside castling move' do
-      let(:move) { Move.new(from: 'e1', to: 'g1', castle: :kingside) }
+      let(:move) { described_class.new(from: 'e1', to: 'g1', castle: :kingside) }
       
       it 'returns the correct Coordinate  format' do
         expect(move.to_s).to eq '0-0'
@@ -71,7 +71,7 @@ describe Move do
     end
     
     context 'when called for a queenside castling move' do
-      let(:move) { Move.new(from: 'e1', to: 'c1', castle: :queenside) }
+      let(:move) { described_class.new(from: 'e1', to: 'c1', castle: :queenside) }
       
       it 'returns the correct Coordinate  format' do
         expect(move.to_s).to eq '0-0-0'
@@ -79,7 +79,7 @@ describe Move do
     end
     
     context 'when called for a promotion move' do
-      let(:move) { Move.new(from: 'e7', to: 'e8', promotion: 'Q') }
+      let(:move) { described_class.new(from: 'e7', to: 'e8', promotion: 'Q') }
       
       it 'returns the correct LAN format' do
         expected = "e7e8Q"

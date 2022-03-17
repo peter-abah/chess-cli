@@ -2,7 +2,7 @@
 
 require_relative '../lib/rb_chess/position'
 
-describe Position do
+describe RbChess::Position do
   subject(:position) { described_class.new(y: 0, x: 0) }
 
   describe '#y' do
@@ -241,17 +241,17 @@ describe Position do
   describe '::parse' do
     context 'when passed an algebraic notation for chess position i.e b5 or h7' do
       it 'returns the correct position for a1' do
-        position = Position.parse('a1')
+        position = described_class.parse('a1')
         expect(position).to have_attributes(y: 7, x: 0)
       end
       
       it 'returns the correct position for h8' do
-        position = Position.parse('h8')
+        position = described_class.parse('h8')
         expect(position).to have_attributes(y: 0, x: 7)
       end
       
       it 'raises an error for invalid position' do
-        expect { Position.parse('i0') }.to raise_error ChessError
+        expect { described_class.parse('i0') }.to raise_error RbChess::ChessError
       end
     end
   end

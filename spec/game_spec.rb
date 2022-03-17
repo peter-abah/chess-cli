@@ -1,9 +1,11 @@
 # frozen_string_literal: true
 
-require_relative '../lib/rb_chess'
-require_rel './game_modules'
+require 'require_all'
 
-describe RbChess do
+require_rel './game_modules'
+require_relative '../lib/rb_chess/game'
+
+describe RbChess::Game do
   it_behaves_like 'move generator'
   
   describe '#make_move' do
@@ -20,7 +22,7 @@ describe RbChess do
       subject(:game) { described_class.new }
       
       it 'throws error' do
-        expect { game.make_move 'a2a5' }.to raise_error ChessError
+        expect { game.make_move 'a2a5' }.to raise_error RbChess::ChessError
       end
     end
     
@@ -28,7 +30,7 @@ describe RbChess do
       subject(:game) { described_class.new(fen: '4r3/k7/8/8/8/5q2/4P3/4K3 w - - 0 4') }
       
       it 'throws error' do
-        expect { game.make_move 'e2f3' }.to raise_error ChessError
+        expect { game.make_move 'e2f3' }.to raise_error RbChess::ChessError
       end
     end
     
@@ -46,7 +48,7 @@ describe RbChess do
         subject(:game) { described_class.new(fen: '4r3/k7/8/8/8/8/4P3/4K2R w - - 0 4') }
         
         it 'raises an error' do
-          expect { game.make_move '0-0' }.to raise_error ChessError
+          expect { game.make_move '0-0' }.to raise_error RbChess::ChessError
         end
       end
 
@@ -54,7 +56,7 @@ describe RbChess do
         subject(:game) { described_class.new(fen: '4r3/k7/8/8/8/4r3/8/4K2R w K - 0 4') }
         
         it 'raises error' do
-          expect{ game.make_move '0-0' }.to raise_error ChessError
+          expect{ game.make_move '0-0' }.to raise_error RbChess::ChessError
         end
       end
 
@@ -62,7 +64,7 @@ describe RbChess do
         subject(:game) { described_class.new(fen: '5r2/k7/8/8/8/8/8/4K2R w K - 0 4') }
         
         it 'raises error' do
-          expect{ game.make_move '0-0' }.to raise_error ChessError
+          expect{ game.make_move '0-0' }.to raise_error RbChess::ChessError
         end
       end
 
@@ -70,7 +72,7 @@ describe RbChess do
         subject(:game) { described_class.new(fen: '8/k7/8/8/8/8/8/4KP1R w K - 0 4') }
         
         it 'raises error' do
-          expect{ game.make_move '0-0' }.to raise_error ChessError
+          expect{ game.make_move '0-0' }.to raise_error RbChess::ChessError
         end
       end
     end
@@ -89,7 +91,7 @@ describe RbChess do
         subject(:game) { described_class.new(fen: '4r3/k7/8/8/8/8/4P3/R3K3 w - - 0 4') }
         
         it 'raises an error' do
-          expect { game.make_move '0-0-0' }.to raise_error ChessError
+          expect { game.make_move '0-0-0' }.to raise_error RbChess::ChessError
         end
       end
 
@@ -97,7 +99,7 @@ describe RbChess do
         subject(:game) { described_class.new(fen: '4r3/k7/8/8/8/4r3/8/R2K3 w Q - 0 4') }
         
         it 'raises error' do
-          expect{ game.make_move '0-0-0' }.to raise_error ChessError
+          expect{ game.make_move '0-0-0' }.to raise_error RbChess::ChessError
         end
       end
 
@@ -105,7 +107,7 @@ describe RbChess do
         subject(:game) { described_class.new(fen: '3r4/k7/8/8/8/8/8/R3K3 w Q - 0 4') }
         
         it 'raises error' do
-          expect{ game.make_move '0-0-0' }.to raise_error ChessError
+          expect{ game.make_move '0-0-0' }.to raise_error RbChess::ChessError
         end
       end
 
@@ -113,7 +115,7 @@ describe RbChess do
         subject(:game) { described_class.new(fen: '8/k7/8/8/8/8/8/RP2K3 w Q - 0 4') }
         
         it 'raises error' do
-          expect{ game.make_move '0-0-0' }.to raise_error ChessError
+          expect{ game.make_move '0-0-0' }.to raise_error RbChess::ChessError
         end
       end
     end
@@ -131,7 +133,7 @@ describe RbChess do
       subject(:game) { described_class.new(fen: '4r3/3P4/4k3/8/8/8/4P3/5K2 w - - 0 4') }
       
       it 'raises error' do
-        expect { game.make_move 'd7e8' }.to raise_error ChessError
+        expect { game.make_move 'd7e8' }.to raise_error RbChess::ChessError
       end
     end
   end

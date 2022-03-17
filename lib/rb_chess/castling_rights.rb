@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+module RbChess
 class CastlingRights
   attr_reader :kingside, :queenside
 
@@ -26,4 +27,5 @@ class CastlingRights
     new_queenside = queenside.dup
     CastlingRights.new(kingside: new_kingside, queenside: new_queenside)
   end
+end
 end

@@ -3,6 +3,7 @@
 require_relative 'move_generator'
 require_relative '../errors'
 
+module RbChess
 module MoveParser
   include MoveGenerator
 
@@ -39,4 +40,5 @@ module MoveParser
     
     move
   end
+end
 end

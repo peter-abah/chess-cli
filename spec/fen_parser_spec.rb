@@ -4,7 +4,7 @@ require_relative '../lib/rb_chess/fen_parser'
 require_relative '../lib/rb_chess/position'
 require_rel '../lib/rb_chess/pieces'
 
-describe FENParser do
+describe RbChess::FENParser do
   let(:default_fen) { 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 0' }
 
   describe '#parse' do
@@ -16,7 +16,7 @@ describe FENParser do
       it 'returns a result containing the correct pieces' do
         result = fen_parser.parse[:pieces]
         expect(result).to contain_exactly(
-          be_a(Rook).and(have_attributes(color: :black, position: Position.parse('a5')))
+          be_a(RbChess::Rook).and(have_attributes(color: :black, position: RbChess::Position.parse('a5')))
         )
       end
 
@@ -31,7 +31,7 @@ describe FENParser do
       end
       
       it 'returns the correct en passant square' do
-        expect(result[:en_passant_square]).to eq Position.parse('e4')
+        expect(result[:en_passant_square]).to eq RbChess::Position.parse('e4')
       end
       
       it 'returns the correct halfmove clock' do
@@ -48,7 +48,7 @@ describe FENParser do
       subject(:fen_parser) { described_class.new(invalid_notation) }
 
       it 'should raise an Error' do
-        expect { fen_parser.parse }.to raise_error ChessError
+        expect { fen_parser.parse }.to raise_error RbChess::ChessError
       end
     end
   end

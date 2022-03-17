@@ -1,6 +1,7 @@
 # frozen_string_literal: true|
 
 # A class to represent info about how a piece moves on the body
+module RbChess
 class MoveSet
   attr_accessor :increments, :repeat, :blocked_by, :promotable, :special_moves
 
@@ -11,4 +12,5 @@ class MoveSet
     @special_moves = special_moves
     @promotable = promotable
   end
+end
 end

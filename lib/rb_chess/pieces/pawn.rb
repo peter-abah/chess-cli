@@ -4,6 +4,7 @@ require_relative '../move_set'
 require_relative 'piece'
 
 # A class to reperesnt a chess pawn
+module RbChess
 class Pawn < Piece
   attr_reader :move_sets, :direction
 
@@ -40,4 +41,5 @@ class Pawn < Piece
   def promotion_pieces
     %w[n r q b]
   end
+end
 end
