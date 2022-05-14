@@ -5,7 +5,7 @@ A chess library written in ruby. It provides all a representation of a chess gam
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'just_chess'
+gem 'rb_chess'
 ```
 
 And then run:
